@@ -25,13 +25,35 @@ namespace Nustache.Core
         {
             if (name == ".") return _data;
 
-            if (_data == null) return null;
+            var value = GetValue(name, _data);
 
-            var propertyInfo = _data.GetType().GetProperty(name, DefaultBindingFlags);
+            if (value != null)
+            {
+                return value;
+            }
 
-            if (propertyInfo == null) return "";
+            foreach (var data in _stack)
+            {
+                value = GetValue(name, data);
 
-            var value = propertyInfo.GetValue(_data, null);
+                if (value != null)
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        private static object GetValue(string name, object data)
+        {
+            if (data == null) return null;
+
+            var propertyInfo = data.GetType().GetProperty(name, DefaultBindingFlags);
+
+            if (propertyInfo == null) return null;
+
+            var value = propertyInfo.GetValue(data, null);
 
             return value;
         }

@@ -105,5 +105,14 @@ namespace Nustache.Tests
                 new { foo = new [] { new { bar = 1 }, new { bar = 2 }, new { bar = 3 } } });
             Assert.AreEqual("before123after", result);
         }
+
+        [Test]
+        public void It_looks_up_the_stack_for_properties()
+        {
+            var result = Template.RenderStringToString(
+                "{{#foo}}{{bar}}{{/foo}}",
+                new { foo = new { }, bar = "baz" });
+            Assert.AreEqual("baz", result);
+        }
     }
 }
