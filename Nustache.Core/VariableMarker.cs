@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Nustache.Core
 {
     public class VariableMarker : Part
@@ -11,13 +9,13 @@ namespace Nustache.Core
             _name = name;
         }
 
-        public override void Render(TextWriter writer, IContext context)
+        public override void Render(RenderContext context)
         {
             object value = context.GetValue(_name);
 
             if (value != null)
             {
-                writer.Write(value.ToString());
+                context.Write(value.ToString());
             }
         }
 

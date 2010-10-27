@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Nustache.Core
 {
@@ -19,46 +17,20 @@ namespace Nustache.Core
             get { return _name; }
         }
 
-        public List<Part> Children { get { return _children; } }
+        public IList<Part> Children { get { return _children; } }
 
-        public override void Render(TextWriter writer, IContext context)
+        public override void Render(RenderContext context)
         {
-            object value = context.GetValue(_name);
-
-            object current = context.Current;
-
-            foreach (var item in GetItems(value))
+            foreach (var value in context.GetValues(_name))
             {
-                context.Current = item;
+                context.Push(value);
 
                 foreach (var child in _children)
                 {
-                    child.Render(writer, context);
+                    child.Render(context);
                 }
-            }
 
-            context.Current = current;
-        }
-
-        private static IEnumerable<object> GetItems(object value)
-        {
-            if (value is bool)
-            {
-                if ((bool)value)
-                {
-                    yield return value;
-                }
-            }
-            else if (value is IEnumerable && !(value is string))
-            {
-                foreach (var item in ((IEnumerable)value))
-                {
-                    yield return item;
-                }
-            }
-            else if (value != null)
-            {
-                yield return value;
+                context.Pop();
             }
         }
 

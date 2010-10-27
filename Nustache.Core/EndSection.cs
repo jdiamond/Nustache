@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Nustache.Core
 {
     public class EndSection : Part
@@ -16,7 +14,7 @@ namespace Nustache.Core
             get { return _name; }
         }
 
-        public override void Render(TextWriter writer, IContext context)
+        public override void Render(RenderContext context)
         {
         }
 

@@ -1,25 +1,63 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Nustache.Core
 {
-    public static class Template
+    public class Template
     {
-        public static string Render(string template, object data)
+        private IEnumerable<Part> _parts;
+
+        public void Load(TextReader reader)
         {
-            var writer = new StringWriter();
-            var context = data as IContext ?? new DefaultContext(data);
+            string template = reader.ReadToEnd();
 
             var scanner = new Scanner();
             var parser = new Parser();
 
-            foreach (var part in parser.Parse(scanner.Scan(template)))
+            _parts = parser.Parse(scanner.Scan(template));
+        }
+
+        public void Render(object data, TextWriter writer)
+        {
+            var context = new RenderContext(data, writer);
+
+            foreach (var part in _parts)
             {
-                part.Render(writer, context);
+                part.Render(context);
             }
 
             writer.Flush();
+        }
 
+        public static string RenderStringToString(string template, object data)
+        {
+            var reader = new StringReader(template);
+            var writer = new StringWriter();
+            Render(reader, data, writer);
             return writer.GetStringBuilder().ToString();
+        }
+
+        public static string RenderFileToString(string templatePath, object data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void RenderStringToFile(string template, object data, string outputPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void RenderFileToFile(string templatePath, object data, string outputPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void Render(TextReader reader, object data, TextWriter writer)
+        {
+            var template = new Template();
+            template.Load(reader);
+            template.Render(data, writer);
         }
    }
 }
