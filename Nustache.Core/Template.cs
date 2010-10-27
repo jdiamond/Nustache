@@ -7,15 +7,14 @@ namespace Nustache.Core
         public static string Render(string template, object data)
         {
             var writer = new StringWriter();
-
-            var context = new DefaultRenderContext(writer, data);
+            var context = data as IContext ?? new DefaultContext(data);
 
             var scanner = new Scanner();
             var parser = new Parser();
 
             foreach (var part in parser.Parse(scanner.Scan(template)))
             {
-                part.Render(context);
+                part.Render(writer, context);
             }
 
             writer.Flush();

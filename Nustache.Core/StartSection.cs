@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Nustache.Core
 {
@@ -20,23 +21,23 @@ namespace Nustache.Core
 
         public List<Part> Children { get { return _children; } }
 
-        public override void Render(IRenderContext context)
+        public override void Render(TextWriter writer, IContext context)
         {
             object value = context.GetValue(_name);
 
-            object currentValue = context.CurrentValue;
+            object current = context.Current;
 
             foreach (var item in GetItems(value))
             {
-                context.CurrentValue = item;
+                context.Current = item;
 
                 foreach (var child in _children)
                 {
-                    child.Render(context);
+                    child.Render(writer, context);
                 }
             }
 
-            context.CurrentValue = currentValue;
+            context.Current = current;
         }
 
         private static IEnumerable<object> GetItems(object value)

@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Nustache.Core
 {
     public class LiteralText : Part
@@ -9,9 +11,9 @@ namespace Nustache.Core
             _text = text;
         }
 
-        public override void Render(IRenderContext context)
+        public override void Render(TextWriter writer, IContext context)
         {
-            context.Write(_text);
+            writer.Write(_text);
         }
 
         #region Boring stuff

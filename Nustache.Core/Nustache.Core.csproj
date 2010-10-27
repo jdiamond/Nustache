@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultRenderContext.cs" />
+    <Compile Include="DefaultContext.cs" />
     <Compile Include="EndSection.cs" />
-    <Compile Include="IRenderContext.cs" />
+    <Compile Include="IContext.cs" />
     <Compile Include="LiteralText.cs" />
     <Compile Include="NustacheException.cs" />
     <Compile Include="Parser.cs" />

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Nustache.Core
 {
@@ -11,7 +12,7 @@ namespace Nustache.Core
             _name = name;
         }
 
-        public override void Render(IRenderContext context)
+        public override void Render(TextWriter writer, IContext context)
         {
             throw new NotImplementedException();
         }
