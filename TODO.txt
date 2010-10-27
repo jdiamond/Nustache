@@ -1,0 +1,20 @@
+- Implement template includes.
+  - Need a way to prevent infinite recursion.
+- Define a way to look up templates for including.
+- Variables should be able to access public fields
+  and methods that return a value and take no params.
+- Support IDictionary and ICustomTypeDescriptor.
+- Add a syntax for defining templates.
+  - {{<foo}}template definition goes here{{/foo}}
+  - {{>foo}} looks for defined templates before hitting the disk.
+  - Looks up context stack.
+  - {{>}} invokes parent template with same name?
+- Add magic variables like {{$i}} and {{$first}}.
+- Add support for variable modifiers like in ctemplate.
+  - Need a way to specify custom modifiers.
+- Create command-line application.
+- Be able to generate static code for later compilation.
+  - Would be nice if it didn't use reflection.
+- Also, think about dynamically generating code for immediate
+  use. May be faster.
+- Look into creating an MVC view engine.
