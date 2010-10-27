@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Nustache.Core
 {
@@ -7,6 +8,17 @@ namespace Nustache.Core
     {
         private IEnumerable<Part> _parts;
 
+        /// <summary>
+        /// Loads the template.
+        /// </summary>
+        /// <param name="reader">The object to read the template from.</param>
+        /// <remarks>
+        /// The <paramref name="reader" /> is read until it ends, but is not
+        /// closed or disposed.
+        /// </remarks>
+        /// <exception cref="NustacheException">
+        /// Thrown when the template contains a syntax error.
+        /// </exception>
         public void Load(TextReader reader)
         {
             string template = reader.ReadToEnd();
@@ -14,9 +26,21 @@ namespace Nustache.Core
             var scanner = new Scanner();
             var parser = new Parser();
 
-            _parts = parser.Parse(scanner.Scan(template));
+            _parts = parser.Parse(scanner.Scan(template)).ToArray();
+
+            // ToArray() forces the iterator to evaluate. I want exceptions
+            // thrown by the scanner or parser to happen during Load and
+            // not during Render.
         }
 
+        /// <summary>
+        /// Renders the template.
+        /// </summary>
+        /// <param name="data">The data to use to render the template.</param>
+        /// <param name="writer">The object to write the output to.</param>
+        /// <remarks>
+        /// The <paramref name="writer" /> is flushed, but not closed or disposed.
+        /// </remarks>
         public void Render(object data, TextWriter writer)
         {
             var context = new RenderContext(data, writer);
