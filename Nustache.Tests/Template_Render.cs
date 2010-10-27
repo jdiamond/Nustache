@@ -91,9 +91,18 @@ namespace Nustache.Tests
         }
 
         [Test]
-        public void It_changes_the_context_to_each_item_in_the_collection()
+        public void It_changes_the_context_for_each_item_in_the_collection()
         {
             var result = Template.Render("before{{#foo}}{{.}}{{/foo}}after", new { foo = new [] { 1, 2, 3 } });
+            Assert.AreEqual("before123after", result);
+        }
+
+        [Test]
+        public void It_lets_you_reference_properties_of_items_in_the_collection()
+        {
+            var result = Template.Render(
+                "before{{#foo}}{{bar}}{{/foo}}after",
+                new { foo = new [] { new { bar = 1 }, new { bar = 2 }, new { bar = 3 } } });
             Assert.AreEqual("before123after", result);
         }
     }

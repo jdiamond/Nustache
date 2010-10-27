@@ -10,12 +10,10 @@ namespace Nustache.Core
             BindingFlags.Public;
 
         private readonly TextWriter _writer;
-        private readonly object _data;
 
         public DefaultRenderContext(TextWriter writer, object data)
         {
             _writer = writer;
-            _data = data;
             CurrentValue = data;
         }
 
@@ -28,13 +26,13 @@ namespace Nustache.Core
         {
             if (name == ".") return CurrentValue;
 
-            if (_data == null) return null;
+            if (CurrentValue == null) return null;
 
-            var propertyInfo = _data.GetType().GetProperty(name, DefaultBindingFlags);
+            var propertyInfo = CurrentValue.GetType().GetProperty(name, DefaultBindingFlags);
 
             if (propertyInfo == null) return "";
 
-            var value = propertyInfo.GetValue(_data, null);
+            var value = propertyInfo.GetValue(CurrentValue, null);
 
             return value;
         }
