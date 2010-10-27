@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Nustache.Core
@@ -28,36 +27,6 @@ namespace Nustache.Core
             }
 
             writer.Flush();
-        }
-
-        public static string RenderStringToString(string template, object data)
-        {
-            var reader = new StringReader(template);
-            var writer = new StringWriter();
-            Render(reader, data, writer);
-            return writer.GetStringBuilder().ToString();
-        }
-
-        public static string RenderFileToString(string templatePath, object data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void RenderStringToFile(string template, object data, string outputPath)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void RenderFileToFile(string templatePath, object data, string outputPath)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void Render(TextReader reader, object data, TextWriter writer)
-        {
-            var template = new Template();
-            template.Load(reader);
-            template.Render(data, writer);
         }
    }
 }
