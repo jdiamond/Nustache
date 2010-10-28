@@ -54,14 +54,7 @@ namespace Nustache.Core
                 return null;
             }
 
-            var getter = ValueGetter.GetValueGetter(data, name);
-
-            if (getter.CanGetValue())
-            {
-                return getter.GetValue();
-            }
-
-            return null;
+            return ValueGetter.GetValue(data, name);
         }
 
         public IEnumerable<object> GetValues(string name)

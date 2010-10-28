@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -8,6 +7,11 @@ namespace Nustache.Core
     public abstract class ValueGetter
     {
         #region Static helper methods
+
+        public static object GetValue(object target, string name)
+        {
+            return GetValueGetter(target, name).GetValue();
+        }
 
         public static ValueGetter GetValueGetter(object target, string name)
         {
@@ -19,27 +23,10 @@ namespace Nustache.Core
                 ?? (ValueGetter)new NullValueGetter();
         }
 
-        public static bool CanGetValue(object target, string name)
-        {
-            return GetValueGetter(target, name).CanGetValue();
-        }
-
-        public static Type GetValueType(object target, string name)
-        {
-            return GetValueGetter(target, name).GetValueType();
-        }
-
-        public static object GetValue(object target, string name)
-        {
-            return GetValueGetter(target, name).GetValue();
-        }
-
         #endregion
 
         #region Abstract methods
 
-        public abstract bool CanGetValue();
-        public abstract Type GetValueType();
         public abstract object GetValue();
 
         #endregion
@@ -81,16 +68,6 @@ namespace Nustache.Core
             _propertyDescriptor = propertyDescriptor;
         }
 
-        public override bool CanGetValue()
-        {
-            return true;
-        }
-
-        public override Type GetValueType()
-        {
-            return _propertyDescriptor.PropertyType;
-        }
-
         public override object GetValue()
         {
             return _propertyDescriptor.GetValue(_target);
@@ -129,16 +106,6 @@ namespace Nustache.Core
             _methodInfo = methodInfo;
         }
 
-        public override bool CanGetValue()
-        {
-            return true;
-        }
-
-        public override Type GetValueType()
-        {
-            return _methodInfo.ReturnType;
-        }
-
         public override object GetValue()
         {
             return _methodInfo.Invoke(_target, null);
@@ -173,16 +140,6 @@ namespace Nustache.Core
             _propertyInfo = propertyInfo;
         }
 
-        public override bool CanGetValue()
-        {
-            return true;
-        }
-
-        public override Type GetValueType()
-        {
-            return _propertyInfo.PropertyType;
-        }
-
         public override object GetValue()
         {
             return _propertyInfo.GetValue(_target, null);
@@ -195,17 +152,12 @@ namespace Nustache.Core
         {
             FieldInfo field = target.GetType().GetField(name, DefaultBindingFlags);
 
-            if (field != null && FieldCanGetValue(field))
+            if (field != null)
             {
                 return new FieldInfoValueGetter(target, field);
             }
 
             return null;
-        }
-
-        private static bool FieldCanGetValue(FieldInfo field)
-        {
-            return !field.IsInitOnly;
         }
 
         private readonly object _target;
@@ -215,16 +167,6 @@ namespace Nustache.Core
         {
             _target = target;
             _fieldInfo = fieldInfo;
-        }
-
-        public override bool CanGetValue()
-        {
-            return true;
-        }
-
-        public override Type GetValueType()
-        {
-            return _fieldInfo.FieldType;
         }
 
         public override object GetValue()
@@ -259,17 +201,6 @@ namespace Nustache.Core
             _key = key;
         }
 
-        public override bool CanGetValue()
-        {
-            return true;
-        }
-
-        public override Type GetValueType()
-        {
-            object value = GetValue();
-            return value != null ? value.GetType() : typeof(object);
-        }
-
         public override object GetValue()
         {
             return _target[_key];
@@ -278,19 +209,9 @@ namespace Nustache.Core
 
     internal class NullValueGetter : ValueGetter
     {
-        public override bool CanGetValue()
-        {
-            return false;
-        }
-
-        public override Type GetValueType()
-        {
-            throw new InvalidOperationException();
-        }
-
         public override object GetValue()
         {
-            throw new InvalidOperationException();
+            return null;
         }
     }
 }

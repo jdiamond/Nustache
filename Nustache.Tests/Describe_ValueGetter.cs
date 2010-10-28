@@ -7,111 +7,81 @@ using Nustache.Core;
 namespace Nustache.Tests
 {
     [TestFixture]
-    public class ValueGetterTests
+    public class Describe_ValueGetter
     {
         [Test]
-        public void Invalid()
+        public void It_returns_null_when_it_cant_get_a_value()
         {
-            Assert.That(ValueGetter.CanGetValue(this, "x"), Is.False);
+            Assert.IsNull(ValueGetter.GetValue(this, "x"));
         }
 
         [Test]
-        public void IntField()
+        public void It_gets_field_values()
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.That(ValueGetter.GetValue(target, "IntField"), Is.EqualTo(123));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntField"));
         }
 
         [Test]
-        public void IntProperty()
+        public void It_gets_property_values()
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.That(ValueGetter.GetValue(target, "IntProperty"), Is.EqualTo(123));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntProperty"));
         }
 
         [Test]
-        public void IntMethod()
+        public void It_gets_method_values()
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.That(ValueGetter.GetValue(target, "IntMethod"), Is.EqualTo(123));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntMethod"));
         }
 
         [Test]
-        public void WriteOnlyIntField()
+        public void It_cant_get_values_from_write_only_properties()
         {
             WriteOnlyInts target = new WriteOnlyInts();
-            Assert.That(ValueGetter.CanGetValue(target, "IntField"), Is.False);
+            Assert.IsNull(ValueGetter.GetValue(target, "IntProperty"));
         }
 
         [Test]
-        public void WriteOnlyIntProperty()
+        public void It_cant_get_values_from_write_only_methods()
         {
             WriteOnlyInts target = new WriteOnlyInts();
-            Assert.That(ValueGetter.CanGetValue(target, "IntProperty"), Is.False);
+            Assert.IsNull(ValueGetter.GetValue(target, "IntMethod"));
         }
 
         [Test]
-        public void WriteOnlyIntMethod()
-        {
-            WriteOnlyInts target = new WriteOnlyInts();
-            Assert.That(ValueGetter.CanGetValue(target, "IntMethod"), Is.False);
-        }
-        [Test]
-        public void Hashtable()
+        public void It_gets_Hashtable_values()
         {
             Hashtable target = new Hashtable();
             target["IntKey"] = 123;
-            Assert.That(ValueGetter.GetValue(target, "IntKey"), Is.EqualTo(123));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey"));
         }
 
         [Test]
-        public void Dictionary()
+        public void It_gets_Dictionary_values()
         {
             Dictionary<string, int> target = new Dictionary<string, int>();
             target["IntKey"] = 123;
-            Assert.That(ValueGetter.GetValue(target, "IntKey"), Is.EqualTo(123));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey"));
         }
 
         [Test]
-        public void DataRowView()
+        public void It_gets_DataRowView_values()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("IntColumn", typeof(int));
             dt.Rows.Add(new object[] { 123 });
             DataRowView target = dt.DefaultView[0];
-            Assert.That(ValueGetter.GetValue(target, "IntColumn"), Is.EqualTo(123));
-        }
-
-        [Test]
-        public void Enum()
-        {
-            ReadWriteEnums target = new ReadWriteEnums();
-            target.EnumField = TestEnum.Bar;
-            Assert.That(ValueGetter.GetValue(target, "EnumField"), Is.EqualTo(TestEnum.Bar));
-        }
-
-        [Test]
-        public void NullableEnumWhenNull()
-        {
-            ReadWriteEnums target = new ReadWriteEnums();
-            target.NullableEnumField = null;
-            Assert.That(ValueGetter.GetValue(target, "NullableEnumField"), Is.EqualTo(null));
-        }
-
-        [Test]
-        public void NullableEnumWhenNotNull()
-        {
-            ReadWriteEnums target = new ReadWriteEnums();
-            target.NullableEnumField = TestEnum.Bar;
-            Assert.That(ValueGetter.GetValue(target, "NullableEnumField"), Is.EqualTo(TestEnum.Bar));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntColumn"));
         }
 
         public class ReadWriteInts
         {
-            public int IntField = 0;
+            public int IntField = -1;
             public int IntProperty { get { return IntField; } set { IntField = value; } }
             public int IntMethod() { return IntField; }
             public void IntMethod(int value) { IntField = value; }
@@ -119,29 +89,16 @@ namespace Nustache.Tests
 
         public class ReadOnlyInts
         {
-            public readonly int IntField = 0;
+            public readonly int IntField = -1;
             public int IntProperty { get { return IntField; } }
             public int IntMethod() { return IntField; }
         }
 
         public class WriteOnlyInts
         {
-            private int IntField = 0;
+            public int IntField; // Write only?
             public int IntProperty { set { IntField = value; } }
             public void IntMethod(int value) { IntField = value; }
-        }
-
-        public enum TestEnum
-        {
-            Foo,
-            Bar,
-            BazQuux
-        }
-
-        public class ReadWriteEnums
-        {
-            public TestEnum EnumField;
-            public TestEnum? NullableEnumField;
         }
     }
 }
