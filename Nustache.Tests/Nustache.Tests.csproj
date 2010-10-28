@@ -53,6 +53,7 @@
     <Compile Include="Describe_Parser_Parse.cs" />
     <Compile Include="Describe_Scanner_Scan.cs" />
     <Compile Include="Describe_Template_Render.cs" />
+    <Compile Include="Describe_ValueGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
