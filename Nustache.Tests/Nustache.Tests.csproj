@@ -49,10 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StartSection.cs" />
-    <Compile Include="Parser_Parse.cs" />
-    <Compile Include="Scanner_Scan.cs" />
-    <Compile Include="Template_Render.cs" />
+    <Compile Include="Describe_StartSection.cs" />
+    <Compile Include="Describe_Parser_Parse.cs" />
+    <Compile Include="Describe_Scanner_Scan.cs" />
+    <Compile Include="Describe_Template_Render.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
