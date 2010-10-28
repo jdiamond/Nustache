@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using Nustache.Core;
 
 namespace Nustache.Tests
@@ -113,6 +114,18 @@ namespace Nustache.Tests
                 "{{#foo}}{{bar}}{{/foo}}",
                 new { foo = new { /* no bar here */ }, bar = "baz" });
             Assert.AreEqual("baz", result);
+        }
+
+        [Test]
+        public void It_can_include_templates()
+        {
+            var fooTemplate = new Template();
+            fooTemplate.Load(new StringReader("FOO"));
+
+            var result = Render.StringToString(
+                "before{{>foo}}after", null, name => fooTemplate);
+
+            Assert.AreEqual("beforeFOOafter", result);
         }
     }
 }

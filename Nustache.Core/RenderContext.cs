@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -9,11 +10,13 @@ namespace Nustache.Core
         private readonly Stack<object> _stack = new Stack<object>();
         private object _data;
         private readonly TextWriter _writer;
+        private readonly Func<string, Template> _templateLocator;
 
-        public RenderContext(object data, TextWriter writer)
+        public RenderContext(object data, TextWriter writer, Func<string, Template> templateLocator)
         {
             _data = data;
             _writer = writer;
+            _templateLocator = templateLocator;
         }
 
         public object GetValue(string name)
@@ -95,6 +98,14 @@ namespace Nustache.Core
         public void Write(string text)
         {
             _writer.Write(text);
+        }
+
+        public void Include(string templateName)
+        {
+            // TODO: Check for null!
+
+            var template = _templateLocator(templateName);
+            template.Render(this);
         }
     }
 }

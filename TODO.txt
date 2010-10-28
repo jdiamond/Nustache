@@ -1,6 +1,4 @@
-- Implement template includes.
-  - Need a way to prevent infinite recursion.
-- Define a way to look up templates for including.
+- Add a way to prevent infinite template recursion.
 - Add tests for ValueGetter.
 - Add a syntax for defining templates.
   - {{<foo}}template definition goes here{{/foo}}

@@ -7,9 +7,14 @@ namespace Nustache.Core
     {
         public static string StringToString(string template, object data)
         {
+            return StringToString(template, data, null);
+        }
+
+        public static string StringToString(string template, object data, Func<string, Template> templateLocator)
+        {
             var reader = new StringReader(template);
             var writer = new StringWriter();
-            Template(reader, data, writer);
+            Template(reader, data, writer, templateLocator);
             return writer.GetStringBuilder().ToString();
         }
 
@@ -28,11 +33,11 @@ namespace Nustache.Core
             throw new NotImplementedException();
         }
 
-        public static void Template(TextReader reader, object data, TextWriter writer)
+        public static void Template(TextReader reader, object data, TextWriter writer, Func<string, Template> templateLocator)
         {
             var template = new Template();
             template.Load(reader);
-            template.Render(data, writer);
+            template.Render(data, writer, templateLocator);
         }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace Nustache.Core
 {
     public class TemplateInclude : Part
@@ -13,7 +11,7 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
-            throw new NotImplementedException();
+            context.Include(_name);
         }
 
         #region Boring stuff

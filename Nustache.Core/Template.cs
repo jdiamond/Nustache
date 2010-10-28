@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -38,19 +39,25 @@ namespace Nustache.Core
         /// </summary>
         /// <param name="data">The data to use to render the template.</param>
         /// <param name="writer">The object to write the output to.</param>
+        /// <param name="templateLocator">The delegate to use to locate templates for inclusion.</param>
         /// <remarks>
         /// The <paramref name="writer" /> is flushed, but not closed or disposed.
         /// </remarks>
-        public void Render(object data, TextWriter writer)
+        public void Render(object data, TextWriter writer, Func<string, Template> templateLocator)
         {
-            var context = new RenderContext(data, writer);
+            var context = new RenderContext(data, writer, templateLocator);
 
+            Render(context);
+
+            writer.Flush();
+        }
+
+        public void Render(RenderContext context)
+        {
             foreach (var part in _parts)
             {
                 part.Render(context);
             }
-
-            writer.Flush();
         }
-   }
+    }
 }
