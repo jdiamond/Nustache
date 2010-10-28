@@ -148,7 +148,7 @@ namespace Nustache.Tests
             Assert.AreEqual("beforeFOOafter", result);
         }
 
-        [Test]
+        [Test, Ignore]
         public void It_allows_templates_to_be_overridden_in_sections()
         {
             var result = Render.StringToString(

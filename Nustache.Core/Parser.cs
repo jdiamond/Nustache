@@ -13,7 +13,7 @@ namespace Nustache.Core
             {
                 if (startSection != null)
                 {
-                    startSection.Children.Add(part);
+                    startSection.Add(part);
                 }
                 else
                 {

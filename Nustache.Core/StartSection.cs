@@ -5,11 +5,12 @@ namespace Nustache.Core
     public class StartSection : Part
     {
         private readonly string _name;
-        private readonly List<Part> _children = new List<Part>();
+        private readonly List<Part> _children;
 
-        public StartSection(string name)
+        public StartSection(string name, params Part[] children)
         {
             _name = name;
+            _children = new List<Part>(children);
         }
 
         public string Name
@@ -17,7 +18,12 @@ namespace Nustache.Core
             get { return _name; }
         }
 
-        public IList<Part> Children { get { return _children; } }
+        public IEnumerable<Part> Children { get { return _children; } }
+
+        public void Add(Part child)
+        {
+            _children.Add(child);
+        }
 
         public override void Render(RenderContext context)
         {

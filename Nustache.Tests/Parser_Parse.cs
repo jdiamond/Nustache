@@ -19,22 +19,17 @@ namespace Nustache.Tests
                         new StartSection("foo"),
                         new LiteralText("inside"),
                         new EndSection("foo"),
-                        new LiteralText("after"),
+                        new LiteralText("after")
                     });
 
             CollectionAssert.AreEqual(
                 new Part[]
                     {
                         new LiteralText("before"),
-                        new StartSection("foo")
-                            {
-                                Children =
-                                    {
-                                        new LiteralText("inside"),
-                                        new EndSection("foo"),
-                                    }
-                            },
-                        new LiteralText("after"),
+                        new StartSection("foo",
+                                         new LiteralText("inside"),
+                                         new EndSection("foo")),
+                        new LiteralText("after")
                     },
                 parts.ToArray());
         }
@@ -55,31 +50,21 @@ namespace Nustache.Tests
                         new EndSection("bar"),
                         new LiteralText("after bar"),
                         new EndSection("foo"),
-                        new LiteralText("after foo"),
+                        new LiteralText("after foo")
                     });
 
             CollectionAssert.AreEqual(
                 new Part[]
                     {
                         new LiteralText("before foo"),
-                        new StartSection("foo")
-                            {
-                                Children =
-                                    {
-                                        new LiteralText("before bar"),
-                                        new StartSection("bar")
-                                            {
-                                                Children =
-                                                    {
-                                                        new LiteralText("inside bar"),
-                                                        new EndSection("bar"),
-                                                    }
-                                            },
-                                        new LiteralText("after bar"),
-                                        new EndSection("foo"),
-                                    }
-                            },
-                        new LiteralText("after foo"),
+                        new StartSection("foo",
+                                         new LiteralText("before bar"),
+                                         new StartSection("bar",
+                                                          new LiteralText("inside bar"),
+                                                          new EndSection("bar")),
+                                         new LiteralText("after bar"),
+                                         new EndSection("foo")),
+                        new LiteralText("after foo")
                     },
                 parts.ToArray());
         }
@@ -100,31 +85,21 @@ namespace Nustache.Tests
                         new EndSection("foo"),
                         new LiteralText("after foo 2"),
                         new EndSection("foo"),
-                        new LiteralText("after foo 1"),
+                        new LiteralText("after foo 1")
                     });
 
             CollectionAssert.AreEqual(
                 new Part[]
                     {
                         new LiteralText("before foo 1"),
-                        new StartSection("foo")
-                            {
-                                Children =
-                                    {
-                                        new LiteralText("before foo 2"),
-                                        new StartSection("foo")
-                                            {
-                                                Children =
-                                                    {
-                                                        new LiteralText("inside foo 2"),
-                                                        new EndSection("foo"),
-                                                    }
-                                            },
-                                        new LiteralText("after foo 2"),
-                                        new EndSection("foo"),
-                                    }
-                            },
-                        new LiteralText("after foo 1"),
+                        new StartSection("foo",
+                                         new LiteralText("before foo 2"),
+                                         new StartSection("foo",
+                                                          new LiteralText("inside foo 2"),
+                                                          new EndSection("foo")),
+                                         new LiteralText("after foo 2"),
+                                         new EndSection("foo")),
+                        new LiteralText("after foo 1")
                     },
                 parts.ToArray());
         }
@@ -141,7 +116,7 @@ namespace Nustache.Tests
                                                               new StartSection("foo"),
                                                               new LiteralText("inside"),
                                                               new EndSection("bar"),
-                                                              new LiteralText("after"),
+                                                              new LiteralText("after")
                                                           })
                                                       .ToArray());
         }
