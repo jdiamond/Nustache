@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StartSection.cs" />
     <Compile Include="Parser_Parse.cs" />
     <Compile Include="Scanner_Scan.cs" />
     <Compile Include="Template_Render.cs" />

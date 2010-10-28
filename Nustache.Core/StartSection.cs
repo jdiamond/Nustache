@@ -6,6 +6,8 @@ namespace Nustache.Core
     {
         private readonly string _name;
         private readonly List<Part> _children;
+        private readonly Dictionary<string, TemplateDefinition> _templateDefinitions =
+            new Dictionary<string, TemplateDefinition>();
 
         public StartSection(string name, params Part[] children)
         {
@@ -22,7 +24,22 @@ namespace Nustache.Core
 
         public void Add(Part child)
         {
-            _children.Add(child);
+            if (child is TemplateDefinition)
+            {
+                var templateDefinition = (TemplateDefinition)child;
+                _templateDefinitions.Add(templateDefinition.Name, templateDefinition);
+            }
+            else
+            {
+                _children.Add(child);
+            }
+        }
+
+        public TemplateDefinition GetTemplateDefinition(string name)
+        {
+            TemplateDefinition templateDefinition;
+            _templateDefinitions.TryGetValue(name, out templateDefinition);
+            return templateDefinition;
         }
 
         public override void Render(RenderContext context)
