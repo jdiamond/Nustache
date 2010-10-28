@@ -138,5 +138,14 @@ namespace Nustache.Tests
                 () => Render.StringToString(
                     "before{{>foo}}after", null, name => fooTemplate));
         }
+
+        [Test]
+        public void It_can_include_templates_defined_in_templates()
+        {
+            var result = Render.StringToString(
+                "{{<foo}}FOO{{/foo}}before{{>foo}}after", null, null);
+
+            Assert.AreEqual("beforeFOOafter", result);
+        }
     }
 }

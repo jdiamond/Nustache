@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TemplateDefinition.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="RenderContext.cs" />
     <Compile Include="EndSection.cs" />

@@ -1,9 +1,7 @@
 - Add tests for ValueGetter.
-- Add a syntax for defining templates.
-  - {{<foo}}template definition goes here{{/foo}}
-  - {{>foo}} looks for defined templates before hitting the disk.
-  - Looks up context stack.
-  - {{>}} invokes parent template with same name?
+- Make looking up internal templates use sections as scopes
+  instead of templates.
+- {{>}} invokes parent template with same name?
 - Add magic variables like {{$i}} and {{$first}}.
   - Need to work with sections, too, like {{#$first}}first stuff goes here{{/$first}}.
 - Add some syntax to define "local" variables?

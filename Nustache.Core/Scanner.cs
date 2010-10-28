@@ -27,6 +27,10 @@ namespace Nustache.Core
                 {
                     yield return new StartSection(marker.Substring(1));
                 }
+                else if (marker[0] == '<')
+                {
+                    yield return new TemplateDefinition(marker.Substring(1));
+                }
                 else if (marker[0] == '/')
                 {
                     yield return new EndSection(marker.Substring(1));

@@ -8,7 +8,8 @@ namespace Nustache.Core
     public class RenderContext
     {
         private const int IncludeLimit = 1024;
-        private readonly Stack<object> _stack = new Stack<object>();
+        private readonly Stack<object> _dataStack = new Stack<object>();
+        private readonly Stack<Template> _templateStack = new Stack<Template>();
         private object _data;
         private readonly TextWriter _writer;
         private readonly Func<string, Template> _templateLocator;
@@ -33,7 +34,7 @@ namespace Nustache.Core
                 return value;
             }
 
-            foreach (var data in _stack)
+            foreach (var data in _dataStack)
             {
                 value = GetValue(name, data);
 
@@ -87,15 +88,25 @@ namespace Nustache.Core
             }
         }
 
-        public void Push(object data)
+        public void PushData(object data)
         {
-            _stack.Push(_data);
+            _dataStack.Push(_data);
             _data = data;
         }
 
-        public void Pop()
+        public void PopData()
         {
-            _data = _stack.Pop();
+            _data = _dataStack.Pop();
+        }
+
+        public void PushTemplate(Template template)
+        {
+            _templateStack.Push(template);
+        }
+
+        public void PopTemplate()
+        {
+            _templateStack.Pop();
         }
 
         public void Write(string text)
@@ -113,10 +124,21 @@ namespace Nustache.Core
 
             _includeLevel++;
 
-            // TODO: Check for null!
+            var currentTemplate = _templateStack.Peek();
 
-            var template = _templateLocator(templateName);
-            template.Render(this);
+            var childTemplate = currentTemplate.GetTemplate(templateName);
+
+            if (childTemplate != null)
+            {
+                childTemplate.Render(this);
+            }
+            else if (_templateLocator != null)
+            {
+                var externalTemplate = _templateLocator(templateName);
+                externalTemplate.Render(this);
+            }
+
+            _includeLevel--;
         }
     }
 }

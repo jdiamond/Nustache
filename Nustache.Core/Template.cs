@@ -34,6 +34,11 @@ namespace Nustache.Core
             // not during Render.
         }
 
+        public void Load(IEnumerable<Part> parts)
+        {
+            _parts = parts;
+        }
+
         /// <summary>
         /// Renders the template.
         /// </summary>
@@ -54,10 +59,27 @@ namespace Nustache.Core
 
         public void Render(RenderContext context)
         {
+            context.PushTemplate(this);
+
             foreach (var part in _parts)
             {
                 part.Render(context);
             }
+
+            context.PopTemplate();
+        }
+
+        public Template GetTemplate(string templateName)
+        {
+            foreach (var part in _parts)
+            {
+                if (part is TemplateDefinition)
+                {
+                    return ((TemplateDefinition)part).GetTemplate();
+                }
+            }
+
+            return null;
         }
     }
 }

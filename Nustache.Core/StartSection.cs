@@ -23,14 +23,14 @@ namespace Nustache.Core
         {
             foreach (var value in context.GetValues(_name))
             {
-                context.Push(value);
+                context.PushData(value);
 
                 foreach (var child in _children)
                 {
                     child.Render(context);
                 }
 
-                context.Pop();
+                context.PopData();
             }
         }
 
