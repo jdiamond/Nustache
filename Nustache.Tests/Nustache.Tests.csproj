@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Describe_StartSection.cs" />
+    <Compile Include="Describe_Container.cs" />
     <Compile Include="Describe_Parser_Parse.cs" />
     <Compile Include="Describe_Scanner_Scan.cs" />
     <Compile Include="Describe_Template_Render.cs" />

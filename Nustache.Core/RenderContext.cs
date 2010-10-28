@@ -8,16 +8,16 @@ namespace Nustache.Core
     public class RenderContext
     {
         private const int IncludeLimit = 1024;
+        private readonly Stack<Container> _containerStack = new Stack<Container>();
         private readonly Stack<object> _dataStack = new Stack<object>();
-        private readonly Stack<Template> _templateStack = new Stack<Template>();
-        private object _data;
         private readonly TextWriter _writer;
         private readonly Func<string, Template> _templateLocator;
         private int _includeLevel;
 
-        public RenderContext(object data, TextWriter writer, Func<string, Template> templateLocator)
+        public RenderContext(Template template, object data, TextWriter writer, Func<string, Template> templateLocator)
         {
-            _data = data;
+            _containerStack.Push(template);
+            _dataStack.Push(data);
             _writer = writer;
             _templateLocator = templateLocator;
             _includeLevel = 0;
@@ -25,9 +25,9 @@ namespace Nustache.Core
 
         public object GetValue(string name)
         {
-            if (name == ".") return _data;
+            if (name == ".") return _dataStack.Peek();
 
-            var value = GetValue(name, _data);
+            var value = GetValue(name, _dataStack.Peek());
 
             if (value != null)
             {
@@ -88,27 +88,6 @@ namespace Nustache.Core
             }
         }
 
-        public void PushData(object data)
-        {
-            _dataStack.Push(_data);
-            _data = data;
-        }
-
-        public void PopData()
-        {
-            _data = _dataStack.Pop();
-        }
-
-        public void PushTemplate(Template template)
-        {
-            _templateStack.Push(template);
-        }
-
-        public void PopTemplate()
-        {
-            _templateStack.Pop();
-        }
-
         public void Write(string text)
         {
             _writer.Write(text);
@@ -124,21 +103,45 @@ namespace Nustache.Core
 
             _includeLevel++;
 
-            var currentTemplate = _templateStack.Peek();
+            TemplateDefinition templateDefinition = GetTemplateDefinition(templateName);
 
-            var childTemplate = currentTemplate.GetTemplate(templateName);
-
-            if (childTemplate != null)
+            if (templateDefinition != null)
             {
-                childTemplate.Render(this);
+                templateDefinition.Render(this);
             }
             else if (_templateLocator != null)
             {
-                var externalTemplate = _templateLocator(templateName);
-                externalTemplate.Render(this);
+                var template = _templateLocator(templateName);
+                template.Render(this);
             }
 
             _includeLevel--;
+        }
+
+        private TemplateDefinition GetTemplateDefinition(string name)
+        {
+            foreach (var container in _containerStack)
+            {
+                var templateDefinition = container.GetTemplateDefinition(name);
+
+                if (templateDefinition != null)
+                {
+                    return templateDefinition;
+                }
+            }
+
+            return null;
+        }
+
+        public void Push(Container section, object data)
+        {
+            _containerStack.Push(section);
+            _dataStack.Push(data);
+        }
+
+        public void Pop()
+        {
+            _containerStack.Pop();
         }
     }
 }

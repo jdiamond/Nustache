@@ -1,28 +1,19 @@
 namespace Nustache.Core
 {
-    public class TemplateDefinition : StartSection
+    public class TemplateDefinition : Container
     {
         public TemplateDefinition(string name)
             : base(name)
         {
         }
 
-        public override void Render(RenderContext context)
-        {
-        }
-
-        public Template GetTemplate()
-        {
-            var template = new Template();
-            template.Load(Children);
-            return template;
-        }
-
         #region Boring stuff
 
         public bool Equals(TemplateDefinition other)
         {
-            return base.Equals(other);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other.Name, Name);
         }
 
         public override bool Equals(object obj)

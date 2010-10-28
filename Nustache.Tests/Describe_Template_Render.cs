@@ -148,7 +148,17 @@ namespace Nustache.Tests
             Assert.AreEqual("beforeFOOafter", result);
         }
 
-        [Test, Ignore]
+        [Test]
+        public void It_can_include_templates_defined_in_outer_templates()
+        {
+            var result = Render.StringToString(
+                "{{<foo}}OUTSIDE{{/foo}}before{{#bar}}{{>foo}}{{/bar}}after",
+                new { bar = "baz" });
+
+            Assert.AreEqual("beforeOUTSIDEafter", result);
+        }
+
+        [Test]
         public void It_allows_templates_to_be_overridden_in_sections()
         {
             var result = Render.StringToString(

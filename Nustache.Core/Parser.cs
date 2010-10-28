@@ -6,33 +6,33 @@ namespace Nustache.Core
     {
         public IEnumerable<Part> Parse(IEnumerable<Part> parts)
         {
-            var sectionStack = new Stack<StartSection>();
-            StartSection startSection = null;
+            var containerStack = new Stack<Container>();
+            Container container = null;
 
             foreach (var part in parts)
             {
-                if (startSection != null)
+                if (container != null)
                 {
-                    startSection.Add(part);
+                    container.Add(part);
                 }
                 else
                 {
-                    if (!(part is StartSection))
+                    if (!(part is Container))
                     {
                         yield return part;
                     }
                 }
 
-                if (part is StartSection)
+                if (part is Container)
                 {
-                    sectionStack.Push(startSection);
-                    startSection = (StartSection)part;
+                    containerStack.Push(container);
+                    container = (Container)part;
                 }
                 else if (part is EndSection)
                 {
                     var endSection = (EndSection)part;
 
-                    if (startSection == null)
+                    if (container == null)
                     {
                         throw new NustacheException(
                             string.Format(
@@ -40,23 +40,23 @@ namespace Nustache.Core
                                 endSection.Name));
                     }
 
-                    if (endSection.Name != startSection.Name)
+                    if (endSection.Name != container.Name)
                     {
                         throw new NustacheException(
                             string.Format(
                                 "End section {0} does not match start section {1}!",
                                 endSection.Name,
-                                startSection.Name));
+                                container.Name));
                     }
 
-                    var lastStartSection = sectionStack.Pop();
+                    var lastStartSection = containerStack.Pop();
 
                     if (lastStartSection == null)
                     {
-                        yield return startSection;
+                        yield return container;
                     }
 
-                    startSection = lastStartSection;
+                    container = lastStartSection;
                 }
             }
         }

@@ -1,6 +1,4 @@
 - Add tests for ValueGetter.
-- Make looking up internal templates use sections as scopes
-  instead of templates.
 - {{>}} invokes parent template with same name?
 - Add magic variables like {{$i}} and {{$first}}.
   - Need to work with sections, too, like {{#$first}}first stuff goes here{{/$first}}.

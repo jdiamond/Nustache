@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Nustache.Core
 {
-    public class Template
+    public class Template : Container
     {
-        private IEnumerable<Part> _parts;
+        public Template()
+            : base("-root-")
+        {
+        }
 
         /// <summary>
         /// Loads the template.
@@ -27,16 +28,7 @@ namespace Nustache.Core
             var scanner = new Scanner();
             var parser = new Parser();
 
-            _parts = parser.Parse(scanner.Scan(template)).ToArray();
-
-            // ToArray() forces the iterator to evaluate. I want exceptions
-            // thrown by the scanner or parser to happen during Load and
-            // not during Render.
-        }
-
-        public void Load(IEnumerable<Part> parts)
-        {
-            _parts = parts;
+            Load(parser.Parse(scanner.Scan(template)));
         }
 
         /// <summary>
@@ -50,36 +42,11 @@ namespace Nustache.Core
         /// </remarks>
         public void Render(object data, TextWriter writer, Func<string, Template> templateLocator)
         {
-            var context = new RenderContext(data, writer, templateLocator);
+            var context = new RenderContext(this, data, writer, templateLocator);
 
             Render(context);
 
             writer.Flush();
-        }
-
-        public void Render(RenderContext context)
-        {
-            context.PushTemplate(this);
-
-            foreach (var part in _parts)
-            {
-                part.Render(context);
-            }
-
-            context.PopTemplate();
-        }
-
-        public Template GetTemplate(string templateName)
-        {
-            foreach (var part in _parts)
-            {
-                if (part is TemplateDefinition)
-                {
-                    return ((TemplateDefinition)part).GetTemplate();
-                }
-            }
-
-            return null;
         }
     }
 }

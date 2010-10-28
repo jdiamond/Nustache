@@ -1,59 +1,22 @@
-using System.Collections.Generic;
-
 namespace Nustache.Core
 {
-    public class StartSection : Part
+    public class StartSection : Container
     {
-        private readonly string _name;
-        private readonly List<Part> _children;
-        private readonly Dictionary<string, TemplateDefinition> _templateDefinitions =
-            new Dictionary<string, TemplateDefinition>();
-
         public StartSection(string name, params Part[] children)
+            : base(name)
         {
-            _name = name;
-            _children = new List<Part>(children);
-        }
-
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        public IEnumerable<Part> Children { get { return _children; } }
-
-        public void Add(Part child)
-        {
-            if (child is TemplateDefinition)
-            {
-                var templateDefinition = (TemplateDefinition)child;
-                _templateDefinitions.Add(templateDefinition.Name, templateDefinition);
-            }
-            else
-            {
-                _children.Add(child);
-            }
-        }
-
-        public TemplateDefinition GetTemplateDefinition(string name)
-        {
-            TemplateDefinition templateDefinition;
-            _templateDefinitions.TryGetValue(name, out templateDefinition);
-            return templateDefinition;
+            Load(children);
         }
 
         public override void Render(RenderContext context)
         {
-            foreach (var value in context.GetValues(_name))
+            foreach (var value in context.GetValues(Name))
             {
-                context.PushData(value);
+                context.Push(this, value);
 
-                foreach (var child in _children)
-                {
-                    child.Render(context);
-                }
+                base.Render(context);
 
-                context.PopData();
+                context.Pop();
             }
         }
 
@@ -63,7 +26,7 @@ namespace Nustache.Core
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other._name, _name);
+            return Equals(other.Name, Name);
         }
 
         public override bool Equals(object obj)
@@ -76,12 +39,12 @@ namespace Nustache.Core
 
         public override int GetHashCode()
         {
-            return (_name != null ? _name.GetHashCode() : 0);
+            return (Name != null ? Name.GetHashCode() : 0);
         }
 
         public override string ToString()
         {
-            return string.Format("StartSection(\"{0}\")", _name);
+            return string.Format("StartSection(\"{0}\")", Name);
         }
 
         #endregion
