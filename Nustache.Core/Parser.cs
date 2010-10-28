@@ -6,44 +6,57 @@ namespace Nustache.Core
     {
         public IEnumerable<Part> Parse(IEnumerable<Part> parts)
         {
-            var enumerator = parts.GetEnumerator();
+            var sectionStack = new Stack<StartSection>();
+            StartSection startSection = null;
 
-            while (enumerator.MoveNext())
+            foreach (var part in parts)
             {
-                var part = enumerator.Current;
-
-                var startSection = part as StartSection;
-
                 if (startSection != null)
                 {
-                    while (enumerator.MoveNext())
-                    {
-                        var child = enumerator.Current;
-
-                        startSection.Children.Add(child);
-
-                        var endSection = child as EndSection;
-
-                        if (endSection != null)
-                        {
-                            if (endSection.Name != startSection.Name)
-                            {
-                                throw new NustacheException(
-                                    string.Format(
-                                        "End section {0} does not match start section {1}!",
-                                        endSection.Name,
-                                        startSection.Name));
-                            }
-
-                            yield return startSection;
-
-                            break;
-                        }
-                    }
+                    startSection.Children.Add(part);
                 }
                 else
                 {
-                    yield return part;
+                    if (!(part is StartSection))
+                    {
+                        yield return part;
+                    }
+                }
+
+                if (part is StartSection)
+                {
+                    sectionStack.Push(startSection);
+                    startSection = (StartSection)part;
+                }
+                else if (part is EndSection)
+                {
+                    var endSection = (EndSection)part;
+
+                    if (startSection == null)
+                    {
+                        throw new NustacheException(
+                            string.Format(
+                                "End section {0} does not match any start section!",
+                                endSection.Name));
+                    }
+
+                    if (endSection.Name != startSection.Name)
+                    {
+                        throw new NustacheException(
+                            string.Format(
+                                "End section {0} does not match start section {1}!",
+                                endSection.Name,
+                                startSection.Name));
+                    }
+
+                    var lastStartSection = sectionStack.Pop();
+
+                    if (lastStartSection == null)
+                    {
+                        yield return startSection;
+                    }
+
+                    startSection = lastStartSection;
                 }
             }
         }
