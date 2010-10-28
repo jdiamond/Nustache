@@ -6,6 +6,10 @@
   - Looks up context stack.
   - {{>}} invokes parent template with same name?
 - Add magic variables like {{$i}} and {{$first}}.
+  - Need to work with sections, too, like {{#$first}}first stuff goes here{{/$first}}.
+- Add some syntax to define "local" variables?
+  - Either that or a way to evaluate variables in templates at definition time.
+    - {{<foo}}{{bar!}}{{/foo}}
 - Add support for variable modifiers like in ctemplate.
   - Need a way to specify custom modifiers.
 - Create command-line application.
