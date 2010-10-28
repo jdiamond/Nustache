@@ -2,14 +2,14 @@ using System.Collections.Generic;
 
 namespace Nustache.Core
 {
-    public class Container : Part
+    public class Section : Part
     {
         private readonly string _name;
         private readonly List<Part> _children = new List<Part>();
         private readonly Dictionary<string, TemplateDefinition> _templateDefinitions =
             new Dictionary<string, TemplateDefinition>();
 
-        public Container(string name)
+        public Section(string name)
         {
             _name = name;
         }

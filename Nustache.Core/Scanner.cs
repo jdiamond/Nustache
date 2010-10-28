@@ -25,7 +25,7 @@ namespace Nustache.Core
 
                 if (marker[0] == '#')
                 {
-                    yield return new StartSection(marker.Substring(1));
+                    yield return new Block(marker.Substring(1));
                 }
                 else if (marker[0] == '<')
                 {

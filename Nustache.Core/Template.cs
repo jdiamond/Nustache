@@ -3,10 +3,10 @@ using System.IO;
 
 namespace Nustache.Core
 {
-    public class Template : Container
+    public class Template : Section
     {
         public Template()
-            : base("-root-")
+            : base("#template") // I'm not happy about this fake name.
         {
         }
 
@@ -28,7 +28,7 @@ namespace Nustache.Core
             var scanner = new Scanner();
             var parser = new Parser();
 
-            Load(parser.Parse(scanner.Scan(template)));
+            parser.Parse(this, scanner.Scan(template));
         }
 
         /// <summary>

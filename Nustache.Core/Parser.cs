@@ -1,38 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Nustache.Core
 {
     public class Parser
     {
-        public IEnumerable<Part> Parse(IEnumerable<Part> parts)
+        public void Parse(Section section, IEnumerable<Part> parts)
         {
-            var containerStack = new Stack<Container>();
-            Container container = null;
+            if (section == null)
+                throw new ArgumentNullException("section");
+
+            var sectionStack = new Stack<Section>();
+            sectionStack.Push(section);
 
             foreach (var part in parts)
             {
-                if (container != null)
-                {
-                    container.Add(part);
-                }
-                else
-                {
-                    if (!(part is Container))
-                    {
-                        yield return part;
-                    }
-                }
+                section.Add(part);
 
-                if (part is Container)
+                if (part is Section)
                 {
-                    containerStack.Push(container);
-                    container = (Container)part;
+                    sectionStack.Push(section);
+                    section = (Section)part;
                 }
                 else if (part is EndSection)
                 {
                     var endSection = (EndSection)part;
 
-                    if (container == null)
+                    if (sectionStack.Count == 1)
                     {
                         throw new NustacheException(
                             string.Format(
@@ -40,23 +34,16 @@ namespace Nustache.Core
                                 endSection.Name));
                     }
 
-                    if (endSection.Name != container.Name)
+                    if (endSection.Name != section.Name)
                     {
                         throw new NustacheException(
                             string.Format(
                                 "End section {0} does not match start section {1}!",
                                 endSection.Name,
-                                container.Name));
+                                section.Name));
                     }
 
-                    var lastStartSection = containerStack.Pop();
-
-                    if (lastStartSection == null)
-                    {
-                        yield return container;
-                    }
-
-                    container = lastStartSection;
+                    section = sectionStack.Pop();
                 }
             }
         }

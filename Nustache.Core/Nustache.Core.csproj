@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Container.cs" />
+    <Compile Include="Section.cs" />
     <Compile Include="TemplateDefinition.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="RenderContext.cs" />
@@ -55,7 +55,7 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Part.cs" />
     <Compile Include="Scanner.cs" />
-    <Compile Include="StartSection.cs" />
+    <Compile Include="Block.cs" />
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateInclude.cs" />

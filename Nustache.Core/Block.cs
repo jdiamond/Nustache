@@ -1,8 +1,8 @@
 namespace Nustache.Core
 {
-    public class StartSection : Container
+    public class Block : Section
     {
-        public StartSection(string name, params Part[] children)
+        public Block(string name, params Part[] children)
             : base(name)
         {
             Load(children);
@@ -22,7 +22,7 @@ namespace Nustache.Core
 
         #region Boring stuff
 
-        public bool Equals(StartSection other)
+        public bool Equals(Block other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -33,8 +33,8 @@ namespace Nustache.Core
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(StartSection)) return false;
-            return Equals((StartSection)obj);
+            if (obj.GetType() != typeof(Block)) return false;
+            return Equals((Block)obj);
         }
 
         public override int GetHashCode()
@@ -44,7 +44,7 @@ namespace Nustache.Core
 
         public override string ToString()
         {
-            return string.Format("StartSection(\"{0}\")", Name);
+            return string.Format("Block(\"{0}\")", Name);
         }
 
         #endregion

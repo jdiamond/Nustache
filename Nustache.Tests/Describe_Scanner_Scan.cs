@@ -59,7 +59,7 @@ namespace Nustache.Tests
 
             CollectionAssert.AreEqual(new Part[]
                                       {
-                                          new StartSection("foo"),
+                                          new Block("foo"),
                                           new LiteralText("inside"),
                                           new EndSection("foo"),
                                       },

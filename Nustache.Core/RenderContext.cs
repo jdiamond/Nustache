@@ -8,7 +8,7 @@ namespace Nustache.Core
     public class RenderContext
     {
         private const int IncludeLimit = 1024;
-        private readonly Stack<Container> _containerStack = new Stack<Container>();
+        private readonly Stack<Section> _sectionStack = new Stack<Section>();
         private readonly Stack<object> _dataStack = new Stack<object>();
         private readonly TextWriter _writer;
         private readonly Func<string, Template> _templateLocator;
@@ -16,7 +16,7 @@ namespace Nustache.Core
 
         public RenderContext(Template template, object data, TextWriter writer, Func<string, Template> templateLocator)
         {
-            _containerStack.Push(template);
+            _sectionStack.Push(template);
             _dataStack.Push(data);
             _writer = writer;
             _templateLocator = templateLocator;
@@ -120,9 +120,9 @@ namespace Nustache.Core
 
         private TemplateDefinition GetTemplateDefinition(string name)
         {
-            foreach (var container in _containerStack)
+            foreach (var section in _sectionStack)
             {
-                var templateDefinition = container.GetTemplateDefinition(name);
+                var templateDefinition = section.GetTemplateDefinition(name);
 
                 if (templateDefinition != null)
                 {
@@ -133,15 +133,15 @@ namespace Nustache.Core
             return null;
         }
 
-        public void Push(Container section, object data)
+        public void Push(Section section, object data)
         {
-            _containerStack.Push(section);
+            _sectionStack.Push(section);
             _dataStack.Push(data);
         }
 
         public void Pop()
         {
-            _containerStack.Pop();
+            _sectionStack.Pop();
         }
     }
 }
