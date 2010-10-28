@@ -127,5 +127,16 @@ namespace Nustache.Tests
 
             Assert.AreEqual("beforeFOOafter", result);
         }
+
+        [Test]
+        public void It_throws_to_prevent_infinite_template_recursion()
+        {
+            var fooTemplate = new Template();
+            fooTemplate.Load(new StringReader("{{>foo}}"));
+
+            Assert.Throws<NustacheException>(
+                () => Render.StringToString(
+                    "before{{>foo}}after", null, name => fooTemplate));
+        }
     }
 }
