@@ -1,9 +1,7 @@
 - Implement template includes.
   - Need a way to prevent infinite recursion.
 - Define a way to look up templates for including.
-- Variables should be able to access public fields
-  and methods that return a value and take no params.
-- Support IDictionary and ICustomTypeDescriptor.
+- Add tests for ValueGetter.
 - Add a syntax for defining templates.
   - {{<foo}}template definition goes here{{/foo}}
   - {{>foo}} looks for defined templates before hitting the disk.

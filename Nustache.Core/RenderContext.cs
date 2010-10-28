@@ -1,16 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace Nustache.Core
 {
     public class RenderContext
     {
-        private const BindingFlags DefaultBindingFlags =
-            BindingFlags.Instance |
-            BindingFlags.Public;
-
         private readonly Stack<object> _stack = new Stack<object>();
         private object _data;
         private readonly TextWriter _writer;
@@ -47,15 +42,19 @@ namespace Nustache.Core
 
         private static object GetValue(string name, object data)
         {
-            if (data == null) return null;
+            if (data == null)
+            {
+                return null;
+            }
 
-            var propertyInfo = data.GetType().GetProperty(name, DefaultBindingFlags);
+            var getter = ValueGetter.GetValueGetter(data, name);
 
-            if (propertyInfo == null) return null;
+            if (getter.CanGetValue())
+            {
+                return getter.GetValue();
+            }
 
-            var value = propertyInfo.GetValue(data, null);
-
-            return value;
+            return null;
         }
 
         public IEnumerable<object> GetValues(string name)

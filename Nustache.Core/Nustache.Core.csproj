@@ -57,6 +57,7 @@
     <Compile Include="Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateInclude.cs" />
+    <Compile Include="ValueGetter.cs" />
     <Compile Include="VariableMarker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
