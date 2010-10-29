@@ -32,7 +32,7 @@ namespace Nustache.Tests
                                          new EndSection("foo")),
                         new LiteralText("after")
                     },
-                template.Children.ToArray());
+                template.Parts.ToArray());
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Nustache.Tests
                                          new EndSection("foo")),
                         new LiteralText("after foo")
                     },
-                template.Children.ToArray());
+                template.Parts.ToArray());
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace Nustache.Tests
                                          new EndSection("foo")),
                         new LiteralText("after foo 1")
                     },
-                template.Children.ToArray());
+                template.Parts.ToArray());
         }
 
         [Test]

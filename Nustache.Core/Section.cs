@@ -5,7 +5,7 @@ namespace Nustache.Core
     public class Section : Part
     {
         private readonly string _name;
-        private readonly List<Part> _children = new List<Part>();
+        private readonly List<Part> _parts = new List<Part>();
         private readonly Dictionary<string, TemplateDefinition> _templateDefinitions =
             new Dictionary<string, TemplateDefinition>();
 
@@ -19,7 +19,7 @@ namespace Nustache.Core
             get { return _name; }
         }
 
-        public IEnumerable<Part> Children { get { return _children; } }
+        public IEnumerable<Part> Parts { get { return _parts; } }
 
         public void Load(IEnumerable<Part> parts)
         {
@@ -29,16 +29,16 @@ namespace Nustache.Core
             }
         }
 
-        public void Add(Part child)
+        public void Add(Part part)
         {
-            if (child is TemplateDefinition)
+            if (part is TemplateDefinition)
             {
-                var templateDefinition = (TemplateDefinition)child;
+                var templateDefinition = (TemplateDefinition)part;
                 _templateDefinitions.Add(templateDefinition.Name, templateDefinition);
             }
             else
             {
-                _children.Add(child);
+                _parts.Add(part);
             }
         }
 
@@ -51,9 +51,9 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
-            foreach (var child in _children)
+            foreach (var part in _parts)
             {
-                child.Render(context);
+                part.Render(context);
             }
         }
     }

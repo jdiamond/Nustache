@@ -21,11 +21,11 @@ namespace Nustache.Tests
                         new LiteralText("bar"),
                         new LiteralText("baz")
                     },
-                section.Children.ToArray());
+                section.Parts.ToArray());
         }
 
         [Test]
-        public void It_does_not_treat_template_definitions_as_children()
+        public void It_does_not_hold_template_definitions_with_other_parts()
         {
             var section = new Section("foo");
 
@@ -39,7 +39,7 @@ namespace Nustache.Tests
                         new LiteralText("bar"),
                         new LiteralText("quux")
                     },
-                section.Children.ToArray());
+                section.Parts.ToArray());
         }
 
         [Test]

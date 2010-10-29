@@ -2,10 +2,10 @@ namespace Nustache.Core
 {
     public class Block : Section
     {
-        public Block(string name, params Part[] children)
+        public Block(string name, params Part[] parts)
             : base(name)
         {
-            Load(children);
+            Load(parts);
         }
 
         public override void Render(RenderContext context)
