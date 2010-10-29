@@ -44,7 +44,7 @@ namespace Nustache.Tests
             CollectionAssert.AreEqual(new Part[]
                                       {
                                           new LiteralText("before"),
-                                          new VariableMarker("foo"),
+                                          new VariableReference("foo"),
                                           new LiteralText("after"),
                                       },
                                       parts.ToArray());
