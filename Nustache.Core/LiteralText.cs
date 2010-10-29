@@ -1,3 +1,5 @@
+using System;
+
 namespace Nustache.Core
 {
     public class LiteralText : Part
@@ -6,6 +8,11 @@ namespace Nustache.Core
 
         public LiteralText(string text)
         {
+            if (text == null)
+            {
+                throw new ArgumentNullException("text");
+            }
+
             _text = text;
         }
 
@@ -16,13 +23,6 @@ namespace Nustache.Core
 
         #region Boring stuff
 
-        public bool Equals(LiteralText other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(other._text, _text);
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -31,9 +31,16 @@ namespace Nustache.Core
             return Equals((LiteralText)obj);
         }
 
+        public bool Equals(LiteralText other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other._text, _text);
+        }
+
         public override int GetHashCode()
         {
-            return (_text != null ? _text.GetHashCode() : 0);
+            return _text.GetHashCode();
         }
 
         public override string ToString()
