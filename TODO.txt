@@ -1,3 +1,17 @@
+- Add a default escape function.
+  - Or ability to specify one in the template.
+  - Probably passed in as a Func<string, string>.
+  - Should it default to HTML escaping or none?
+  - Maybe use AntiXss library?
+  - {{{variables}}} don't get escaped.
+- Render helper methods that read from files should use a template
+  locator that reads from the folder containing the template.
+- Provide some implementations for locating templates.
+  - From a Dictionary<string, Template>.
+  - From the file system.
+    - Option for multiple paths.
+  - From assembly resources.
+  - From other locators.
 - {{>}} invokes parent template with same name?
 - Add magic variables like {{$i}} and {{$first}}.
   - Need to work with sections, too, like {{#$first}}first stuff goes here{{/$first}}.
@@ -9,6 +23,5 @@
 - Create command-line application.
 - Be able to generate static code for later compilation.
   - Would be nice if it didn't use reflection.
-- Also, think about dynamically generating code for immediate
-  use. May be faster.
+- Also, think about dynamically generating code for immediate use. May be faster.
 - Look into creating an MVC view engine.
