@@ -14,9 +14,9 @@ namespace Nustache.Core
         private readonly Func<string, Template> _templateLocator;
         private int _includeLevel;
 
-        public RenderContext(Template template, object data, TextWriter writer, Func<string, Template> templateLocator)
+        public RenderContext(Section section, object data, TextWriter writer, Func<string, Template> templateLocator)
         {
-            _sectionStack.Push(template);
+            _sectionStack.Push(section);
             _dataStack.Push(data);
             _writer = writer;
             _templateLocator = templateLocator;
@@ -25,36 +25,25 @@ namespace Nustache.Core
 
         public object GetValue(string name)
         {
-            if (name == ".") return _dataStack.Peek();
-
-            var value = GetValue(name, _dataStack.Peek());
-
-            if (value != null)
+            if (name == ".")
             {
-                return value;
+                return _dataStack.Peek();
             }
 
             foreach (var data in _dataStack)
             {
-                value = GetValue(name, data);
-
-                if (value != null)
+                if (data != null)
                 {
-                    return value;
+                    var value = ValueGetter.GetValue(data, name);
+
+                    if (value != null)
+                    {
+                        return value;
+                    }
                 }
             }
 
             return null;
-        }
-
-        private static object GetValue(string name, object data)
-        {
-            if (data == null)
-            {
-                return null;
-            }
-
-            return ValueGetter.GetValue(data, name);
         }
 
         public IEnumerable<object> GetValues(string name)

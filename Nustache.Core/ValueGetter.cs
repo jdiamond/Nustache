@@ -13,7 +13,7 @@ namespace Nustache.Core
             return GetValueGetter(target, name).GetValue();
         }
 
-        public static ValueGetter GetValueGetter(object target, string name)
+        private static ValueGetter GetValueGetter(object target, string name)
         {
             return PropertyDescriptorValueGetter.GetPropertyDescriptorValueGetter(target, name)
                 ?? MethodInfoValueGetter.GetMethodInfoValueGetter(target, name)
