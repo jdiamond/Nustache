@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Describe_Render.cs" />
     <Compile Include="Describe_Section.cs" />
     <Compile Include="Describe_Parser_Parse.cs" />
     <Compile Include="Describe_Scanner_Scan.cs" />

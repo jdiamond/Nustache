@@ -20,17 +20,26 @@ namespace Nustache.Core
 
         public static string FileToString(string templatePath, object data)
         {
-            throw new NotImplementedException();
+            var template = File.ReadAllText(templatePath);
+            return StringToString(template, data);
         }
 
         public static void StringToFile(string template, object data, string outputPath)
         {
-            throw new NotImplementedException();
+            var reader = new StringReader(template);
+            using (var writer = new StreamWriter(File.OpenWrite(outputPath)))
+            {
+                Template(reader, data, writer, null);
+            }
         }
 
         public static void FileToFile(string templatePath, object data, string outputPath)
         {
-            throw new NotImplementedException();
+            var reader = new StringReader(File.ReadAllText(templatePath));
+            using (var writer = new StreamWriter(File.OpenWrite(outputPath)))
+            {
+                Template(reader, data, writer, null);
+            }
         }
 
         public static void Template(TextReader reader, object data, TextWriter writer, Func<string, Template> templateLocator)
