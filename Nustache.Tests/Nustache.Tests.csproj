@@ -62,6 +62,7 @@
     <Compile Include="Describe_Template_Render.cs" />
     <Compile Include="Describe_ValueGetter.cs" />
     <Compile Include="PartComparer.cs" />
+    <Compile Include="EnumerablePartExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

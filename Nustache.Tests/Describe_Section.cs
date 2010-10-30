@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Nustache.Core;
 
 namespace Nustache.Tests
@@ -15,14 +14,8 @@ namespace Nustache.Tests
             section.Add(new LiteralText("bar"));
             section.Add(new LiteralText("baz"));
 
-            CollectionAssert.AreEqual(
-                new Part[]
-                    {
-                        new LiteralText("bar"),
-                        new LiteralText("baz")
-                    },
-                section.Parts.ToArray(),
-                new PartComparer());
+            section.Parts.IsEqualTo(new LiteralText("bar"),
+                                    new LiteralText("baz"));
         }
 
         [Test]
@@ -34,14 +27,8 @@ namespace Nustache.Tests
             section.Add(new TemplateDefinition("baz"));
             section.Add(new LiteralText("quux"));
 
-            CollectionAssert.AreEqual(
-                new Part[]
-                    {
-                        new LiteralText("bar"),
-                        new LiteralText("quux")
-                    },
-                section.Parts.ToArray(),
-                new PartComparer());
+            section.Parts.IsEqualTo(new LiteralText("bar"),
+                                    new LiteralText("quux"));
         }
 
         [Test]

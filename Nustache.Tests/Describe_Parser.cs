@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using Nustache.Core;
 
@@ -32,17 +31,11 @@ namespace Nustache.Tests
                                  new LiteralText("after")
                              });
 
-            CollectionAssert.AreEqual(
-                new Part[]
-                    {
-                        new LiteralText("before"),
-                        new Block("foo",
-                                  new LiteralText("inside"),
-                                  new EndSection("foo")),
-                        new LiteralText("after")
-                    },
-                template.Parts.ToArray(),
-                new PartComparer());
+            template.Parts.IsEqualTo(new LiteralText("before"),
+                                     new Block("foo",
+                                               new LiteralText("inside"),
+                                               new EndSection("foo")),
+                                     new LiteralText("after"));
         }
 
         [Test]
@@ -65,21 +58,15 @@ namespace Nustache.Tests
                                  new LiteralText("after foo")
                              });
 
-            CollectionAssert.AreEqual(
-                new Part[]
-                    {
-                        new LiteralText("before foo"),
-                        new Block("foo",
-                                  new LiteralText("before bar"),
-                                  new Block("bar",
-                                            new LiteralText("inside bar"),
-                                            new EndSection("bar")),
-                                  new LiteralText("after bar"),
-                                  new EndSection("foo")),
-                        new LiteralText("after foo")
-                    },
-                template.Parts.ToArray(),
-                new PartComparer());
+            template.Parts.IsEqualTo(new LiteralText("before foo"),
+                                     new Block("foo",
+                                               new LiteralText("before bar"),
+                                               new Block("bar",
+                                                         new LiteralText("inside bar"),
+                                                         new EndSection("bar")),
+                                               new LiteralText("after bar"),
+                                               new EndSection("foo")),
+                                     new LiteralText("after foo"));
         }
 
         [Test]
@@ -102,21 +89,15 @@ namespace Nustache.Tests
                                  new LiteralText("after foo 1")
                              });
 
-            CollectionAssert.AreEqual(
-                new Part[]
-                    {
-                        new LiteralText("before foo 1"),
-                        new Block("foo",
-                                  new LiteralText("before foo 2"),
-                                  new Block("foo",
-                                            new LiteralText("inside foo 2"),
-                                            new EndSection("foo")),
-                                  new LiteralText("after foo 2"),
-                                  new EndSection("foo")),
-                        new LiteralText("after foo 1")
-                    },
-                template.Parts.ToArray(),
-                new PartComparer());
+            template.Parts.IsEqualTo(new LiteralText("before foo 1"),
+                                     new Block("foo",
+                                               new LiteralText("before foo 2"),
+                                               new Block("foo",
+                                                         new LiteralText("inside foo 2"),
+                                                         new EndSection("foo")),
+                                               new LiteralText("after foo 2"),
+                                               new EndSection("foo")),
+                                     new LiteralText("after foo 1"));
         }
 
         [Test]
