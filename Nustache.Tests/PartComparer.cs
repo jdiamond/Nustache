@@ -3,7 +3,7 @@ using Nustache.Core;
 
 namespace Nustache.Tests
 {
-    class PartComparer : IComparer
+    internal class PartComparer : IComparer
     {
         public int Compare(object x, object y)
         {
@@ -20,6 +20,11 @@ namespace Nustache.Tests
             if (x.GetType() == typeof(LiteralText))
             {
                 return ((LiteralText)x).Text.CompareTo(((LiteralText)y).Text);
+            }
+
+            if (x.GetType() == typeof(TemplateDefinition))
+            {
+                return ((TemplateDefinition)x).Name.CompareTo(((TemplateDefinition)y).Name);
             }
 
             if (x.GetType() == typeof(TemplateInclude))

@@ -37,7 +37,7 @@ namespace Nustache.Tests
         }
 
         [Test]
-        public void It_scans_variable_markers()
+        public void It_scans_variable_references()
         {
             var scanner = new Scanner();
 
@@ -70,8 +70,24 @@ namespace Nustache.Tests
                                       new PartComparer());
         }
 
+        public void It_scans_template_definitions()
+        {
+            var scanner = new Scanner();
+
+            var parts = scanner.Scan("{{<foo}}inside{{/foo}}");
+
+            CollectionAssert.AreEqual(new Part[]
+                                      {
+                                          new TemplateDefinition("foo"),
+                                          new LiteralText("inside"),
+                                          new EndSection("foo"),
+                                      },
+                                      parts.ToArray(),
+                                      new PartComparer());
+        }
+
         [Test]
-        public void It_scans_template_include_markers()
+        public void It_scans_template_includes()
         {
             var scanner = new Scanner();
 
@@ -88,7 +104,7 @@ namespace Nustache.Tests
         }
 
         [Test]
-        public void It_skips_comment_markers()
+        public void It_skips_comments()
         {
             var scanner = new Scanner();
 
