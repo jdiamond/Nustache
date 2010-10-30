@@ -5,7 +5,7 @@ using Nustache.Core;
 namespace Nustache.Tests
 {
     [TestFixture]
-    public class Describe_Scanner_Scan
+    public class Describe_Scanner
     {
         [Test]
         public void It_returns_no_parts_for_the_empty_string()
@@ -17,7 +17,8 @@ namespace Nustache.Tests
             CollectionAssert.AreEqual(new Part[]
                                       {
                                       },
-                                      parts.ToArray());
+                                      parts.ToArray(),
+                                      new PartComparer());
         }
 
         [Test]
@@ -31,7 +32,8 @@ namespace Nustache.Tests
                                       {
                                           new LiteralText("foo"),
                                       },
-                                      parts.ToArray());
+                                      parts.ToArray(),
+                                      new PartComparer());
         }
 
         [Test]
@@ -47,7 +49,8 @@ namespace Nustache.Tests
                                           new VariableReference("foo"),
                                           new LiteralText("after"),
                                       },
-                                      parts.ToArray());
+                                      parts.ToArray(),
+                                      new PartComparer());
         }
 
         [Test]
@@ -63,7 +66,8 @@ namespace Nustache.Tests
                                           new LiteralText("inside"),
                                           new EndSection("foo"),
                                       },
-                                      parts.ToArray());
+                                      parts.ToArray(),
+                                      new PartComparer());
         }
 
         [Test]
@@ -79,7 +83,8 @@ namespace Nustache.Tests
                                           new TemplateInclude("foo"),
                                           new LiteralText("after"),
                                       },
-                                      parts.ToArray());
+                                      parts.ToArray(),
+                                      new PartComparer());
         }
 
         [Test]
@@ -94,7 +99,8 @@ namespace Nustache.Tests
                                           new LiteralText("before"),
                                           new LiteralText("after"),
                                       },
-                                      parts.ToArray());
+                                      parts.ToArray(),
+                                      new PartComparer());
         }
     }
 }

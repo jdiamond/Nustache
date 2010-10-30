@@ -6,20 +6,21 @@ using Nustache.Core;
 namespace Nustache.Tests
 {
     [TestFixture]
-    public class Describe_VariableReference
+    public class Describe_TemplateDefinition
     {
         [Test]
         public void It_cant_be_constructed_with_a_null_name()
         {
-            Assert.Throws<ArgumentNullException>(() => new VariableReference(null));
+            Assert.Throws<ArgumentNullException>(() => new TemplateDefinition(null));
         }
 
         [Test]
-        public void It_renders_the_named_value_from_the_context()
+        public void It_renders_its_child_parts()
         {
-            var a = new VariableReference("a");
+            var a = new TemplateDefinition("a");
+            a.Load(new Part[] { new LiteralText("b") });
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = "b" }, writer, null);
+            var context = new RenderContext(new Template(), null, writer, null);
 
             a.Render(context);
 
@@ -29,9 +30,9 @@ namespace Nustache.Tests
         [Test]
         public void It_has_a_useful_ToString_method()
         {
-            var a = new VariableReference("a");
+            var a = new TemplateDefinition("a");
 
-            Assert.AreEqual("VariableReference(\"a\")", a.ToString());
+            Assert.AreEqual("TemplateDefinition(\"a\")", a.ToString());
         }
     }
 }

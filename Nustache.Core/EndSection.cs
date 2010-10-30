@@ -1,3 +1,5 @@
+using System;
+
 namespace Nustache.Core
 {
     public class EndSection : Part
@@ -6,6 +8,11 @@ namespace Nustache.Core
 
         public EndSection(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
             _name = name;
         }
 
@@ -18,33 +25,9 @@ namespace Nustache.Core
         {
         }
 
-        #region Boring stuff
-
-        public bool Equals(EndSection other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(other._name, _name);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(EndSection)) return false;
-            return Equals((EndSection)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return (_name != null ? _name.GetHashCode() : 0);
-        }
-
         public override string ToString()
         {
             return string.Format("EndSection(\"{0}\")", _name);
         }
-
-        #endregion
     }
 }

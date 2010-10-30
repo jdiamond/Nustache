@@ -6,32 +6,32 @@ using Nustache.Core;
 namespace Nustache.Tests
 {
     [TestFixture]
-    public class Describe_LiteralText
+    public class Describe_EndSection
     {
         [Test]
-        public void It_cant_be_constructed_with_null_text()
+        public void It_cant_be_constructed_with_a_null_name()
         {
-            Assert.Throws<ArgumentNullException>(() => new LiteralText(null));
+            Assert.Throws<ArgumentNullException>(() => new EndSection(null));
         }
 
         [Test]
-        public void It_renders_its_text()
+        public void It_renders_nothing()
         {
-            var a = new LiteralText("a");
+            var a = new EndSection("a");
             var writer = new StringWriter();
             var context = new RenderContext(null, null, writer, null);
 
             a.Render(context);
 
-            Assert.AreEqual("a", writer.GetStringBuilder().ToString());
+            Assert.AreEqual("", writer.GetStringBuilder().ToString());
         }
 
         [Test]
         public void It_has_a_useful_ToString_method()
         {
-            var a = new LiteralText("a");
+            var a = new EndSection("a");
 
-            Assert.AreEqual("LiteralText(\"a\")", a.ToString());
+            Assert.AreEqual("EndSection(\"a\")", a.ToString());
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Nustache.Core
@@ -11,6 +12,11 @@ namespace Nustache.Core
 
         public Section(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
             _name = name;
         }
 

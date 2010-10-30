@@ -21,7 +21,8 @@ namespace Nustache.Tests
                         new LiteralText("bar"),
                         new LiteralText("baz")
                     },
-                section.Parts.ToArray());
+                section.Parts.ToArray(),
+                new PartComparer());
         }
 
         [Test]
@@ -39,7 +40,8 @@ namespace Nustache.Tests
                         new LiteralText("bar"),
                         new LiteralText("quux")
                     },
-                section.Parts.ToArray());
+                section.Parts.ToArray(),
+                new PartComparer());
         }
 
         [Test]

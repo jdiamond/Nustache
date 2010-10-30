@@ -49,14 +49,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Describe_TemplateDefinition.cs" />
+    <Compile Include="Describe_Block.cs" />
+    <Compile Include="Describe_EndSection.cs" />
+    <Compile Include="Describe_TemplateInclude.cs" />
     <Compile Include="Describe_LiteralText.cs" />
     <Compile Include="Describe_VariableReference.cs" />
     <Compile Include="Describe_Render.cs" />
     <Compile Include="Describe_Section.cs" />
-    <Compile Include="Describe_Parser_Parse.cs" />
-    <Compile Include="Describe_Scanner_Scan.cs" />
+    <Compile Include="Describe_Parser.cs" />
+    <Compile Include="Describe_Scanner.cs" />
     <Compile Include="Describe_Template_Render.cs" />
     <Compile Include="Describe_ValueGetter.cs" />
+    <Compile Include="PartComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

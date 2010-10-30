@@ -1,12 +1,21 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Nustache.Core;
 
 namespace Nustache.Tests
 {
     [TestFixture]
-    public class Describe_Parser_Parse
+    public class Describe_Parser
     {
+        [Test]
+        public void It_throws_when_section_is_null()
+        {
+            var parser = new Parser();
+
+            Assert.Throws<ArgumentNullException>(() => parser.Parse(null, null));
+        }
+
         [Test]
         public void It_combines_sections()
         {
@@ -32,7 +41,8 @@ namespace Nustache.Tests
                                   new EndSection("foo")),
                         new LiteralText("after")
                     },
-                template.Parts.ToArray());
+                template.Parts.ToArray(),
+                new PartComparer());
         }
 
         [Test]
@@ -68,7 +78,8 @@ namespace Nustache.Tests
                                   new EndSection("foo")),
                         new LiteralText("after foo")
                     },
-                template.Parts.ToArray());
+                template.Parts.ToArray(),
+                new PartComparer());
         }
 
         [Test]
@@ -104,7 +115,8 @@ namespace Nustache.Tests
                                   new EndSection("foo")),
                         new LiteralText("after foo 1")
                     },
-                template.Parts.ToArray());
+                template.Parts.ToArray(),
+                new PartComparer());
         }
 
         [Test]
