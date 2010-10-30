@@ -1,0 +1,6 @@
+﻿{
+	name: "Chris",
+	value: 10000,
+	taxed_value: 9600,
+	in_ca: true
+}

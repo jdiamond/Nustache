@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nustache", "nustache\nustache.csproj", "{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{872BE5F3-E52A-45C8-BEEB-1A9540F24153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{872BE5F3-E52A-45C8-BEEB-1A9540F24153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{872BE5F3-E52A-45C8-BEEB-1A9540F24153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
