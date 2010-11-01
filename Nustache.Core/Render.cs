@@ -21,7 +21,8 @@ namespace Nustache.Core
         public static string FileToString(string templatePath, object data)
         {
             var template = File.ReadAllText(templatePath);
-            return StringToString(template, data);
+            var templateLocator = GetTemplateLocator(templatePath);
+            return StringToString(template, data, templateLocator.GetTemplate);
         }
 
         public static void StringToFile(string template, object data, string outputPath)
@@ -36,9 +37,10 @@ namespace Nustache.Core
         public static void FileToFile(string templatePath, object data, string outputPath)
         {
             var reader = new StringReader(File.ReadAllText(templatePath));
+            var templateLocator = GetTemplateLocator(templatePath);
             using (var writer = new StreamWriter(File.OpenWrite(outputPath)))
             {
-                Template(reader, data, writer, null);
+                Template(reader, data, writer, templateLocator.GetTemplate);
             }
         }
 
@@ -47,6 +49,13 @@ namespace Nustache.Core
             var template = new Template();
             template.Load(reader);
             template.Render(data, writer, templateLocator);
+        }
+
+        private static FileSystemTemplateLocator GetTemplateLocator(string templatePath)
+        {
+            string dir = Path.GetDirectoryName(templatePath);
+            string ext = Path.GetExtension(templatePath);
+            return new FileSystemTemplateLocator(ext, dir);
         }
     }
 }

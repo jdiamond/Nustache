@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PartExtensions.cs" />
+    <Compile Include="Describe_FileSystemTemplateLocator.cs" />
+    <Compile Include="FileSystemTestFixture.cs" />
     <Compile Include="Describe_TemplateDefinition.cs" />
     <Compile Include="Describe_Block.cs" />
     <Compile Include="Describe_EndSection.cs" />

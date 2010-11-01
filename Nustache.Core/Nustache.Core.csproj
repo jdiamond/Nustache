@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="TemplateDefinition.cs" />
     <Compile Include="Render.cs" />

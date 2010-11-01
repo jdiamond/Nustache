@@ -58,6 +58,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="test-include.nustache">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

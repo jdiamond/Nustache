@@ -1,0 +1,3 @@
+﻿{{#in_ca}}
+Well, ${{taxed_value}}, after taxes.
+{{/in_ca}}
