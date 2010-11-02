@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Tests", "Nustache.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D6A76C1-E840-4BB4-AAA6-CA39BECEAF21}"
 	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
