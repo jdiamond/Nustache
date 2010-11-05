@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{872BE5F3-E52A-45C8-BEEB-1A9540F24153}</ProjectGuid>
+    <ProjectGuid>{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Nustache.Tests</RootNamespace>
-    <AssemblyName>Nustache.Tests</AssemblyName>
+    <RootNamespace>Nustache.Mvc</RootNamespace>
+    <AssemblyName>Nustache.Mvc</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,18 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Moq\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\NUnit\framework\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -53,23 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PartExtensions.cs" />
-    <Compile Include="Describe_FileSystemTemplateLocator.cs" />
-    <Compile Include="FileSystemTestFixture.cs" />
-    <Compile Include="Describe_TemplateDefinition.cs" />
-    <Compile Include="Describe_Block.cs" />
-    <Compile Include="Describe_EndSection.cs" />
-    <Compile Include="Describe_TemplateInclude.cs" />
-    <Compile Include="Describe_LiteralText.cs" />
-    <Compile Include="Describe_VariableReference.cs" />
-    <Compile Include="Describe_Render.cs" />
-    <Compile Include="Describe_Section.cs" />
-    <Compile Include="Describe_Parser.cs" />
-    <Compile Include="Describe_Scanner.cs" />
-    <Compile Include="Describe_Template_Render.cs" />
-    <Compile Include="Describe_ValueGetter.cs" />
-    <Compile Include="PartComparer.cs" />
-    <Compile Include="EnumerablePartExtensions.cs" />
+    <Compile Include="NustacheView.cs" />
+    <Compile Include="NustacheViewEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

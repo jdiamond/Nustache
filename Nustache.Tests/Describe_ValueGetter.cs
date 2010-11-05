@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Moq;
 using NUnit.Framework;
 using Nustache.Core;
 
@@ -67,6 +68,16 @@ namespace Nustache.Tests
             Dictionary<string, int> target = new Dictionary<string, int>();
             target["IntKey"] = 123;
             Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey"));
+        }
+
+        [Test]
+        public void It_gets_GenericDictionary_values()
+        {
+            var mock = new Mock<IDictionary<string, int>>();
+            mock.Setup(x => x.ContainsKey("Key")).Returns(true);
+            mock.Setup(x => x["Key"]).Returns(123);
+            IDictionary<string, int> target = mock.Object;
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "Key"));
         }
 
         [Test]

@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nustache", "nustache\nustache.csproj", "{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Mvc", "Nustache.Mvc\Nustache.Mvc.csproj", "{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Mvc.Example", "Nustache.Mvc.Example\Nustache.Mvc.Example.csproj", "{07E2AC37-08D6-46D4-A9DD-13F6A70E1427}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,14 @@ Global
 		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07E2AC37-08D6-46D4-A9DD-13F6A70E1427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07E2AC37-08D6-46D4-A9DD-13F6A70E1427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07E2AC37-08D6-46D4-A9DD-13F6A70E1427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07E2AC37-08D6-46D4-A9DD-13F6A70E1427}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
