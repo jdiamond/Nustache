@@ -1,7 +1,7 @@
 using System.Collections;
 using Nustache.Core;
 
-namespace Nustache.Tests
+namespace Nustache.Core.Tests
 {
     internal class PartComparer : IComparer
     {

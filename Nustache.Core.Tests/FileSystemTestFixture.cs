@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
-namespace Nustache.Tests
+namespace Nustache.Core.Tests
 {
     public class FileSystemTestFixture
     {

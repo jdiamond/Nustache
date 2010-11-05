@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Nustache.Core;
 
-namespace Nustache.Tests
+namespace Nustache.Core.Tests
 {
     internal static class EnumerablePartExtensions
     {

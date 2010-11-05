@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using Moq;
 using NUnit.Framework;
-using Nustache.Core;
 
-namespace Nustache.Tests
+namespace Nustache.Core.Tests
 {
     [TestFixture]
     public class Describe_ValueGetter

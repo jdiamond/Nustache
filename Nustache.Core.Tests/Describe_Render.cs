@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using Nustache.Core;
 
-namespace Nustache.Tests
+namespace Nustache.Core.Tests
 {
     [TestFixture]
     public class Describe_Render : FileSystemTestFixture
