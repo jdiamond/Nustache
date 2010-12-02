@@ -5,16 +5,18 @@ using System.IO;
 
 namespace Nustache.Core
 {
+    public delegate Template TemplateLocator(string name);
+
     public class RenderContext
     {
         private const int IncludeLimit = 1024;
         private readonly Stack<Section> _sectionStack = new Stack<Section>();
         private readonly Stack<object> _dataStack = new Stack<object>();
         private readonly TextWriter _writer;
-        private readonly Func<string, Template> _templateLocator;
+        private readonly TemplateLocator _templateLocator;
         private int _includeLevel;
 
-        public RenderContext(Section section, object data, TextWriter writer, Func<string, Template> templateLocator)
+        public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator)
         {
             _sectionStack.Push(section);
             _dataStack.Push(data);

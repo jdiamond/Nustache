@@ -40,7 +40,7 @@ namespace Nustache.Core
         /// <remarks>
         /// The <paramref name="writer" /> is flushed, but not closed or disposed.
         /// </remarks>
-        public void Render(object data, TextWriter writer, Func<string, Template> templateLocator)
+        public void Render(object data, TextWriter writer, TemplateLocator templateLocator)
         {
             var context = new RenderContext(this, data, writer, templateLocator);
 

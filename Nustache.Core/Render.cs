@@ -10,7 +10,7 @@ namespace Nustache.Core
             return StringToString(template, data, null);
         }
 
-        public static string StringToString(string template, object data, Func<string, Template> templateLocator)
+        public static string StringToString(string template, object data, TemplateLocator templateLocator)
         {
             var reader = new StringReader(template);
             var writer = new StringWriter();
@@ -44,7 +44,7 @@ namespace Nustache.Core
             }
         }
 
-        public static void Template(TextReader reader, object data, TextWriter writer, Func<string, Template> templateLocator)
+        public static void Template(TextReader reader, object data, TextWriter writer, TemplateLocator templateLocator)
         {
             var template = new Template();
             template.Load(reader);
