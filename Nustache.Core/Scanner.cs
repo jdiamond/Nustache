@@ -5,7 +5,7 @@ namespace Nustache.Core
 {
     public class Scanner
     {
-        private static readonly Regex _markerRegex = new Regex(@"\{\{(.+?)\}\}");
+        private static readonly Regex _markerRegex = new Regex(@"\{\{([\{]?[^}]+?\}?)\}\}");
 
         public IEnumerable<Part> Scan(string template)
         {

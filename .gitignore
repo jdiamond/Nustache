@@ -3,3 +3,5 @@
 _ReSharper.*
 bin
 obj
+*.bak
+*.sln.cache

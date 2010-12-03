@@ -46,5 +46,20 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("bar", File.ReadAllText(outputPath));
         }
+
+        [Test]
+        public void It_can_render_encoded_text()
+        {
+          var result = Render.StringToString("{{foo}}", new { foo = "<bar>" });
+
+          Assert.AreEqual("&lt;bar&gt;", result);
+        }
+        [Test]
+        public void It_can_render_unencoded_text()
+        {
+          var result = Render.StringToString("{{{foo}}}", new { foo = "<bar>" });
+
+          Assert.AreEqual("<bar>", result);
+        }
     }
 }

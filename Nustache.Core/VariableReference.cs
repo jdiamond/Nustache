@@ -1,12 +1,15 @@
 using System;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Nustache.Core
 {
     public class VariableReference : Part
     {
         private readonly string _name;
-
-        public VariableReference(string name)
+      private readonly bool _escaped;
+      private static readonly Regex Inner = new Regex(@"^\{(.+?)\}$");
+      public VariableReference(string name)
         {
             if (name == null)
             {
@@ -14,6 +17,13 @@ namespace Nustache.Core
             }
 
             _name = name;
+        var match = Inner.Match(name);
+        _escaped = !match.Success;
+        if (match.Success)
+        {
+          _name = match.Groups[1].Value;
+        }
+
         }
 
         public string Name { get { return _name; } }
@@ -24,7 +34,9 @@ namespace Nustache.Core
 
             if (value != null)
             {
-                context.Write(value.ToString());
+              context.Write(_escaped
+                ? HttpUtility.HtmlEncode( value.ToString())
+                : value.ToString());
             }
         }
 
