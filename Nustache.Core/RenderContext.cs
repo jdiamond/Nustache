@@ -126,6 +126,7 @@ namespace Nustache.Core
         public void Pop()
         {
             _sectionStack.Pop();
+            _dataStack.Pop();
         }
     }
 }
