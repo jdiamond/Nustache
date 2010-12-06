@@ -59,7 +59,7 @@ namespace Nustache.Core
                     yield return value;
                 }
             }
-            else if (value is IEnumerable && !(value is string))
+            else if (value is IEnumerable && !(value is string || value is IDictionary))
             {
                 foreach (var item in ((IEnumerable)value))
                 {
