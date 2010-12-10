@@ -23,6 +23,11 @@ namespace Nustache.Core
             context.Include(_name);
         }
 
+        public override string Source()
+        {
+            return "{{> " + _name + "}}";
+        }
+
         public override string ToString()
         {
             return string.Format("TemplateInclude(\"{0}\")", _name);

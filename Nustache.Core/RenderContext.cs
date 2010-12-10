@@ -7,6 +7,8 @@ namespace Nustache.Core
 {
     public delegate Template TemplateLocator(string name);
 
+    public delegate Object Lambda(string text);
+
     public class RenderContext
     {
         private const int IncludeLimit = 1024;

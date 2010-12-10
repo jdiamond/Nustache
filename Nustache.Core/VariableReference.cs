@@ -28,6 +28,11 @@ namespace Nustache.Core
             }
         }
 
+        public override string Source()
+        {
+            return "{{" + _name + "}}";
+        }
+
         public override string ToString()
         {
             return string.Format("VariableReference(\"{0}\")", _name);

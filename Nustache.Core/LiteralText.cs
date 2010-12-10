@@ -23,6 +23,11 @@ namespace Nustache.Core
             context.Write(_text);
         }
 
+        public override string Source()
+        {
+            return _text;
+        }
+
         public override string ToString()
         {
             return string.Format("LiteralText(\"{0}\")", _text);
