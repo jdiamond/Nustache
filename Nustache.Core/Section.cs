@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Nustache.Core
 {
@@ -61,6 +62,24 @@ namespace Nustache.Core
             {
                 part.Render(context);
             }
+        }
+
+        protected string InnerSource()
+        {
+            var sb = new StringBuilder();
+            foreach (var part in Parts)
+            {
+                if (!(part is EndSection))
+                {
+                    sb.Append(part.Source());
+                }
+            }
+            return sb.ToString();
+        }
+
+        public override string Source()
+        {
+            return "{{#" + _name + "}}" + InnerSource() + "{{/" + _name + "}}";
         }
     }
 }

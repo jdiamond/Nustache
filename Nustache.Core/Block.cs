@@ -10,6 +10,13 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
+            var lambda = context.GetValue(Name) as Lambda;
+            if (lambda != null)
+            {
+                context.Write(lambda(InnerSource()).ToString());
+                return;
+            }
+
             foreach (var value in context.GetValues(Name))
             {
                 context.Push(this, value);

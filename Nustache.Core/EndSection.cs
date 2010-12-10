@@ -25,6 +25,11 @@ namespace Nustache.Core
         {
         }
 
+        public override string Source()
+        {
+            return "";
+        }
+
         public override string ToString()
         {
             return string.Format("EndSection(\"{0}\")", _name);
