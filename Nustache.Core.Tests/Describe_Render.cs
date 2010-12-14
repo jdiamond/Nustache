@@ -54,6 +54,7 @@ namespace Nustache.Core.Tests
 
           Assert.AreEqual("&lt;bar&gt;", result);
         }
+
         [Test]
         public void It_can_render_unencoded_text()
         {
