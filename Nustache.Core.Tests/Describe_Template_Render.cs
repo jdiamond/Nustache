@@ -116,6 +116,15 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_pushes_and_pops_contexts_correctly()
+        {
+            var result = Render.StringToString(
+                "{{bar}}{{#foo}}{{bar}}{{/foo}}{{bar}}",
+                new { foo = new { bar = "quux" }, bar = "baz" });
+            Assert.AreEqual("bazquuxbaz", result);
+        }
+
+        [Test]
         public void It_can_include_templates()
         {
             var fooTemplate = new Template();
