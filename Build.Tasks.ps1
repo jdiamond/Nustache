@@ -25,6 +25,13 @@ task RunUnitTests {
     Run-Test "Unit"
 }
 
+task Package {
+    $ILMerge = "$rootDir\Lib\ILMerge\ILMerge.exe"
+
+    iex "$ILMerge /target:exe /out:build\nustache.exe nustache\bin\Release\nustache.exe nustache\bin\Release\Nustache.Core.dll"
+
+}
+
 function Exit-IfError {
     param ($message)
 

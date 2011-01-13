@@ -1,5 +1,5 @@
 param(
-    $task = @("Clean", "Compile", "RunUnitTests"),
+    $task = @("Clean", "Compile", "RunUnitTests", "Package"),
     $verbose = "/noconsolelogger"  #q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]. e.g.: /v:n
 )
 
