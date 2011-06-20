@@ -66,26 +66,26 @@ namespace Nustache.Core
 
         public override object GetValue()
         {
-            if (_target.Attributes != null)
+            if (_name[0] == '@')
             {
-                XmlNode attribute = _target.Attributes.GetNamedItem(_name);
-
-                if (attribute != null)
+                if (_target.Attributes != null)
                 {
-                    return attribute.Value;
+                    XmlNode attribute = _target.Attributes.GetNamedItem(_name.Substring(1));
+
+                    if (attribute != null)
+                    {
+                        return attribute.Value;
+                    }
                 }
             }
-
-            XmlNodeList list = _target.SelectNodes(_name);
-
-            if (list != null)
+            else
             {
-                if (list.Count == 1)
-                {
-                    return list[0].InnerText;
-                }
+                XmlNodeList list = _target.SelectNodes(_name);
 
-                return list;
+                if (list != null && list.Count > 0)
+                {
+                    return list;
+                }
             }
 
             return null;

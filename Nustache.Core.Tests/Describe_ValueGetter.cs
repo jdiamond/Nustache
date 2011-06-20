@@ -95,19 +95,21 @@ namespace Nustache.Core.Tests
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'></doc>");
-            Assert.AreEqual("val", ValueGetter.GetValue(target.DocumentElement, "attr"));
+            Assert.AreEqual("val", ValueGetter.GetValue(target.DocumentElement, "@attr"));
         }
 
         [Test]
-        public void It_gets_XmlNode_single_child_element_values()
+        public void It_gets_XmlNode_single_child_element_values_as_a_list()
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'><child>text</child></doc>");
-            Assert.AreEqual("text", ValueGetter.GetValue(target.DocumentElement, "child"));
+            XmlNodeList elements = (XmlNodeList)ValueGetter.GetValue(target.DocumentElement, "child");
+            Assert.AreEqual(1, elements.Count);
+            Assert.AreEqual("text", elements[0].InnerText);
         }
 
         [Test]
-        public void It_gets_XmlNode_multiple_child_element_values()
+        public void It_gets_XmlNode_multiple_child_element_values_as_a_list()
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'><child>text1</child><child>text2</child></doc>");
