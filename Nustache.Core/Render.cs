@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Nustache.Core
 {
@@ -28,7 +27,7 @@ namespace Nustache.Core
         public static void StringToFile(string template, object data, string outputPath)
         {
             var reader = new StringReader(template);
-            using (var writer = new StreamWriter(File.OpenWrite(outputPath)))
+            using (var writer = File.CreateText(outputPath))
             {
                 Template(reader, data, writer, null);
             }
@@ -38,7 +37,7 @@ namespace Nustache.Core
         {
             var reader = new StringReader(File.ReadAllText(templatePath));
             var templateLocator = GetTemplateLocator(templatePath);
-            using (var writer = new StreamWriter(File.OpenWrite(outputPath)))
+            using (var writer = File.CreateText(outputPath))
             {
                 Template(reader, data, writer, templateLocator.GetTemplate);
             }

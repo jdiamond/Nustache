@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Xml;
 using Moq;
 using NUnit.Framework;
 
@@ -87,6 +88,33 @@ namespace Nustache.Core.Tests
             dt.Rows.Add(new object[] { 123 });
             DataRowView target = dt.DefaultView[0];
             Assert.AreEqual(123, ValueGetter.GetValue(target, "IntColumn"));
+        }
+
+        [Test]
+        public void It_gets_XmlNode_attribute_values()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml("<doc attr='val'></doc>");
+            Assert.AreEqual("val", ValueGetter.GetValue(target.DocumentElement, "attr"));
+        }
+
+        [Test]
+        public void It_gets_XmlNode_single_child_element_values()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml("<doc attr='val'><child>text</child></doc>");
+            Assert.AreEqual("text", ValueGetter.GetValue(target.DocumentElement, "child"));
+        }
+
+        [Test]
+        public void It_gets_XmlNode_multiple_child_element_values()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml("<doc attr='val'><child>text1</child><child>text2</child></doc>");
+            XmlNodeList elements = (XmlNodeList)ValueGetter.GetValue(target.DocumentElement, "child");
+            Assert.AreEqual(2, elements.Count);
+            Assert.AreEqual("text1", elements[0].InnerText);
+            Assert.AreEqual("text2", elements[1].InnerText);
         }
 
         public class ReadWriteInts

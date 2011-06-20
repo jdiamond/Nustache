@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using System.Xml;
 
 namespace Nustache.Core
 {
@@ -17,7 +18,8 @@ namespace Nustache.Core
 
         private static ValueGetter GetValueGetter(object target, string name)
         {
-            return PropertyDescriptorValueGetter.GetPropertyDescriptorValueGetter(target, name)
+            return XmlNodeValueGetter.GetXmlNodeValueGetter(target, name)
+                ?? PropertyDescriptorValueGetter.GetPropertyDescriptorValueGetter(target, name)
                 ?? GenericDictionaryValueGetter.GetGenericDictionaryValueGetter(target, name)
                 ?? DictionaryValueGetter.GetDictionaryValueGetter(target, name)
                 ?? MethodInfoValueGetter.GetMethodInfoValueGetter(target, name)
@@ -39,6 +41,55 @@ namespace Nustache.Core
         protected const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
 
         #endregion
+    }
+
+    internal class XmlNodeValueGetter : ValueGetter
+    {
+        internal static XmlNodeValueGetter GetXmlNodeValueGetter(object target, string name)
+        {
+            if (target is XmlNode)
+            {
+                return new XmlNodeValueGetter((XmlNode)target, name);
+            }
+
+            return null;
+        }
+
+        private readonly XmlNode _target;
+        private readonly string _name;
+
+        private XmlNodeValueGetter(XmlNode target, string name)
+        {
+            _target = target;
+            _name = name;
+        }
+
+        public override object GetValue()
+        {
+            if (_target.Attributes != null)
+            {
+                XmlNode attribute = _target.Attributes.GetNamedItem(_name);
+
+                if (attribute != null)
+                {
+                    return attribute.Value;
+                }
+            }
+
+            XmlNodeList list = _target.SelectNodes(_name);
+
+            if (list != null)
+            {
+                if (list.Count == 1)
+                {
+                    return list[0].InnerText;
+                }
+
+                return list;
+            }
+
+            return null;
+        }
     }
 
     internal class PropertyDescriptorValueGetter : ValueGetter

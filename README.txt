@@ -18,8 +18,10 @@ Usage:
 nustache.exe:
 
 - Command-line wrapper around Render.FileToFile.
-- Reads JSON from file for data. Must wrap with { }.
-- Parameters are templatePath, jsonPath, and outputPath.
+- Parameters are templatePath, dataPath, and outputPath.
+- Reads JSON or XML from dataPath for data.
+  - If extension is .js or .json, assumes JSON. Must wrap with { }.
+  - If extension is .xml, assumes XML. Initial context is the document element.
 
     nustache.exe foo.template myData.json foo.html
 
