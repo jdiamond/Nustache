@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Nustache</id>
+    <version>1.0.0.20110812</version>
+    <authors>Jason Diamond</authors>
+    <owners>Paul Betts</owners>
+    <licenseUrl>https://github.com/jdiamond/Nustache/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/jdiamond/Nustache</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Logic-less Templates for .NET</description>
+    <tags>Mustache Template</tags>
+  </metadata>
+</package>
