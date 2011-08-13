@@ -1,13 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Core", "Nustache.Core\Nustache.Core.csproj", "{3A725CD9-6024-441F-84B5-4226D78352C5}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D6A76C1-E840-4BB4-AAA6-CA39BECEAF21}"
 	ProjectSection(SolutionItems) = preProject
 		README.txt = README.txt
 		TODO.txt = TODO.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Core", "Nustache.Core\Nustache.Core.csproj", "{3A725CD9-6024-441F-84B5-4226D78352C5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nustache", "nustache\nustache.csproj", "{F0F3CFC9-0028-46D4-8481-9FE0310D5F83}"
 EndProject
