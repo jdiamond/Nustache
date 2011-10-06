@@ -27,7 +27,7 @@ namespace Nustache.Mvc
 
         protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath)
         {
-            throw new NotImplementedException();
+          return new NustacheView(controllerContext,partialPath);
         }
     }
 }
