@@ -45,7 +45,7 @@ namespace Nustache.Core
                 }
                 else if (marker[0] != '!')
                 {
-                    yield return new VariableReference(m.Groups[1].Value);
+                    yield return new VariableReference(marker.Trim());
                 }
 
                 i = m.Index + m.Length;
