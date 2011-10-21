@@ -21,7 +21,7 @@ namespace Nustache.Mvc
             var templateSource = File.ReadAllText(templatePath);
             var template = new Template();
             template.Load(new StringReader(templateSource));
-            template.Render(viewContext.ViewData, writer, null);
+            template.Render(viewContext.ViewData.Model ?? viewContext.ViewData, writer, null);
         }
     }
 }
