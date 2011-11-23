@@ -1,0 +1,4 @@
+﻿{{#Posts}}
+    <h1><a href="#{{Id}}">{{Title}}</a></h1>
+	 <p>{{Body}}</p>
+{{/Posts}}
