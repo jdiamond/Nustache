@@ -26,6 +26,18 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_does_not_render_its_child_parts_if_name_evaluates_to_empty_string()
+        {
+            var a = new Block("a", new LiteralText("b"));
+            var writer = new StringWriter();
+            var context = new RenderContext(null, new { a = "" }, writer, null);
+
+            a.Render(context);
+
+            Assert.AreEqual("", writer.GetStringBuilder().ToString());
+        }
+
+        [Test]
         public void It_renders_its_child_parts_once_for_each_item_if_name_evaluates_to_a_collection()
         {
             var a = new Block("a", new LiteralText("b"));

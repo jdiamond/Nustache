@@ -61,7 +61,14 @@ namespace Nustache.Core
                     yield return value;
                 }
             }
-            else if (value is IEnumerable && !(value is string))
+            else if (value is string)
+            {
+                if (!string.IsNullOrEmpty((string)value))
+                {
+                    yield return value;
+                }
+            }
+            else if (value is IEnumerable)
             {
                 foreach (var item in ((IEnumerable)value))
                 {
