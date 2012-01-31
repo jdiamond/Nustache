@@ -9,11 +9,17 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_can_render_strings_to_strings()
         {
-            var template = CreateFile("{{foo}}");
-
-            var output = Render.FileToString(template, new { foo = "bar" });
+            var output = Render.StringToString("{{foo}}", new { foo = "bar" });
 
             Assert.AreEqual("bar", output);
+        }
+
+        [Test]
+        public void It_does_not_include_a_byte_order_mark_when_rendering_to_strings()
+        {
+            var output = Render.StringToString("{{foo}}", new { foo = "bar" });
+
+            StringAssert.DoesNotStartWith(output, "\uFEFF");
         }
 
         [Test]
