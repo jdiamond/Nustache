@@ -37,7 +37,6 @@ namespace Nustache.Mvc3.Example
 
         public static void RegisterViewEngines(ViewEngineCollection engines)
         {
-            engines.Clear();
             engines.Add(new NustacheViewEngine());
         }
     }

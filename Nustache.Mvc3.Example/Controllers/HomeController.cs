@@ -13,5 +13,10 @@ namespace Nustache.Mvc3.Example.Controllers
 
             return View(model);
         }
+
+        public ActionResult RazorWithPartialNustache()
+        {
+            return View();
+        }
     }
 }
