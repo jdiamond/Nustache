@@ -27,9 +27,9 @@ namespace Nustache.Core
             _includeLevel = 0;
         }
 
-        public object GetValue(string name)
+        public object GetValue(string path)
         {
-            if (name == ".")
+            if (path == ".")
             {
                 return _dataStack.Peek();
             }
@@ -38,7 +38,7 @@ namespace Nustache.Core
             {
                 if (data != null)
                 {
-                    var value = ValueGetter.GetValue(data, name);
+                    var value = GetValueFromPath(data, path);
 
                     if (value != null)
                     {
@@ -50,9 +50,26 @@ namespace Nustache.Core
             return null;
         }
 
-        public IEnumerable<object> GetValues(string name)
+        private static object GetValueFromPath(object data, string path)
         {
-            object value = GetValue(name);
+            var names = path.Split('.');
+
+            foreach (var name in names)
+            {
+                data = ValueGetter.GetValue(data, name);
+
+                if (data == null)
+                {
+                    return null;
+                }
+            }
+
+            return data;
+        }
+
+        public IEnumerable<object> GetValues(string path)
+        {
+            object value = GetValue(path);
 
             if (value is bool)
             {

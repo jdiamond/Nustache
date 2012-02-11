@@ -6,48 +6,50 @@ namespace Nustache.Core
 {
     public class VariableReference : Part
     {
-        private readonly string _name;
-      private readonly bool _escaped;
-      private static readonly Regex Inner = new Regex(@"^\{(.+?)\}$");
-      public VariableReference(string name)
+        private static readonly Regex _notEscapedRegex = new Regex(@"^\{(.+?)\}$");
+        private readonly string _path;
+        private readonly bool _escaped;
+
+        public VariableReference(string path)
         {
-            if (name == null)
+            if (path == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException("path");
             }
 
-            _name = name;
-        var match = Inner.Match(name);
-        _escaped = !match.Success;
-        if (match.Success)
-        {
-          _name = match.Groups[1].Value;
+            _path = path;
+
+            var match = _notEscapedRegex.Match(path);
+            _escaped = !match.Success;
+
+            if (match.Success)
+            {
+                _path = match.Groups[1].Value;
+            }
         }
 
-        }
-
-        public string Name { get { return _name; } }
+        public string Path { get { return _path; } }
 
         public override void Render(RenderContext context)
         {
-            object value = context.GetValue(_name);
+            object value = context.GetValue(_path);
 
             if (value != null)
             {
-              context.Write(_escaped
-                ? HttpUtility.HtmlEncode( value.ToString())
-                : value.ToString());
+                context.Write(_escaped
+                    ? HttpUtility.HtmlEncode(value.ToString())
+                    : value.ToString());
             }
         }
 
         public override string Source()
         {
-            return "{{" + _name + "}}";
+            return "{{" + _path + "}}";
         }
 
         public override string ToString()
         {
-            return string.Format("VariableReference(\"{0}\")", _name);
+            return string.Format("VariableReference(\"{0}\")", _path);
         }
     }
 }

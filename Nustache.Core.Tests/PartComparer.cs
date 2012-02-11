@@ -34,7 +34,7 @@ namespace Nustache.Core.Tests
 
             if (x.GetType() == typeof(VariableReference))
             {
-                return ((VariableReference)x).Name.CompareTo(((VariableReference)y).Name);
+                return ((VariableReference)x).Path.CompareTo(((VariableReference)y).Path);
             }
 
             return -1;

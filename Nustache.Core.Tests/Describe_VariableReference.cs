@@ -26,6 +26,18 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_supports_accessing_members_of_child_objects()
+        {
+            var a = new VariableReference("a.b");
+            var writer = new StringWriter();
+            var context = new RenderContext(null, new { a = new { b = "c" } }, writer, null);
+
+            a.Render(context);
+
+            Assert.AreEqual("c", writer.GetStringBuilder().ToString());
+        }
+
+        [Test]
         public void It_has_a_useful_ToString_method()
         {
             var a = new VariableReference("a");
