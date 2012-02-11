@@ -149,6 +149,7 @@
     <None Include="Views\Home\PartialNustache.mustache" />
     <None Include="Views\Home\Index.mustache" />
     <Content Include="Views\Home\RazorWithPartialNustache.cshtml" />
+    <None Include="Views\Shared\_Layout.mustache" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -11,7 +11,7 @@ namespace Nustache.Mvc3.Example.Controllers
                             Message = "Nustache works!"
                         };
 
-            return View(model);
+            return View("Index", "_Layout", model);
         }
 
         public ActionResult RazorWithPartialNustache()
