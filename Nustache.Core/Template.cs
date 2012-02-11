@@ -6,7 +6,12 @@ namespace Nustache.Core
     public class Template : Section
     {
         public Template()
-            : base("#template") // I'm not happy about this fake name.
+            : this("#template") // I'm not happy about this fake name.
+        {
+        }
+
+        public Template(string name)
+            : base(name)
         {
         }
 

@@ -19,6 +19,8 @@ namespace Nustache.Mvc
 
         public void Render(ViewContext viewContext, TextWriter writer)
         {
+            var viewTemplate = GetTemplate(_viewPath);
+
             if (!string.IsNullOrEmpty(_masterPath))
             {
                 var masterTemplate = GetTemplate(_masterPath);
@@ -28,18 +30,23 @@ namespace Nustache.Mvc
                         {
                             if (name == "Body")
                             {
-                                return GetTemplate(_viewPath);
+                                return viewTemplate;
                             }
+                            else
+                            {
+                                var section = viewTemplate.GetTemplateDefinition(name);
 
-                            // TODO: Figure out how to render sections.
-                            // Wouldn't those be defined in the view like in Razor?
+                                if (section != null)
+                                {
+                                    return section;
+                                }
+                            }
 
                             return null;
                         });
             }
             else
             {
-                var viewTemplate = GetTemplate(_viewPath);
                 viewTemplate.Render(viewContext.ViewData.Model ?? viewContext.ViewData, writer, null);
             }
         }
