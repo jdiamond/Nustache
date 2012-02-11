@@ -34,21 +34,13 @@ namespace Nustache.Mvc
                             {
                                 return viewTemplate;
                             }
-                            else
-                            {
-                                var section = viewTemplate.GetTemplateDefinition(name);
 
-                                if (section != null)
-                                {
-                                    return section;
-                                }
-                            }
-
-                            return null;
+                            return viewTemplate.GetTemplateDefinition(name);
                         });
             }
             else
             {
+                // TODO: Do we want to allow rendering external templates via a template locator?
                 viewTemplate.Render(viewContext.ViewData, writer, null);
             }
         }

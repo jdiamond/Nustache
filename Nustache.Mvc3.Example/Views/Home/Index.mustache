@@ -1,11 +1,11 @@
-﻿{{<Title}}Index{{/Title}}
+﻿{{<Title}}Nustache MVC View Engine Test{{/Title}}
 
-<h2>Index</h2>
+<h2>{{>Title}}</h2>
 
-<p>ValueInViewData: {{ ValueInViewData }}</p>
-<p>ValueInViewBag: {{ ValueInViewBag }}</p>
-<p>ModelProperty: {{ Model.ModelProperty }}</p>
+<p>Does ViewData work? <span class="success">{{ DoesViewDataWork }}</span></p>
+<p>Does ViewBag work? <span class="success">{{ DoesViewBagWork }}</span></p>
+<p>Do Model properties work? <span class="success">{{ Model.DoModelPropertiesWork }}</span></p>
 
 {{<Section}}
-<p>This is a nested section.</p>
+Sections work!
 {{/Section}}

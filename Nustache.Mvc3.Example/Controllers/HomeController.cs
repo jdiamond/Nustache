@@ -6,14 +6,15 @@ namespace Nustache.Mvc3.Example.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["ValueInViewData"] = "ViewData works!";
-            ViewBag.ValueInViewBag = "ViewBag works!";
+            ViewData["DoesViewDataWork"] = "ViewData works!";
+            ViewBag.DoesViewBagWork = "ViewBag works!";
 
             var model = new
                         {
-                            ModelProperty = "Model properties work!"
+                            DoModelPropertiesWork = "Model properties work!"
                         };
 
+            // TODO: Find a better way to specify the default master.
             return View("Index", "_Layout", model);
         }
 
