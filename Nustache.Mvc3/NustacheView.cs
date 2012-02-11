@@ -25,7 +25,9 @@ namespace Nustache.Mvc
             {
                 var masterTemplate = GetTemplate(_masterPath);
 
-                masterTemplate.Render(viewContext.ViewData.Model ?? viewContext.ViewData, writer,
+                masterTemplate.Render(
+                    viewContext.ViewData,
+                    writer,
                     name =>
                         {
                             if (name == "Body")
@@ -47,7 +49,7 @@ namespace Nustache.Mvc
             }
             else
             {
-                viewTemplate.Render(viewContext.ViewData.Model ?? viewContext.ViewData, writer, null);
+                viewTemplate.Render(viewContext.ViewData, writer, null);
             }
         }
 

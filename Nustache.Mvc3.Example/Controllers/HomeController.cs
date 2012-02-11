@@ -6,9 +6,12 @@ namespace Nustache.Mvc3.Example.Controllers
     {
         public ActionResult Index()
         {
+            ViewData["ValueInViewData"] = "ViewData works!";
+            ViewBag.ValueInViewBag = "ViewBag works!";
+
             var model = new
                         {
-                            Message = "Nustache works!"
+                            ModelProperty = "Model properties work!"
                         };
 
             return View("Index", "_Layout", model);
