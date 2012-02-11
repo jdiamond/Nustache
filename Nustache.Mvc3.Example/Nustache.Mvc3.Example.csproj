@@ -140,9 +140,9 @@
       <Project>{3A725CD9-6024-441F-84B5-4226D78352C5}</Project>
       <Name>Nustache.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Nustache.Mvc\Nustache.Mvc.csproj">
-      <Project>{6AFAAAF1-A4C0-412F-AC7F-1D40B79E76C8}</Project>
-      <Name>Nustache.Mvc</Name>
+    <ProjectReference Include="..\Nustache.Mvc3\Nustache.Mvc3.csproj">
+      <Project>{BB62330D-3604-40EB-9B76-39CE36F1AD6F}</Project>
+      <Name>Nustache.Mvc3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
