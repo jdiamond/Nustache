@@ -1,0 +1,5 @@
+2012-02-10:
+
+- Removed old MVC projects and examples.
+  I can add them back if you really need them.
+- First push to NuGet by me.
