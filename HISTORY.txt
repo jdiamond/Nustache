@@ -1,6 +1,13 @@
 xxx:
 
 - Added support for paths in variable references.
+- MVC view engine now uses ViewData is the inital context and not
+  ViewData.Model like before. This makes it more like Razor and
+  is now possible because we can use paths to get values. This
+  may break some templates if you were implicitly getting values
+  form your model.
+- MVC view engine now supports masters and sections. See the
+  Nustache.Mvc3.Example project to see how.
 
 2012-02-10:
 
