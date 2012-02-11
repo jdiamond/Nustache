@@ -1,12 +1,6 @@
 - Handle whitespace better.
   - Strip out new lines after non-variable markers.
-- Add a default escape function.
-  - Or ability to specify one in the template.
-  - Probably passed in as a Func<string, string>.
-  - Should it default to HTML escaping or none?
-  - Maybe use AntiXss library?
-  - {{{variables}}} don't get escaped.
-- Provide some implementations for locating templates.
+- Provide more implementations for locating templates.
   - From a Dictionary<string, Template>.
   - From the file system.
     - Option for multiple paths and extensions.
@@ -14,7 +8,7 @@
   - From other locators.
     - Caching adapter.
 - {{>}} invokes parent template with same name?
-- Add magic variables like {{$i}} and {{$first}}.
+- Add magic variables like {{$index}} and {{$first}}.
   - Need to work with sections, too, like {{#$first}}first stuff goes here{{/$first}}.
 - Add some syntax to define "local" variables?
   - Either that or a way to evaluate variables in templates at definition time.
@@ -24,4 +18,3 @@
 - Be able to generate static code for later compilation.
   - Would be nice if it didn't use reflection.
 - Also, think about dynamically generating code for immediate use. May be faster.
-- Look into creating an MVC view engine.

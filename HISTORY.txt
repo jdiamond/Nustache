@@ -1,3 +1,7 @@
+xxx:
+
+- Added support for paths in variable references.
+
 2012-02-10:
 
 - Removed old MVC projects and examples.
