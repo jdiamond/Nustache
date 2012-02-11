@@ -5,3 +5,4 @@ bin
 obj
 *.bak
 *.sln.cache
+*.nupkg
