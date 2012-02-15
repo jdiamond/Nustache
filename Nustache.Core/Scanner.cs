@@ -6,6 +6,7 @@ namespace Nustache.Core
     public class Scanner
     {
         private static readonly Regex _markerRegex = new Regex(@"\{\{([\{]?[^}]+?\}?)\}\}");
+        private static readonly Regex _stripRegex = new Regex(@"\G[\r\t\v ]+\n");
 
         public IEnumerable<Part> Scan(string template)
         {
@@ -22,26 +23,32 @@ namespace Nustache.Core
                 }
 
                 string marker = m.Groups[1].Value;
+                bool stripOutNewLine = false;
 
                 if (marker[0] == '#')
                 {
                     yield return new Block(marker.Substring(1));
+                    stripOutNewLine = true;
                 } 
                 else if (marker[0] == '^') 
                 {
                     yield return new InvertedBlock(marker.Substring(1));
+                    stripOutNewLine = true;
                 }
                 else if (marker[0] == '<')
                 {
                     yield return new TemplateDefinition(marker.Substring(1));
+                    stripOutNewLine = true;
                 }
                 else if (marker[0] == '/')
                 {
                     yield return new EndSection(marker.Substring(1));
+                    stripOutNewLine = true;
                 }
                 else if (marker[0] == '>')
                 {
                     yield return new TemplateInclude(marker.Substring(1));
+                    stripOutNewLine = true;
                 }
                 else if (marker[0] != '!')
                 {
@@ -49,6 +56,10 @@ namespace Nustache.Core
                 }
 
                 i = m.Index + m.Length;
+
+                Match s;
+                if (stripOutNewLine && (s = _stripRegex.Match(template, i)).Success)
+                    i += s.Length;
             }
 
             if (i < template.Length)

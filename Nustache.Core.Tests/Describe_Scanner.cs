@@ -95,5 +95,18 @@ namespace Nustache.Core.Tests
             parts.IsEqualTo(new LiteralText("before"),
                             new LiteralText("after"));
         }
+
+        [Test]
+        public void It_strips_out_new_lines_after_non_variable_markers()
+        {
+            var scanner = new Scanner();
+
+            var parts = scanner.Scan("before\r\n{{#foo}} \r\n{{/foo}}\t\r\n\r\nafter");
+
+            parts.IsEqualTo(new LiteralText("before\r\n"),
+                            new Block("foo"),
+                            new EndSection("foo"),
+                            new LiteralText("\r\nafter"));
+        }
     }
 }
