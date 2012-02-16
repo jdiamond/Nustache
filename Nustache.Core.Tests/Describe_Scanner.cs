@@ -38,6 +38,18 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_allows_dots_in_variable_references()
+        {
+            var scanner = new Scanner();
+
+            var parts = scanner.Scan("before{{foo.bar}}after");
+
+            parts.IsEqualTo(new LiteralText("before"),
+                            new VariableReference("foo.bar"),
+                            new LiteralText("after"));
+        }
+
+        [Test]
         public void It_allows_variable_references_to_be_surrounded_by_spaces()
         {
             var scanner = new Scanner();
@@ -59,6 +71,18 @@ namespace Nustache.Core.Tests
             parts.IsEqualTo(new Block("foo"),
                             new LiteralText("inside"),
                             new EndSection("foo"));
+        }
+
+        [Test]
+        public void It_allows_dots_in_sections()
+        {
+            var scanner = new Scanner();
+
+            var parts = scanner.Scan("{{#foo.bar}}inside{{/foo.bar}}");
+
+            parts.IsEqualTo(new Block("foo.bar"),
+                            new LiteralText("inside"),
+                            new EndSection("foo.bar"));
         }
 
         [Test]

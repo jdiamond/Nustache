@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -47,6 +48,34 @@ namespace Nustache.Core.Tests
             a.Render(context);
 
             Assert.AreEqual("bbb", writer.GetStringBuilder().ToString());
+        }
+
+        [Test]
+        public void It_supports_accessing_members_of_child_objects()
+        {
+            var a = new Block("a.b", new LiteralText("c"));
+            var writer = new StringWriter();
+            var context = new RenderContext(null, new { a = new { b = new[] { 1, 2, 3 } } }, writer, null);
+
+            a.Render(context);
+
+            Assert.AreEqual("ccc", writer.GetStringBuilder().ToString());
+        }
+
+        [Test]
+        public void It_does_not_treat_dictionaries_as_lists()
+        {
+            var a = new Block("a", new LiteralText("x"));
+            var writer = new StringWriter();
+            var context = new RenderContext(
+                null,
+                new { a = new Dictionary<string, int> { { "b", 1 }, { "c", 2 }, { "d", 3 } } },
+                writer,
+                null);
+
+            a.Render(context);
+
+            Assert.AreEqual("x", writer.GetStringBuilder().ToString());
         }
 
         [Test]
