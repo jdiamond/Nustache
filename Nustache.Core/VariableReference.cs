@@ -1,6 +1,5 @@
 using System;
 using System.Text.RegularExpressions;
-using System.Web;
 
 namespace Nustache.Core
 {
@@ -37,7 +36,7 @@ namespace Nustache.Core
             if (value != null)
             {
                 context.Write(_escaped
-                    ? HttpUtility.HtmlEncode(value.ToString())
+                    ? Encoders.HtmlEncode(value.ToString())
                     : value.ToString());
             }
         }
