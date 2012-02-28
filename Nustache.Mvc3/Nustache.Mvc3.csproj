@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="NustacheView.cs" />
     <Compile Include="NustacheViewEngine.cs" />
+    <Compile Include="NustachViewEngineOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +50,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Nustache.Mvc3.nuspec" />
+    <None Include="Nustache.Mvc3.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

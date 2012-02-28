@@ -9,12 +9,18 @@ namespace Nustache.Mvc
         private readonly ControllerContext _controllerContext;
         private readonly string _viewPath;
         private readonly string _masterPath;
+        private readonly NustachViewEngineOptions _options;
 
-        public NustacheView(ControllerContext controllerContext, string viewPath, string masterPath)
+        public NustacheView(
+            ControllerContext controllerContext,
+            string viewPath,
+            string masterPath,
+            NustachViewEngineOptions options)
         {
             _controllerContext = controllerContext;
             _viewPath = viewPath;
             _masterPath = masterPath;
+            _options = options;
         }
 
         public void Render(ViewContext viewContext, TextWriter writer)
@@ -25,8 +31,12 @@ namespace Nustache.Mvc
             {
                 var masterTemplate = GetTemplate(_masterPath);
 
+                var data = _options.RootContext == NustacheViewEngineRootContext.ViewData
+                               ? viewContext.ViewData
+                               : viewContext.ViewData.Model;
+
                 masterTemplate.Render(
-                    viewContext.ViewData,
+                    data,
                     writer,
                     name =>
                         {
