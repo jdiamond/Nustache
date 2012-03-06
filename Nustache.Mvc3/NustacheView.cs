@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Web.Caching;
 using System.Web.Mvc;
 using Nustache.Core;
 
@@ -57,11 +58,20 @@ namespace Nustache.Mvc
 
         private Template GetTemplate(string path)
         {
-            // TODO: Add caching?
+            var key = "Nustache:" + path;
+
+            if (_controllerContext.HttpContext.Cache[key] != null)
+            {
+                return (Template)_controllerContext.HttpContext.Cache[key];
+            }
+
             var templatePath = _controllerContext.HttpContext.Server.MapPath(path);
             var templateSource = File.ReadAllText(templatePath);
             var template = new Template();
             template.Load(new StringReader(templateSource));
+
+            _controllerContext.HttpContext.Cache.Insert(key, template, new CacheDependency(templatePath));
+
             return template;
         }
     }
