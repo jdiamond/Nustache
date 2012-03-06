@@ -4,18 +4,23 @@ namespace Nustache.Mvc
 {
     public class NustacheViewEngine : VirtualPathProviderViewEngine
     {
-        private readonly NustachViewEngineOptions _options;
+        private string _fileExtension;
 
         public NustacheViewEngine()
-            : this(new NustachViewEngineOptions())
         {
+            FileExtension = ".mustache";
+            RootContext = NustacheViewEngineRootContext.ViewData;
         }
 
-        public NustacheViewEngine(NustachViewEngineOptions options)
+        public string FileExtension
         {
-            _options = options;
+            get { return _fileExtension; }
+            set { _fileExtension = value; UpdatePaths(); }
+        }
 
-            var fileExtension = options.Extension ?? ".mustache";
+        private void UpdatePaths()
+        {
+            var fileExtension = FileExtension;
 
             MasterLocationFormats = new[]
                                         {
@@ -43,14 +48,22 @@ namespace Nustache.Mvc
                                                  };
         }
 
+        public NustacheViewEngineRootContext RootContext { get; set; }
+
         protected override IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
-            return new NustacheView(controllerContext, viewPath, masterPath, _options);
+            return new NustacheView(controllerContext, viewPath, masterPath, RootContext);
         }
 
         protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath)
         {
-            return new NustacheView(controllerContext, partialPath, null, _options);
+            return new NustacheView(controllerContext, partialPath, null, RootContext);
         }
+    }
+
+    public enum NustacheViewEngineRootContext
+    {
+        ViewData,
+        Model
     }
 }

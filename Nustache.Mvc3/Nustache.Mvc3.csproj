@@ -40,7 +40,6 @@
   <ItemGroup>
     <Compile Include="NustacheView.cs" />
     <Compile Include="NustacheViewEngine.cs" />
-    <Compile Include="NustachViewEngineOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -38,14 +38,13 @@ namespace Nustache.Mvc3.Example
         public static void RegisterViewEngines(ViewEngineCollection engines)
         {
             engines.RemoveAt(0);
-            engines.Add(new NustacheViewEngine(
-                            new NustachViewEngineOptions
-                                {
-                                    // Uncomment out this line to not need Model in front of all your expressions.
-                                    // This makes it easier to share templates between the client and server.
-                                    // But it also means that ViewData/ViewBag will be inaccessible.
-                                    //RootContext = NustacheViewEngineRootContext.Model
-                                }));
+            engines.Add(new NustacheViewEngine
+                            {
+                                // Uncomment out this line to not need Model in front of all your expressions.
+                                // This makes it easier to share templates between the client and server.
+                                // But it also means that ViewData/ViewBag will be inaccessible.
+                                //RootContext = NustacheViewEngineRootContext.Model
+                            });
         }
     }
 }
