@@ -22,5 +22,15 @@ namespace Nustache.Mvc3.Example.Controllers
         {
             return View();
         }
+
+        public ActionResult MissingView()
+        {
+            return View();
+        }
+
+        public ActionResult MissingPartial()
+        {
+            return View();
+        }
     }
 }

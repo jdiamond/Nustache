@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 using System.Web.Caching;
 using System.Web.Mvc;
 using Nustache.Core;
@@ -92,6 +94,24 @@ namespace Nustache.Mvc
 
             if (viewResult != null)
             {
+                if (viewResult.View == null)
+                {
+                    var stringBuilder = new StringBuilder();
+                    
+                    foreach (var str in viewResult.SearchedLocations)
+                    {
+                        stringBuilder.AppendLine();
+                        stringBuilder.Append(str);
+                    }
+
+                    var msg = string.Format(
+                        "The partial view '{0}' was not found or no view engine supports the searched locations. The following locations were searched:{1}",
+                        name,
+                        stringBuilder);
+
+                    throw new InvalidOperationException(msg);
+                }
+
                 var nustacheView = viewResult.View as NustacheView;
 
                 if (nustacheView != null)

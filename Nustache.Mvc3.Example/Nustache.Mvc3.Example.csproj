@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Views\Home\AnotherPartialNustache.mustache" />
+    <None Include="Views\Home\MissingPartial.mustache" />
     <None Include="Views\Home\PartialNustache.mustache" />
     <None Include="Views\Home\Index.mustache" />
     <Content Include="Views\Home\RazorWithPartialNustache.cshtml" />
