@@ -1,13 +1,22 @@
-xxx:
+2012-03-06:
 
+- New lines are stripped from lines that only contain markers.
 - Added support for paths in variable references.
+- Fixed dictionaries (deserialized JSON) not working.
+- No more dependency on System.Web so can be used with the
+  Client Profile.
 - MVC view engine now uses ViewData is the inital context and not
   ViewData.Model like before. This makes it more like Razor and
   is now possible because we can use paths to get values. This
   may break some templates if you were implicitly getting values
   form your model.
+- When adding the NustacheViewEngine to your project, you can
+  set RootContext to NustacheViewEngineRootContext.Model to use
+  the Model instead of ViewData as your initial context.
 - MVC view engine now supports masters and sections. See the
   Nustache.Mvc3.Example project to see how.
+- {{>foo}} now looks for partial views with the MVC view engine.
+- The view engine now caches templates unless they've changed on disk.
 
 2012-02-10:
 
