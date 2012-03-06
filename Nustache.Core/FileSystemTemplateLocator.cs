@@ -5,27 +5,29 @@ namespace Nustache.Core
     public class FileSystemTemplateLocator
     {
         private readonly string _extension;
-        private readonly string _directory;
+        private readonly string[] _directories;
 
-        public FileSystemTemplateLocator(string extension, string directory)
+        public FileSystemTemplateLocator(string extension, params string[] directories)
         {
             _extension = extension;
-            _directory = directory;
+            _directories = directories;
         }
 
         public Template GetTemplate(string name)
         {
-            string path = Path.Combine(_directory, name + _extension);
-
-            if (File.Exists(path))
+            foreach (var directory in _directories)
             {
-                string text = File.ReadAllText(path);
-                var reader = new StringReader(text);
+                var path = Path.Combine(directory, name + _extension);
 
-                var template = new Template();
-                template.Load(reader);
+                if (File.Exists(path))
+                {
+                    var text = File.ReadAllText(path);
+                    var reader = new StringReader(text);
+                    var template = new Template();
+                    template.Load(reader);
 
-                return template;
+                    return template;
+                }
             }
 
             return null;
