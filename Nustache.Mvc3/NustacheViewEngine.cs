@@ -52,12 +52,17 @@ namespace Nustache.Mvc
 
         protected override IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
-            return new NustacheView(controllerContext, viewPath, masterPath, RootContext);
+            return GetView(controllerContext, viewPath, masterPath);
         }
 
         protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath)
         {
-            return new NustacheView(controllerContext, partialPath, null, RootContext);
+            return GetView(controllerContext, partialPath, null);
+        }
+
+        private IView GetView(ControllerContext controllerContext, string viewPath, string masterPath)
+        {
+            return new NustacheView(this, controllerContext, viewPath, masterPath);
         }
     }
 

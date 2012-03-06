@@ -130,7 +130,11 @@ namespace Nustache.Core
             else if (_templateLocator != null)
             {
                 var template = _templateLocator(templateName);
-                template.Render(this);
+
+                if (template != null)
+                {
+                    template.Render(this);
+                }
             }
 
             _includeLevel--;

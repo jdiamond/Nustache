@@ -7,32 +7,32 @@ namespace Nustache.Mvc
 {
     public class NustacheView : IView
     {
+        private readonly NustacheViewEngine _engine;
         private readonly ControllerContext _controllerContext;
         private readonly string _viewPath;
         private readonly string _masterPath;
-        private readonly NustacheViewEngineRootContext _rootContext;
 
         public NustacheView(
+            NustacheViewEngine engine,
             ControllerContext controllerContext,
             string viewPath,
-            string masterPath,
-            NustacheViewEngineRootContext rootContext)
+            string masterPath)
         {
+            _engine = engine;
             _controllerContext = controllerContext;
             _viewPath = viewPath;
             _masterPath = masterPath;
-            _rootContext = rootContext;
         }
 
         public void Render(ViewContext viewContext, TextWriter writer)
         {
-            var viewTemplate = GetTemplate(_viewPath);
+            var viewTemplate = GetTemplate();
 
             if (!string.IsNullOrEmpty(_masterPath))
             {
-                var masterTemplate = GetTemplate(_masterPath);
+                var masterTemplate = LoadTemplate(_masterPath);
 
-                var data = _rootContext == NustacheViewEngineRootContext.ViewData
+                var data = _engine.RootContext == NustacheViewEngineRootContext.ViewData
                                ? viewContext.ViewData
                                : viewContext.ViewData.Model;
 
@@ -43,20 +43,31 @@ namespace Nustache.Mvc
                         {
                             if (name == "Body")
                             {
-                                return viewTemplate;
+                                return GetTemplate();
                             }
 
-                            return viewTemplate.GetTemplateDefinition(name);
+                            var template = viewTemplate.GetTemplateDefinition(name);
+
+                            if (template != null)
+                            {
+                                return template;
+                            }
+
+                            return FindPartial(name);
                         });
             }
             else
             {
-                // TODO: Do we want to allow rendering external templates via a template locator?
-                viewTemplate.Render(viewContext.ViewData, writer, null);
+                GetTemplate().Render(viewContext.ViewData, writer, null);
             }
         }
 
-        private Template GetTemplate(string path)
+        private Template GetTemplate()
+        {
+            return LoadTemplate(_viewPath);
+        }
+
+        private Template LoadTemplate(string path)
         {
             var key = "Nustache:" + path;
 
@@ -73,6 +84,23 @@ namespace Nustache.Mvc
             _controllerContext.HttpContext.Cache.Insert(key, template, new CacheDependency(templatePath));
 
             return template;
+        }
+
+        private Template FindPartial(string name)
+        {
+            var viewResult = _engine.FindPartialView(_controllerContext, name, false);
+
+            if (viewResult != null)
+            {
+                var nustacheView = viewResult.View as NustacheView;
+
+                if (nustacheView != null)
+                {
+                    return nustacheView.GetTemplate();
+                }
+            }
+
+            return null;
         }
     }
 }
