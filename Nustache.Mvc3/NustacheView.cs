@@ -58,7 +58,7 @@ namespace Nustache.Mvc
             }
             else
             {
-                GetTemplate().Render(viewContext.ViewData, writer, null);
+                GetTemplate().Render(viewContext.ViewData, writer, FindPartial);
             }
         }
 
