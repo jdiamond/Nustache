@@ -6,3 +6,4 @@ obj
 *.bak
 *.sln.cache
 *.nupkg
+*.dotCover
