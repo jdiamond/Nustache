@@ -40,10 +40,10 @@ namespace Nustache.Mvc3.Example
             engines.RemoveAt(0);
             engines.Add(new NustacheViewEngine
                             {
-                                // Uncomment out this line to not need Model in front of all your expressions.
+                                // Comment out this line to require Model in front of all your expressions.
                                 // This makes it easier to share templates between the client and server.
-                                // But it also means that ViewData/ViewBag will be inaccessible.
-                                //RootContext = NustacheViewEngineRootContext.Model
+                                // But it also means that ViewData/ViewBag is inaccessible.
+                                RootContext = NustacheViewEngineRootContext.Model
                             });
         }
     }

@@ -20,7 +20,12 @@ namespace Nustache.Mvc3.Example.Controllers
 
         public ActionResult RazorWithPartialNustache()
         {
-            return View();
+            var model = new
+                        {
+                            DoModelPropertiesWork = "Model properties work!"
+                        };
+
+            return View(model);
         }
 
         public ActionResult MissingView()

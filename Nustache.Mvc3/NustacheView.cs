@@ -30,13 +30,13 @@ namespace Nustache.Mvc
         {
             var viewTemplate = GetTemplate();
 
+            var data = _engine.RootContext == NustacheViewEngineRootContext.ViewData
+                           ? viewContext.ViewData
+                           : viewContext.ViewData.Model;
+
             if (!string.IsNullOrEmpty(_masterPath))
             {
                 var masterTemplate = LoadTemplate(_masterPath);
-
-                var data = _engine.RootContext == NustacheViewEngineRootContext.ViewData
-                               ? viewContext.ViewData
-                               : viewContext.ViewData.Model;
 
                 masterTemplate.Render(
                     data,
@@ -60,7 +60,7 @@ namespace Nustache.Mvc
             }
             else
             {
-                GetTemplate().Render(viewContext.ViewData, writer, FindPartial);
+                GetTemplate().Render(data, writer, FindPartial);
             }
         }
 

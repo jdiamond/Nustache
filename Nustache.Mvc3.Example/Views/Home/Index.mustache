@@ -2,9 +2,17 @@
 
 <h2>{{>Title}}</h2>
 
-<p>Does ViewData work? <span class="success">{{ DoesViewDataWork }}</span></p>
-<p>Does ViewBag work? <span class="success">{{ DoesViewBagWork }}</span></p>
-<p>Do Model properties work? <span class="success">{{ Model.DoModelPropertiesWork }}</span></p>
+<p>Does ViewData work (will not when the RootContext is set to Model)?</p>
+<p class="success">{{ DoesViewDataWork }}</p>
+
+<p>Does ViewBag work? (will not when the RootContext is set to Model)</p>
+<p class="success">{{ DoesViewBagWork }}</p>
+
+<p>Do Model properties work? (will not when the RootContext is set to Model)</p>
+<p class="success">{{ Model.DoModelPropertiesWork }}</p>
+
+<p>Do unprefixed Model properties work? (will not when the RootContext is set to ViewData)</p>
+<p class="success">{{ DoModelPropertiesWork }}</p>
 
 <p>Do partials work?</p>
 {{>PartialNustache}}
