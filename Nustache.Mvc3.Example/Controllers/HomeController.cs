@@ -12,7 +12,8 @@ namespace Nustache.Mvc3.Example.Controllers
             var model = new
                         {
                             DoModelPropertiesWork = "Model properties work!",
-                            DoesHtmlEncodingWork = "<em>Should this be encoded?</em>"
+                            DoesHtmlEncodingWork = "<em>Should this be encoded?</em>",
+                            DoesInternationalCharacterEncodingWork = "Iñtërnâtiônàlizætiøn"
                         };
 
             // TODO: Find a better way to specify the default master.
@@ -21,6 +22,8 @@ namespace Nustache.Mvc3.Example.Controllers
 
         public ActionResult RazorWithPartialNustache()
         {
+            ViewBag.InternationalCharacters = "Iñtërnâtiônàlizætiøn";
+
             var model = new
                         {
                             DoModelPropertiesWork = "Model properties work!"
