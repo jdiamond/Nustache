@@ -11,7 +11,8 @@ namespace Nustache.Mvc3.Example.Controllers
 
             var model = new
                         {
-                            DoModelPropertiesWork = "Model properties work!"
+                            DoModelPropertiesWork = "Model properties work!",
+                            DoesHtmlEncodingWork = "<em>Should this be encoded?</em>"
                         };
 
             // TODO: Find a better way to specify the default master.

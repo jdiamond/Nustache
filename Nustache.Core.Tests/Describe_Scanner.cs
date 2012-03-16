@@ -62,6 +62,18 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_allows_unencoded_variable_references_to_be_surrounded_by_spaces()
+        {
+            var scanner = new Scanner();
+
+            var parts = scanner.Scan("before{{{ foo }}}after");
+
+            parts.IsEqualTo(new LiteralText("before"),
+                            new VariableReference("foo"),
+                            new LiteralText("after"));
+        }
+
+        [Test]
         public void It_scans_sections()
         {
             var scanner = new Scanner();

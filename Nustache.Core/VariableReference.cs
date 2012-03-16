@@ -5,7 +5,7 @@ namespace Nustache.Core
 {
     public class VariableReference : Part
     {
-        private static readonly Regex _notEscapedRegex = new Regex(@"^\{(.+?)\}$");
+        private static readonly Regex _notEscapedRegex = new Regex(@"^\{\s*(.+?)\s*\}$");
         private readonly string _path;
         private readonly bool _escaped;
 
