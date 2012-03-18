@@ -13,7 +13,8 @@ namespace Nustache.Mvc3.Example.Controllers
                         {
                             DoModelPropertiesWork = "Model properties work!",
                             DoesHtmlEncodingWork = "<em>Should this be encoded?</em>",
-                            DoesInternationalCharacterEncodingWork = "Iñtërnâtiônàlizætiøn"
+                            DoesInternationalCharacterEncodingWork = "Iñtërnâtiônàlizætiøn",
+                            DoesRussianCharacterEncodingWork = "Привет, как дела"
                         };
 
             // TODO: Find a better way to specify the default master.

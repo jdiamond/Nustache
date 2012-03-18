@@ -3,10 +3,23 @@ using System.Text;
 
 namespace Nustache.Core
 {
+    // We can't reference System.Web in Client Profile environments so this
+    // class contains a simple encoder, but it can be swapped out with
+    // HttpUtility.HtmlEncode when used in non-Client Profile environments
+    // (like when using Nustache in an MVC application).
     public static class Encoders
     {
+        public delegate string HtmlEncoder(string text);
+
+        public static HtmlEncoder HtmlEncode { get; set; }
+
+        static Encoders()
+        {
+            HtmlEncode = DefaultHtmlEncode;
+        }
+
         // Used with permission from http://www.west-wind.com/weblog/posts/2009/Feb/05/Html-and-Uri-String-Encoding-without-SystemWeb
-        public static string HtmlEncode(string text)
+        public static string DefaultHtmlEncode(string text)
         {
             if (text == null)
             {

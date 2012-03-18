@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
+using Nustache.Core;
 
 namespace Nustache.Mvc
 {
@@ -6,6 +8,9 @@ namespace Nustache.Mvc
     {
         public NustacheViewEngine(string[] fileExtensions = null)
         {
+            // If we're using MVC, we probably want to use the same encoder MVC uses.
+            Encoders.HtmlEncode = HttpUtility.HtmlEncode;
+
             FileExtensions = fileExtensions ?? new[] { "mustache" };
             SetLocationFormats();
             RootContext = NustacheViewEngineRootContext.ViewData;
