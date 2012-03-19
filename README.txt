@@ -3,17 +3,32 @@ Nustache - Logic-less templates for .NET
 For a list of implementations (other than .NET) and editor plugins, see
 http://mustache.github.com/.
 
+Installation:
+
+- Pull from GitHub or download the repository and build it.
+- Or, install via NuGet (search for Nustache).
+- If you're using MVC, you'll want to build/install the Nustache.Mvc3 project,
+  too.
+
 Usage:
 
-- Add a reference to Nustache.Core.dll.
+For non-MVC projects:
+
+- Add a reference to Nustache.Core.dll (done for you if you used NuGet).
 - Import the Nustache.Core namespace.
-- Use one of the static, helper methods in the Render class.
+- Use one of the static, helper methods on the Render class.
 
     var html = Render.FileToString("foo.template", myData);
 
 - Data can be object, IDictionary, or DataTable.
 - If you need more control, use Render.Template.
 - See the source and tests for more information.
+
+For MVC projects:
+
+- Add a reference to Nustache.Mvc3.dll (done for you if you used NuGet).
+- Add NustacheViewEngine to the global list of view engines.
+- See Global.asax.cs in the Nustache.Mvc3.Example project for an example.
 
 nustache.exe:
 
