@@ -93,7 +93,14 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_changes_the_context_for_each_item_in_the_collection()
         {
-            var result = Render.StringToString("before{{#foo}}{{.}}{{/foo}}after", new { foo = new [] { 1, 2, 3 } });
+            var result = Render.StringToString("before{{#foo}}{{.}}{{/foo}}after", new { foo = new[] { 1, 2, 3 } });
+            Assert.AreEqual("before123after", result);
+        }
+
+        [Test]
+        public void It_can_render_arrays()
+        {
+            var result = Render.StringToString("before{{#.}}{{.}}{{/.}}after", new[] { 1, 2, 3 });
             Assert.AreEqual("before123after", result);
         }
 
