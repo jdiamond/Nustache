@@ -26,10 +26,15 @@ namespace Nustache.Core
 
         public static void StringToFile(string template, object data, string outputPath)
         {
+            StringToFile(template, data, outputPath, null);
+        }
+
+        public static void StringToFile(string template, object data, string outputPath, TemplateLocator templateLocator)
+        {
             var reader = new StringReader(template);
             using (var writer = File.CreateText(outputPath))
             {
-                Template(reader, data, writer, null);
+                Template(reader, data, writer, templateLocator);
             }
         }
 
@@ -41,6 +46,11 @@ namespace Nustache.Core
             {
                 Template(reader, data, writer, templateLocator.GetTemplate);
             }
+        }
+
+        public static void Template(TextReader reader, object data, TextWriter writer)
+        {
+            Template(reader, data, writer, null);
         }
 
         public static void Template(TextReader reader, object data, TextWriter writer, TemplateLocator templateLocator)
