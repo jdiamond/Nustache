@@ -123,6 +123,15 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_doesnt_look_up_the_stack_for_properties_that_return_null()
+        {
+            var result = Render.StringToString(
+                "{{#foo}}{{bar}}{{/foo}}",
+                new { foo = new { bar = (string)null }, bar = "baz" });
+            Assert.AreEqual("", result);
+        }
+
+        [Test]
         public void It_pushes_and_pops_contexts_correctly()
         {
             var result = Render.StringToString(

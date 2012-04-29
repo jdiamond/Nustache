@@ -40,7 +40,7 @@ namespace Nustache.Core
                 {
                     var value = GetValueFromPath(data, path);
 
-                    if (value != null)
+                    if (!ReferenceEquals(value, ValueGetter.NoValue))
                     {
                         return value;
                     }
@@ -58,9 +58,9 @@ namespace Nustache.Core
             {
                 data = ValueGetter.GetValue(data, name);
 
-                if (data == null)
+                if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
                 {
-                    return null;
+                    break;
                 }
             }
 

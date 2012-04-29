@@ -9,6 +9,8 @@ namespace Nustache.Core
 {
     public abstract class ValueGetter
     {
+        public static readonly object NoValue = new object();
+
         #region Static helper methods
 
         public static object GetValue(object target, string name)
@@ -25,7 +27,7 @@ namespace Nustache.Core
                 ?? MethodInfoValueGetter.GetMethodInfoValueGetter(target, name)
                 ?? PropertyInfoValueGetter.GetPropertyInfoValueGetter(target, name)
                 ?? FieldInfoValueGetter.GetFieldInfoValueGetter(target, name)
-                ?? (ValueGetter)new NullValueGetter();
+                ?? (ValueGetter)new NoValueGetter();
         }
 
         #endregion
@@ -88,7 +90,7 @@ namespace Nustache.Core
                 }
             }
 
-            return null;
+            return NoValue;
         }
     }
 
@@ -309,11 +311,11 @@ namespace Nustache.Core
         }
     }
 
-    internal class NullValueGetter : ValueGetter
+    internal class NoValueGetter : ValueGetter
     {
         public override object GetValue()
         {
-            return null;
+            return NoValue;
         }
     }
 }

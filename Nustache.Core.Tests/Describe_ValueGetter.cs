@@ -11,9 +11,9 @@ namespace Nustache.Core.Tests
     public class Describe_ValueGetter
     {
         [Test]
-        public void It_returns_null_when_it_cant_get_a_value()
+        public void It_returns_NoValue_when_it_cant_get_a_value()
         {
-            Assert.IsNull(ValueGetter.GetValue(this, "x"));
+            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(this, "x"));
         }
 
         [Test]
@@ -44,14 +44,14 @@ namespace Nustache.Core.Tests
         public void It_cant_get_values_from_write_only_properties()
         {
             WriteOnlyInts target = new WriteOnlyInts();
-            Assert.IsNull(ValueGetter.GetValue(target, "IntProperty"));
+            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(target, "IntProperty"));
         }
 
         [Test]
         public void It_cant_get_values_from_write_only_methods()
         {
             WriteOnlyInts target = new WriteOnlyInts();
-            Assert.IsNull(ValueGetter.GetValue(target, "IntMethod"));
+            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(target, "IntMethod"));
         }
 
         [Test]
