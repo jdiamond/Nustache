@@ -25,6 +25,14 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_gets_case_insensitive_field_values()
+        {
+            ReadWriteInts target = new ReadWriteInts();
+            target.IntField = 123;
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intfield"));
+        }
+
+        [Test]
         public void It_gets_property_values()
         {
             ReadWriteInts target = new ReadWriteInts();
@@ -33,11 +41,27 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_gets_case_insensitive_property_values()
+        {
+            ReadWriteInts target = new ReadWriteInts();
+            target.IntField = 123;
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intproperty"));
+        }
+
+        [Test]
         public void It_gets_method_values()
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
             Assert.AreEqual(123, ValueGetter.GetValue(target, "IntMethod"));
+        }
+
+        [Test]
+        public void It_gets_case_insensitive_method_values()
+        {
+            ReadWriteInts target = new ReadWriteInts();
+            target.IntField = 123;
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intmethod"));
         }
 
         [Test]
@@ -88,6 +112,16 @@ namespace Nustache.Core.Tests
             dt.Rows.Add(new object[] { 123 });
             DataRowView target = dt.DefaultView[0];
             Assert.AreEqual(123, ValueGetter.GetValue(target, "IntColumn"));
+        }
+
+        [Test]
+        public void It_gets_case_insensitive_DataRowView_values()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("IntColumn", typeof(int));
+            dt.Rows.Add(new object[] { 123 });
+            DataRowView target = dt.DefaultView[0];
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intcolumn"));
         }
 
         [Test]
