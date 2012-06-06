@@ -40,7 +40,8 @@ namespace Nustache.Core
 
         #region Constants for derived classes that use reflection
 
-        protected const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance;
+        protected const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
+        protected const StringComparison DefaultNameComparison = StringComparison.CurrentCultureIgnoreCase;
 
         #endregion
     }
@@ -105,7 +106,7 @@ namespace Nustache.Core
 
                 foreach (PropertyDescriptor property in properties)
                 {
-                    if (property.Name ==  name)
+                    if (String.Equals(property.Name, name, DefaultNameComparison))
                     {
                         return new PropertyDescriptorValueGetter(target, property);
                     }
