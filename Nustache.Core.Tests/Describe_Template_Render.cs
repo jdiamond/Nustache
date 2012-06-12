@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System;
 
 namespace Nustache.Core.Tests
 {
@@ -181,6 +183,42 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("beforeOUTSIDEafter", result);
         }
+
+		[Test]
+		public void It_can_include_templates_over_three_levels()
+		{
+			var result = Render.StringToString("{{<t1}}One{{/t1}}{{<t2}}{{>t1}}Two{{/t2}}{{<t3}}{{>t2}}Three{{/t3}}{{>t3}}", null);
+
+			Assert.AreEqual("OneTwoThree", result);
+		}
+
+
+		[Test]
+		public void It_can_include_templates_over_three_levels_with_external_includes()
+		{
+			var baseTemplate = new Template("Base");
+			baseTemplate.Load(new StringReader("Base{{>BaseContent}}"));
+
+			var masterTemplate = new Template("Master");
+			masterTemplate.Load(new StringReader("{{<BaseContent}}Master{{>MasterContent}}{{/BaseContent}}{{>Base}}"));
+
+			var templates = new Dictionary<string, Template>();
+			templates.Add("Base", baseTemplate);
+			templates.Add("Master", masterTemplate);
+
+			TemplateLocator locateTemplate =
+				name =>
+				{
+					Template ret;
+					templates.TryGetValue(name, out ret);
+					if (ret == null) throw new KeyNotFoundException(string.Format("The view '{0}' could not be found.", name));
+					return ret;
+				};
+
+			var result = Render.StringToString("{{<MasterContent}}Hello{{/MasterContent}}{{>Master}}", null, locateTemplate);
+
+			Assert.AreEqual("BaseMasterHello", result);
+		}
 
         [Test]
         public void It_allows_templates_to_be_overridden_in_sections()

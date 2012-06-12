@@ -133,7 +133,11 @@ namespace Nustache.Core
 
                 if (template != null)
                 {
+					// push the included template on the stack so that internally defined templates can be resolved properly later.
+					// designed to pass test Describe_Template_Render.It_can_include_templates_over_three_levels_with_external_includes()
+					this.Push(template, null);
                     template.Render(this);
+					this.Pop();
                 }
             }
 
