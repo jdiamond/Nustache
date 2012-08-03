@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Xml;
@@ -151,6 +152,61 @@ namespace Nustache.Core.Tests
             Assert.AreEqual(2, elements.Count);
             Assert.AreEqual("text1", elements[0].InnerText);
             Assert.AreEqual("text2", elements[1].InnerText);
+        }
+
+        [Test]
+        public void It_gets_gt_value()
+        {
+            var t = ValueGetter.GetValue(1901, "$gt(1900)");
+            var f = ValueGetter.GetValue(1899, "$gt(1900)");
+            Assert.AreEqual(true, t);
+            Assert.AreEqual(false, f);
+        }
+
+        [Test]
+        public void It_gets_lt_value()
+        {
+            var t = ValueGetter.GetValue(1899, "$lt(1900)");
+            var f = ValueGetter.GetValue(1901, "$lt(1900)");
+            Assert.AreEqual(true, t);
+            Assert.AreEqual(false, f);
+        }
+
+        [Test]
+        public void It_gets_gte_value()
+        {
+            var t = ValueGetter.GetValue(1900, "$gte(1900)");
+            var f = ValueGetter.GetValue(1899, "$gte(1900)");
+            Assert.AreEqual(true, t);
+            Assert.AreEqual(false, f);
+        }
+
+        [Test]
+        public void It_gets_lte_value()
+        {
+            var t = ValueGetter.GetValue(1900, "$lte(1900)");
+            var f = ValueGetter.GetValue(1901, "$lte(1900)");
+            Assert.AreEqual(true, t);
+            Assert.AreEqual(false, f);
+        }
+
+        
+        [Test]
+        public void It_gets_eq_value()
+        {
+            var t = ValueGetter.GetValue(1900, "$eq(1900)");
+            var f = ValueGetter.GetValue(1901, "$eq(1900)");
+            Assert.AreEqual(true, t);
+            Assert.AreEqual(false, f);
+        }
+
+        [Test]
+        public void It_gets_ne_value()
+        {
+            var t = ValueGetter.GetValue(1901, "$ne(1900)");
+            var f = ValueGetter.GetValue(1900, "$ne(1900)");
+            Assert.AreEqual(true, t);
+            Assert.AreEqual(false, f);
         }
 
         public class ReadWriteInts
