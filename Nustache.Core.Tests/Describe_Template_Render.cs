@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace Nustache.Core.Tests
@@ -79,14 +80,14 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_renders_sections_mapped_to_non_empty_collections()
         {
-            var result = Render.StringToString("before{{#foo}}FOO{{/foo}}after", new { foo = new [] { 1 } });
+            var result = Render.StringToString("before{{#foo}}FOO{{/foo}}after", new { foo = new[] { 1 } });
             Assert.AreEqual("beforeFOOafter", result);
         }
 
         [Test]
         public void It_renders_sections_mapped_to_non_empty_collections_for_each_item_in_the_collection()
         {
-            var result = Render.StringToString("before{{#foo}}FOO{{/foo}}after", new { foo = new [] { 1, 2, 3 } });
+            var result = Render.StringToString("before{{#foo}}FOO{{/foo}}after", new { foo = new[] { 1, 2, 3 } });
             Assert.AreEqual("beforeFOOFOOFOOafter", result);
         }
 
@@ -109,7 +110,7 @@ namespace Nustache.Core.Tests
         {
             var result = Render.StringToString(
                 "before{{#foo}}{{bar}}{{/foo}}after",
-                new { foo = new [] { new { bar = 1 }, new { bar = 2 }, new { bar = 3 } } });
+                new { foo = new[] { new { bar = 1 }, new { bar = 2 }, new { bar = 3 } } });
             Assert.AreEqual("before123after", result);
         }
 
@@ -190,6 +191,20 @@ namespace Nustache.Core.Tests
                 new { bar = "baz" });
 
             Assert.AreEqual("beforeINSIDEafter", result);
+        }
+
+        [Test]
+        public void It_renders_templates_mapped_to_evaluations()
+        {
+            var result = Render.StringToString(
+                "{{#birthday.month.$eq(3)}}{{name}} was born in March{{/birthday.month.$eq(3)}}",
+                new
+                {
+                    birthday = new DateTime(1974, 3, 12),
+                    name = "Andrea"
+                });
+            
+            Assert.AreEqual("Andrea was born in March", result);
         }
     }
 }

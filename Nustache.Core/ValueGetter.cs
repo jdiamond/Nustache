@@ -27,6 +27,7 @@ namespace Nustache.Core
                 ?? MethodInfoValueGetter.GetMethodInfoValueGetter(target, name)
                 ?? PropertyInfoValueGetter.GetPropertyInfoValueGetter(target, name)
                 ?? FieldInfoValueGetter.GetFieldInfoValueGetter(target, name)
+                ?? ComparableValueGetter.GetEvalutatorValueGetter(target, name)
                 ?? (ValueGetter)new NoValueGetter();
         }
 
@@ -317,6 +318,87 @@ namespace Nustache.Core
         public override object GetValue()
         {
             return NoValue;
+        }
+    }
+
+    internal class ComparableValueGetter : ValueGetter
+    {
+        private readonly IComparable _left;
+        private readonly object _right;
+        public enum ComparisonType
+        {
+            Gte,
+            Gt,
+            Lt,
+            Lte,
+            Eq,
+            Ne
+        }
+
+        private readonly ComparisonType _comparisonType;
+
+        private ComparableValueGetter(IComparable left, object right, ComparisonType comparisonType)
+        {
+            _left = left;
+            _right = right;
+            _comparisonType = comparisonType;
+        }
+
+        public override object GetValue()
+        {
+            int result = _left.CompareTo(_right);
+
+            switch (_comparisonType)
+            {
+                case ComparisonType.Gte:
+                    return result >= 0;
+                case ComparisonType.Gt:
+                    return result > 0;
+                case ComparisonType.Lt:
+                    return result < 0;
+                case ComparisonType.Lte:
+                    return result <= 0;
+                case ComparisonType.Eq:
+                    return result == 0;
+                case ComparisonType.Ne:
+                    return result != 0;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        internal static ValueGetter GetEvalutatorValueGetter(object target, string name)
+        {
+            string[] parameters = null;
+            if (name.StartsWith("$") && name.Contains("(") && name.EndsWith(")"))
+            {
+                int start = name.IndexOf('(') + 1;
+                string tkParams = name.Substring(start, name.Length - start - 1);
+                parameters = tkParams.Split(',');
+                name = name.Substring(0, start - 1);
+
+                if (target is IComparable && parameters.Length == 1)
+                {
+                    var comparableTarget = target as IComparable;
+                    var typedParam = Convert.ChangeType(parameters[0], target.GetType());
+                    switch (name.ToLowerInvariant())
+                    {
+                        case "$gt":
+                            return new ComparableValueGetter(comparableTarget, typedParam, ComparisonType.Gt);
+                        case "$lt":
+                            return new ComparableValueGetter(comparableTarget, typedParam, ComparisonType.Lt);
+                        case "$eq":
+                            return new ComparableValueGetter(comparableTarget, typedParam, ComparisonType.Eq);
+                        case "$ne":
+                            return new ComparableValueGetter(comparableTarget, typedParam, ComparisonType.Ne);
+                        case "$gte":
+                            return new ComparableValueGetter(comparableTarget, typedParam, ComparisonType.Gte);
+                        case "$lte":
+                            return new ComparableValueGetter(comparableTarget, typedParam, ComparisonType.Lte);
+                    }
+                }
+            }
+            return null;
         }
     }
 }

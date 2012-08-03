@@ -10,15 +10,20 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
-            var lambda = context.GetValue(Name) as Lambda;
-            if (lambda != null)
-            {
-                context.Write(lambda(InnerSource()).ToString());
-                return;
-            }
-
+            bool checkLambda = true;
             foreach (var value in context.GetValues(Name))
             {
+                if (checkLambda)
+                {
+                    checkLambda = false;
+                    var lambda = value as Lambda;
+                    if (lambda != null)
+                    {
+                        context.Write(lambda(InnerSource()).ToString());
+                        return;
+                    }
+                }
+                
                 context.Push(this, value);
 
                 base.Render(context);
