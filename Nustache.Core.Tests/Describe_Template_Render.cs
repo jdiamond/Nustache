@@ -14,17 +14,17 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
-        public void It_replaces_undefined_variables_with_empty_strings_when_there_is_no_data()
+        public void It_preserves_undefined_variables_with_empty_strings_when_there_is_no_data()
         {
             var result = Render.StringToString("before{{foo}}after", null);
-            Assert.AreEqual("beforeafter", result);
+            Assert.AreEqual("before{{foo}}after", result);
         }
 
         [Test]
-        public void It_replaces_undefined_variables_with_empty_strings_when_there_is_data()
+        public void It_preserves_undefined_variables_with_empty_strings_when_there_is_data()
         {
             var result = Render.StringToString("before{{foo}}after", new { bar = "baz" });
-            Assert.AreEqual("beforeafter", result);
+            Assert.AreEqual("before{{foo}}after", result);
         }
 
         [Test]
@@ -128,7 +128,7 @@ namespace Nustache.Core.Tests
             var result = Render.StringToString(
                 "{{#foo}}{{bar}}{{/foo}}",
                 new { foo = new { bar = (string)null }, bar = "baz" });
-            Assert.AreEqual("", result);
+            Assert.AreEqual("{{bar}}", result);
         }
 
         [Test]

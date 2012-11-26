@@ -39,6 +39,11 @@ namespace Nustache.Core
                     ? Encoders.HtmlEncode(value.ToString())
                     : value.ToString());
             }
+            else
+            {
+                // Leave tag in for integration testing
+                context.Write(Source());
+            }
         }
 
         public override string Source()
