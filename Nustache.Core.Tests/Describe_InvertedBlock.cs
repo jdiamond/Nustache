@@ -62,7 +62,7 @@ namespace Nustache.Core.Tests
             var inverted = new InvertedBlock("a", text);
 
             using (var writer = new StringWriter()) {
-                var context = new RenderContext(null, new { a = value }, writer, null);
+                var context = new RenderContext(null, new { a = value }, writer, null, Options.Defaults());
 
                 inverted.Render(context);
 

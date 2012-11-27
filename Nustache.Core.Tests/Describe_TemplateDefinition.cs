@@ -19,7 +19,7 @@ namespace Nustache.Core.Tests
             var a = new TemplateDefinition("a");
             a.Load(new Part[] { new LiteralText("b") });
             var writer = new StringWriter();
-            var context = new RenderContext(new Template(), null, writer, null);
+            var context = new RenderContext(new Template(), null, writer, null, Options.Defaults());
 
             a.Render(context);
 

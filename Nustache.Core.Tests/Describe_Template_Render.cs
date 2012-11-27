@@ -14,14 +14,30 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
-        public void It_replaces_undefined_variables_with_empty_strings_when_there_is_no_data()
+        public void It_preserves_undefined_variables_with_empty_strings_when_there_is_no_data_and_options_set_to_preserve_undefined_variables()
+        {
+            var options = new Options { PreserveUndefinedVariables = true };
+            var result = Render.StringToString("before{{foo}}after", null, options);
+            Assert.AreEqual("before{{foo}}after", result);
+        }
+
+        [Test]
+        public void It_preserves_undefined_variables_with_empty_strings_when_there_is_data_and_options_set_to_preserve_undefined_variables()
+        {
+            var options = new Options { PreserveUndefinedVariables = true };
+            var result = Render.StringToString("before{{foo}}after", new { bar = "baz" }, options);
+            Assert.AreEqual("before{{foo}}after", result);
+        }
+
+        [Test]
+        public void It_removes_undefined_variables_with_empty_strings_when_there_is_no_data_and_options_set_to_defaults()
         {
             var result = Render.StringToString("before{{foo}}after", null);
             Assert.AreEqual("beforeafter", result);
         }
 
         [Test]
-        public void It_replaces_undefined_variables_with_empty_strings_when_there_is_data()
+        public void It_premoves_undefined_variables_with_empty_strings_when_there_is_data_and_options_set_to_defaults()
         {
             var result = Render.StringToString("before{{foo}}after", new { bar = "baz" });
             Assert.AreEqual("beforeafter", result);

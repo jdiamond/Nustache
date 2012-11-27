@@ -56,11 +56,12 @@ namespace Nustache.Mvc
                             }
 
                             return FindPartial(name);
-                        });
+                        },
+                    Options.Defaults());
             }
             else
             {
-                GetTemplate().Render(data, writer, FindPartial);
+                GetTemplate().Render(data, writer, FindPartial, Options.Defaults());
             }
         }
 
