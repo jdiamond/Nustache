@@ -11,20 +11,34 @@ namespace Nustache.Core
 
     public class RenderContext
     {
-        private const int IncludeLimit = 1024;
+        private const int INCLUDE_LIMIT = 1024;
+
         private readonly Stack<Section> _sectionStack = new Stack<Section>();
+
         private readonly Stack<object> _dataStack = new Stack<object>();
+
         private readonly TextWriter _writer;
+
         private readonly TemplateLocator _templateLocator;
+
         private int _includeLevel;
 
-        public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator)
+        public Options CurrentOptions { get; set; }
+
+        public RenderContext(
+            Section section, 
+            object data, 
+            TextWriter writer, 
+            TemplateLocator templateLocator, 
+            Options options)
         {
             _sectionStack.Push(section);
             _dataStack.Push(data);
             _writer = writer;
             _templateLocator = templateLocator;
             _includeLevel = 0;
+
+            CurrentOptions = options;
         }
 
         public object GetValue(string path)
@@ -113,10 +127,10 @@ namespace Nustache.Core
 
         public void Include(string templateName)
         {
-            if (_includeLevel >= IncludeLimit)
+            if (_includeLevel >= INCLUDE_LIMIT)
             {
                 throw new NustacheException(
-                    string.Format("You have reached the include limit of {0}. Are you trying to render infinitely recursive templates or data?", IncludeLimit));
+                    string.Format("You have reached the include limit of {0}. Are you trying to render infinitely recursive templates or data?", INCLUDE_LIMIT));
             }
 
             _includeLevel++;

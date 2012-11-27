@@ -18,7 +18,7 @@ namespace Nustache.Core.Tests
         {
             var a = new VariableReference("a");
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = "b" }, writer, null);
+            var context = new RenderContext(null, new { a = "b" }, writer, null, Options.Defaults());
 
             a.Render(context);
 
@@ -30,7 +30,7 @@ namespace Nustache.Core.Tests
         {
             var a = new VariableReference("a.b");
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = new { b = "c" } }, writer, null);
+            var context = new RenderContext(null, new { a = new { b = "c" } }, writer, null, Options.Defaults());
 
             a.Render(context);
 

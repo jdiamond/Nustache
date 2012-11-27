@@ -33,6 +33,17 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_can_render_strings_to_files_with_options()
+        {
+            var outputPath = CreateEmptyFile();
+            var options = Options.Defaults();
+
+            Render.StringToFile("{{foo}}", new { foo = "bar" }, outputPath, options);
+
+            Assert.AreEqual("bar", File.ReadAllText(outputPath));
+        }
+
+        [Test]
         public void It_can_render_files_to_strings()
         {
             var templatePath = CreateFile("{{foo}}");

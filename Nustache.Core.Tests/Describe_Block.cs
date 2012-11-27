@@ -19,7 +19,7 @@ namespace Nustache.Core.Tests
         {
             var a = new Block("a", new LiteralText("b"));
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = true }, writer, null);
+            var context = new RenderContext(null, new { a = true }, writer, null, Options.Defaults());
 
             a.Render(context);
 
@@ -31,7 +31,7 @@ namespace Nustache.Core.Tests
         {
             var a = new Block("a", new LiteralText("b"));
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = "" }, writer, null);
+            var context = new RenderContext(null, new { a = "" }, writer, null, Options.Defaults());
 
             a.Render(context);
 
@@ -43,7 +43,7 @@ namespace Nustache.Core.Tests
         {
             var a = new Block("a", new LiteralText("b"));
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = new [] { 1, 2, 3 } }, writer, null);
+            var context = new RenderContext(null, new { a = new[] { 1, 2, 3 } }, writer, null, Options.Defaults());
 
             a.Render(context);
 
@@ -55,7 +55,7 @@ namespace Nustache.Core.Tests
         {
             var a = new Block("a.b", new LiteralText("c"));
             var writer = new StringWriter();
-            var context = new RenderContext(null, new { a = new { b = new[] { 1, 2, 3 } } }, writer, null);
+            var context = new RenderContext(null, new { a = new { b = new[] { 1, 2, 3 } } }, writer, null, Options.Defaults());
 
             a.Render(context);
 
@@ -71,7 +71,8 @@ namespace Nustache.Core.Tests
                 null,
                 new { a = new Dictionary<string, int> { { "b", 1 }, { "c", 2 }, { "d", 3 } } },
                 writer,
-                null);
+                null,
+                Options.Defaults());
 
             a.Render(context);
 

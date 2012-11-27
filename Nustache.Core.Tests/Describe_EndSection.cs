@@ -18,7 +18,7 @@ namespace Nustache.Core.Tests
         {
             var a = new EndSection("a");
             var writer = new StringWriter();
-            var context = new RenderContext(null, null, writer, null);
+            var context = new RenderContext(null, null, writer, null, Options.Defaults());
 
             a.Render(context);
 

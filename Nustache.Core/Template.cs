@@ -42,12 +42,13 @@ namespace Nustache.Core
         /// <param name="data">The data to use to render the template.</param>
         /// <param name="writer">The object to write the output to.</param>
         /// <param name="templateLocator">The delegate to use to locate templates for inclusion.</param>
+        /// <param name="options">The options defining the behaviour of the renderer.</param>
         /// <remarks>
         /// The <paramref name="writer" /> is flushed, but not closed or disposed.
         /// </remarks>
-        public void Render(object data, TextWriter writer, TemplateLocator templateLocator)
+        public void Render(object data, TextWriter writer, TemplateLocator templateLocator, Options options)
         {
-            var context = new RenderContext(this, data, writer, templateLocator);
+            var context = new RenderContext(this, data, writer, templateLocator, options);
 
             Render(context);
 

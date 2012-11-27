@@ -41,8 +41,10 @@ namespace Nustache.Core
             }
             else
             {
-                // Leave tag in for integration testing
-                context.Write(Source());
+                if (context.CurrentOptions.PreserveUndefinedVariables)
+                {
+                    context.Write(Source());
+                }
             }
         }
 
