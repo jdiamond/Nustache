@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 namespace Nustache.Core
 {
@@ -31,7 +32,12 @@ namespace Nustache.Core
         {
             if (path == ".")
             {
-                return _dataStack.Peek();
+                object peekedObject = _dataStack.Peek();
+                if (peekedObject as XmlElement != null)
+                {
+                    return ((XmlElement)peekedObject).InnerText;
+                }
+                return peekedObject;
             }
 
             foreach (var data in _dataStack)
