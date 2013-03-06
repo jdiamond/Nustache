@@ -13,7 +13,7 @@ namespace Nustache.Core
                 throw new ArgumentNullException("name");
             }
 
-            _name = name;
+            _name = name.Trim();
         }
 
         public string Name { get { return _name; } }
