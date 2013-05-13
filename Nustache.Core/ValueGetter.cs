@@ -30,6 +30,8 @@ namespace Nustache.Core
     {
         private readonly XmlNode _target;
         private readonly string _name;
+        private string _textValueLocated;
+        private XmlNodeList _childNodeList;
 
         internal XmlNodeValueGetter(XmlNode target, string name)
         {
@@ -37,31 +39,64 @@ namespace Nustache.Core
             _name = name;
         }
 
+        private bool HasChildNodeList()
+        {
+            _childNodeList = _target.SelectNodes(_name);
+            return _childNodeList != null && _childNodeList.Count > 0;
+        }
+
+        private bool TryGetSingleTextNodeValue()
+        {
+            if (_childNodeList.Count != 1)
+                return false;
+
+            return TryGetNodeValueAsText(_childNodeList[0]);
+        }
+
+        private bool TryGetNodeValueAsText(XmlNode node)
+        {
+            if (node.ChildNodes.Count == 1
+                && node.ChildNodes[0].NodeType == XmlNodeType.Text)
+            {
+                _textValueLocated = node.ChildNodes[0].Value;
+                return true;
+            }
+            return false;
+        }
+
         public override object GetValue()
         {
-            if (_name[0] == '@')
-            {
-                if (_target.Attributes != null)
-                {
-                    XmlNode attribute = _target.Attributes.GetNamedItem(_name.Substring(1));
+            if (_name[0] == '@' && TryGetStringByAttributeName(_name.Substring(1)))
+                return _textValueLocated;
 
-                    if (attribute != null)
-                    {
-                        return attribute.Value;
-                    }
-                }
+            if (HasChildNodeList())
+            {
+                if (TryGetSingleTextNodeValue())
+                    return _textValueLocated;
+
+                return _childNodeList;
             }
-            else
-            {
-                XmlNodeList list = _target.SelectNodes(_name);
 
-                if (list != null && list.Count > 0)
-                {
-                    return list;
-                }
+            if (TryGetStringByAttributeName(_name))
+            {
+                return _textValueLocated;
             }
 
             return NoValue;
+        }
+
+        private bool TryGetStringByAttributeName(string attributeName)
+        {
+            if (_target.Attributes != null)
+            {
+                XmlNode attribute = _target.Attributes.GetNamedItem(attributeName);
+                if (attribute != null)
+                {
+                    _textValueLocated = attribute.Value;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

@@ -133,13 +133,12 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
-        public void It_gets_XmlNode_single_child_element_values_as_a_list()
+        public void It_gets_XmlNode_single_child_element_value_as_a_string()
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'><child>text</child></doc>");
-            XmlNodeList elements = (XmlNodeList)ValueGetter.GetValue(target.DocumentElement, "child");
-            Assert.AreEqual(1, elements.Count);
-            Assert.AreEqual("text", elements[0].InnerText);
+            var value= (string)ValueGetter.GetValue(target.DocumentElement, "child");
+            Assert.AreEqual("text", value);
         }
 
         [Test]
