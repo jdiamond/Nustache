@@ -34,5 +34,12 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("TemplateInclude(\"a\")", a.ToString());
         }
+
+        [Test]
+        public void It_trims_spaces()
+        {
+            var a = new TemplateInclude(" a ");
+            Assert.AreEqual(a.Name, "a");
+        }
     }
 }
