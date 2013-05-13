@@ -1,3 +1,10 @@
+2013-05-12:
+
+- Allow spaces in template includes thanks to Tim Schmidt (taschmidt).
+- Configurable value getters thanks to Mattias Rydengren (mrydengren).
+- Simpler XML processing thanks to Bruce Lindsay (bruce-lindsay).
+- Nustache.Core.dll is signed.
+
 2012-04-29:
 
 - Fixed RootContext not being honored when rendering partials
