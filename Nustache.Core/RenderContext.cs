@@ -91,25 +91,32 @@ namespace Nustache.Core
                     yield return value;
                 }
             }
-            else if (value is IDictionary) // Dictionaries also implement IEnumerable
-                                           // so this has to be checked before it.
-            {
-                if (((IDictionary)value).Count > 0)
-                {
-                    yield return value;
-                }
-            }
-            else if (value is IEnumerable)
-            {
-                foreach (var item in ((IEnumerable)value))
-                {
-                    yield return item;
-                }
-            }
-            else if (value != null)
-            {
-                yield return value;
-            }
+			else if (GenericIDictionaryUtil.IsInstanceOfGenericIDictionary(value))
+			{
+				if ((value as IEnumerable).GetEnumerator().MoveNext())
+				{
+					yield return value;
+				}
+			}
+			else if (value is IDictionary) // Dictionaries also implement IEnumerable
+											// so this has to be checked before it.
+			{
+				if (((IDictionary)value).Count > 0)
+				{
+					yield return value;
+				}
+			}
+			else if (value is IEnumerable)
+			{
+				foreach (var item in ((IEnumerable)value))
+				{
+					yield return item;
+				}
+			}
+			else if (value != null)
+			{
+				yield return value;
+			}
         }
 
         public void Write(string text)
