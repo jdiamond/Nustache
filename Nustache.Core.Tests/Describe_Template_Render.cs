@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 
 namespace Nustache.Core.Tests
@@ -97,6 +99,37 @@ namespace Nustache.Core.Tests
             Assert.AreEqual("before123after", result);
         }
 
+		[Test]
+        public void It_treats_generic_dictionaries_that_do_not_implement_IDictionary_as_dictionaries()
+        {
+			var result = Render.StringToString("before{{#Data}}{{#alpha}}{{one}}{{two}}{{/alpha}}{{#bravo}}{{three}}{{four}}{{/bravo}}{{#charlie}}{{five}}{{six}}{{/charlie}}{{/Data}}after", new
+			{
+				Data = new SneakyDictionary<String, object>()
+                    {
+                        { "alpha", new SneakyDictionary<String, int>()
+                            {
+                                { "one", 1 },
+                                { "two", 2 }
+                            }
+                        },
+                        { "bravo", new SneakyDictionary<String, int>()
+                            {
+                                { "three", 3 },
+                                { "four", 4 }
+                            }
+                        },
+                        { "charlie", new SneakyDictionary<String, int>()
+                            {
+                                { "five", 5 },
+                                { "six", 6 }
+                            }
+                        },
+                    }
+			}
+				);
+            Assert.AreEqual("before123456after", result);
+        }
+
         [Test]
         public void It_can_render_arrays()
         {
@@ -191,5 +224,99 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("beforeINSIDEafter", result);
         }
+
+
+		private class SneakyDictionary<K, V> : IDictionary<K, V>
+		{
+			private Dictionary<K, V> underlying = new Dictionary<K, V>();
+			public void Add(K key, V value)
+			{
+				underlying.Add(key, value);
+			}
+
+			public bool ContainsKey(K key)
+			{
+				return underlying.ContainsKey(key);
+			}
+
+			public ICollection<K> Keys
+			{
+				get { return underlying.Keys; }
+			}
+
+			public bool Remove(K key)
+			{
+				return underlying.Remove(key);
+			}
+
+			public bool TryGetValue(K key, out V value)
+			{
+				return underlying.TryGetValue(key, out value);
+			}
+
+			public ICollection<V> Values
+			{
+				get { return underlying.Values; }
+			}
+
+			public V this[K key]
+			{
+				get
+				{
+					return underlying[key];
+				}
+				set
+				{
+					underlying[key] = value;
+				}
+			}
+
+			public void Add(KeyValuePair<K, V> item)
+			{
+				(underlying as IDictionary<K, V>).Add(item);
+			}
+
+			public void Clear()
+			{
+				underlying.Clear();
+			}
+
+			public bool Contains(KeyValuePair<K, V> item)
+			{
+				return (underlying as IDictionary<K, V>).Contains(item);
+			}
+
+			public void CopyTo(KeyValuePair<K, V>[] array, int arrayIndex)
+			{
+				(underlying as IDictionary<K, V>).CopyTo(array, arrayIndex);
+			}
+
+			public int Count
+			{
+				get { return underlying.Count; }
+			}
+
+			public bool IsReadOnly
+			{
+				get { return (underlying as IDictionary<K, V>).IsReadOnly; }
+			}
+
+			public bool Remove(KeyValuePair<K, V> item)
+			{
+				return (underlying as IDictionary<K, V>).Remove(item);
+			}
+
+			public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
+			{
+				return underlying.GetEnumerator();
+			}
+
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				return (underlying as System.Collections.IEnumerable).GetEnumerator();
+			}
+		}
+
+
     }
 }

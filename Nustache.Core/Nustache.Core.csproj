@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Encoders.cs" />
     <Compile Include="FileSystemTemplateLocator.cs" />
+    <Compile Include="GenericDictionaryUtil.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="TemplateDefinition.cs" />
     <Compile Include="Render.cs" />
