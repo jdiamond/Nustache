@@ -98,6 +98,18 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_allows_funny_whitespace_in_section_markers()
+        {
+            var scanner = new Scanner();
+
+            var parts = scanner.Scan("{{ #foo }}inside{{ /foo }}");
+
+            parts.IsEqualTo(new Block("foo"),
+                            new LiteralText("inside"),
+                            new EndSection("foo"));
+        }
+
+        [Test]
         public void It_scans_template_definitions()
         {
             var scanner = new Scanner();

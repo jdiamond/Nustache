@@ -25,6 +25,8 @@ namespace Nustache.Core
                 string marker = m.Groups[1].Value;
                 bool stripOutNewLine = false;
 
+                marker = marker.Trim();
+
                 if (marker[0] == '#')
                 {
                     yield return new Block(marker.Substring(1));
