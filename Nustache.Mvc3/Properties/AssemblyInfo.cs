@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jason Diamond")]
 [assembly: AssemblyProduct("Nustache.Mvc3")]
-[assembly: AssemblyCopyright("Copyright © 2010-2012")]
+[assembly: AssemblyCopyright("Copyright © 2010-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.13.5.12")]
-[assembly: AssemblyFileVersion("1.13.5.12")]
+[assembly: AssemblyVersion("1.13.6.20")]
+[assembly: AssemblyFileVersion("1.13.6.20")]

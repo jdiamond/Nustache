@@ -1,3 +1,11 @@
+2013-06-20:
+
+- Support dictionaries that implement IDictionary<K, V>, but not
+  IDictionary thanks to Matthew Schaad (mschaad).
+- Check for keys containing dots before splitting on dots. Reported
+  by joeyjbarrett.
+- Allow whitespace inside markers like {{ #foo }} and {{ /foo }}.
+
 2013-05-12:
 
 - Allow spaces in template includes thanks to Tim Schmidt (taschmidt).
