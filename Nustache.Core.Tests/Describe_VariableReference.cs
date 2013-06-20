@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -31,6 +32,18 @@ namespace Nustache.Core.Tests
             var a = new VariableReference("a.b");
             var writer = new StringWriter();
             var context = new RenderContext(null, new { a = new { b = "c" } }, writer, null);
+
+            a.Render(context);
+
+            Assert.AreEqual("c", writer.GetStringBuilder().ToString());
+        }
+
+        [Test]
+        public void It_checks_for_keys_containing_dots_before_splitting()
+        {
+            var a = new VariableReference("a.b");
+            var writer = new StringWriter();
+            var context = new RenderContext(null, new Dictionary<string, string> { { "a.b", "c" } }, writer, null);
 
             a.Render(context);
 

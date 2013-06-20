@@ -58,6 +58,13 @@ namespace Nustache.Core
 
         private static object GetValueFromPath(object data, string path)
         {
+            var value = ValueGetter.GetValue(data, path);
+
+            if (value != null && !ReferenceEquals(value, ValueGetter.NoValue))
+            {
+                return value;
+            }
+
             var names = path.Split('.');
 
             foreach (var name in names)
