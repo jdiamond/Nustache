@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using System.Linq.Expressions;
 
 namespace Nustache.Core
 {
@@ -31,6 +33,11 @@ namespace Nustache.Core
         public override string ToString()
         {
             return string.Format("TemplateInclude(\"{0}\")", _name);
+        }
+
+        internal override Expression Compile(CompileContext context)
+        {
+            return context.Include(_name);
         }
     }
 }

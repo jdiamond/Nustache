@@ -1,5 +1,8 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Text;
+using System.Linq.Expressions;
+using Nustache.Core.Compilation;
 
 namespace Nustache.Core
 {
@@ -49,6 +52,22 @@ namespace Nustache.Core
         public override string ToString()
         {
             return string.Format("VariableReference(\"{0}\")", _path);
+        }
+
+        internal override Expression Compile(CompileContext context)
+        {
+            var getter = context.CompiledGetter(_path);
+            getter = CompoundExpression.NullCheck(getter, "");
+            getter = Expression.Call(getter, context.TargetType.GetMethod("ToString"));
+
+            if (_escaped)
+            {
+                return Expression.Call(null, typeof(Encoders).GetMethod("DefaultHtmlEncode"), getter);
+            }
+            else
+            {
+                return getter;
+            }
         }
     }
 }

@@ -5,12 +5,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
+using System.Linq;
 
 namespace Nustache.Core
 {
     public abstract class ValueGetterFactory
     {
         public abstract ValueGetter GetValueGetter(object target, string name);
+        public abstract ValueGetter GetValueGetter(Type targetType, string name);
 
         protected const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
         protected const StringComparison DefaultNameComparison = StringComparison.CurrentCultureIgnoreCase;
@@ -43,6 +45,20 @@ namespace Nustache.Core
             return GetValueGetterOrDefault(Items, target, name) ?? new NoValueGetter();
         }
 
+        public ValueGetter GetCompiledGetter(Type targetType, string name)
+        {
+            foreach (var factory in Items)
+            {
+                var getter = factory.GetValueGetter(targetType, name);
+                if (getter != null)
+                {
+                    return getter;
+                }
+            }
+
+            return null;
+        }
+        
         private static ValueGetter GetValueGetterOrDefault(IEnumerable<ValueGetterFactory> factories, object target, string name)
         {
             foreach (var factory in factories)
@@ -88,6 +104,16 @@ namespace Nustache.Core
 
             return null;
         }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
+            if (targetType.IsSubclassOf(typeof(XmlNode)))
+            {
+                return new XmlNodeValueGetter(null, name);
+            }
+
+            return null;
+        }
     }
 
     internal class PropertyDescriptorValueGetterFactory : ValueGetterFactory
@@ -108,6 +134,11 @@ namespace Nustache.Core
                 }
             }
 
+            return null;
+        }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
             return null;
         }
     }
@@ -134,6 +165,21 @@ namespace Nustache.Core
             return method.ReturnType != typeof(void) &&
                    method.GetParameters().Length == 0;
         }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
+            MemberInfo[] methods = targetType.GetMember(name, MemberTypes.Method, DefaultBindingFlags);
+
+            foreach (MethodInfo method in methods)
+            {
+                if (MethodCanGetValue(method))
+                {
+                    return new MethodInfoValueGetter(null, method);
+                }
+            }
+
+            return null;
+        }
     }
 
     internal class PropertyInfoValueGetterFactory : ValueGetterFactory
@@ -154,6 +200,18 @@ namespace Nustache.Core
         {
             return property.CanRead;
         }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
+            PropertyInfo property = targetType.GetProperty(name, DefaultBindingFlags);
+
+            if (property != null && PropertyCanGetValue(property))
+            {
+                return new PropertyInfoValueGetter(null, property);
+            }
+
+            return null;
+        }
     }
 
     internal class FieldInfoValueGetterFactory : ValueGetterFactory
@@ -165,6 +223,18 @@ namespace Nustache.Core
             if (field != null)
             {
                 return new FieldInfoValueGetter(target, field);
+            }
+
+            return null;
+        }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
+            FieldInfo field = targetType.GetField(name, DefaultBindingFlags);
+
+            if (field != null)
+            {
+                return new FieldInfoValueGetter(null, field);
             }
 
             return null;
@@ -187,25 +257,18 @@ namespace Nustache.Core
 
             return null;
         }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
+            return null;
+        }
     }
 
     internal class GenericDictionaryValueGetterFactory : ValueGetterFactory
     {
         public override ValueGetter GetValueGetter(object target, string name)
         {
-            Type dictionaryType = null;
-
-            foreach (var interfaceType in target.GetType().GetInterfaces())
-            {
-                if (interfaceType.IsGenericType &&
-                    interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>) &&
-                    interfaceType.GetGenericArguments()[0] == typeof(string))
-                {
-                    dictionaryType = interfaceType;
-
-                    break;
-                }
-            }
+            Type dictionaryType = GetSupportedInterfaceType(target.GetType());
 
             if (dictionaryType != null)
             {
@@ -218,6 +281,34 @@ namespace Nustache.Core
             }
 
             return null;
+        }
+
+        public override ValueGetter GetValueGetter(Type targetType, string name)
+        {
+            Type dictionaryType = GetSupportedInterfaceType(targetType);
+
+            if (dictionaryType != null)
+            {
+                return new GenericDictionaryValueGetter(null, name, dictionaryType);
+            }
+
+            return null;
+        }
+
+        private static Type GetSupportedInterfaceType(Type targetType)
+        {
+            Func<Type, bool> supportedInteface = interfaceType => interfaceType.IsGenericType &&
+                    interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>) &&
+                    interfaceType.GetGenericArguments()[0] == typeof(string);
+
+            if (supportedInteface(targetType))
+            {
+                return targetType;
+            }
+            else
+            {
+                return targetType.GetInterfaces().FirstOrDefault(supportedInteface);
+            }
         }
     }
 }

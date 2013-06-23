@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace Nustache.Core
 {
@@ -80,6 +82,31 @@ namespace Nustache.Core
         public override string Source()
         {
             return "{{#" + _name + "}}" + InnerSource() + "{{/" + _name + "}}";
+        }
+
+        internal override Expression Compile(CompileContext context)
+        {
+            var parts = _parts.Select(part => part.Compile(context))
+                .Where(part => part != null)
+                .ToList();
+            return Concat(parts);
+        }
+
+        protected Expression Concat(IEnumerable<Expression> expressions)
+        {
+            var builder = Expression.Variable(typeof(StringBuilder), "builder");
+
+            var blockExpressions = new List<Expression>();
+            blockExpressions.Add(Expression.Assign(builder, Expression.New(typeof(StringBuilder))));
+            blockExpressions.AddRange(expressions.Select(item => 
+                    Expression.Call(builder, typeof(StringBuilder).GetMethod("Append", new Type[] { typeof(string) }), item)));
+            blockExpressions.Add(
+                    Expression.Call(builder, typeof(StringBuilder).GetMethod("ToString", new Type[0])));
+
+            return Expression.Block(
+                new [] { builder },
+                blockExpressions
+            );
         }
     }
 }

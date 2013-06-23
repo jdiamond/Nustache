@@ -1,0 +1,3 @@
+﻿The code in this folder is generated!  
+
+Use Generate_Classes_From_JSON.Run() to regenerate the code.  Editing it manually could mean it gets overwritten.

@@ -18,3 +18,4 @@
 - Be able to generate static code for later compilation.
   - Would be nice if it didn't use reflection.
 - Also, think about dynamically generating code for immediate use. May be faster.
+- Pass row/col context from scanner to parser for use in exception handling/debugging
