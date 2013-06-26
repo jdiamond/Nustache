@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Nustache.Core.Block" Collapsed="true">
+    <Position X="2.75" Y="3" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Block.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.Section" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAoAAAIgAAAAwAABAAAAQAEAAAABAAABAAAAAAAAA=</HashCode>
+      <FileName>Section.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.RenderContext">
+    <Position X="10" Y="2.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAYAAAIAAgAIAACAAAUACAABIAAAAAAAEACIA=</HashCode>
+      <FileName>RenderContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.Part" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Part.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.InvertedBlock" Collapsed="true">
+    <Position X="4.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>InvertedBlock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.Template" Collapsed="true">
+    <Position X="1" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Template.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.TemplateDefinition" Collapsed="true">
+    <Position X="0.75" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TemplateDefinition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.EndSection" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAgAAAAAEAAAAAAQAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>EndSection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.LiteralText" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAEAAAAAAAAAAAAAAAIABAACAAAAAA=</HashCode>
+      <FileName>LiteralText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.TemplateInclude" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAgAAAAAEAAAAAAQAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>TemplateInclude.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Nustache.Core.VariableReference" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIgACAAIEAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>VariableReference.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Delegate Name="Nustache.Core.TemplateLocator" Collapsed="true">
+    <Position X="8" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RenderContext.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="Nustache.Core.Lambda" Collapsed="true">
+    <Position X="8" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RenderContext.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

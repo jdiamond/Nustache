@@ -13,7 +13,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_returns_NoValue_when_it_cant_get_a_value()
         {
-            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(this, "x"));
+            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(this, "x", null));
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace Nustache.Core.Tests
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntField"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntField", null));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Nustache.Core.Tests
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "intfield"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intfield", null));
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace Nustache.Core.Tests
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntProperty"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntProperty", null));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace Nustache.Core.Tests
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "intproperty"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intproperty", null));
         }
 
         [Test]
@@ -53,7 +53,15 @@ namespace Nustache.Core.Tests
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntMethod"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntMethod", null));
+        }
+
+        [Test]
+        public void It_gets_method_context_values()
+        {
+            ReadWriteInts target = new ReadWriteInts();
+            target.IntField = 123;
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntMethodWithContext", null));
         }
 
         [Test]
@@ -61,21 +69,21 @@ namespace Nustache.Core.Tests
         {
             ReadWriteInts target = new ReadWriteInts();
             target.IntField = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "intmethod"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intmethod", null));
         }
 
         [Test]
         public void It_cant_get_values_from_write_only_properties()
         {
             WriteOnlyInts target = new WriteOnlyInts();
-            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(target, "IntProperty"));
+            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(target, "IntProperty", null));
         }
 
         [Test]
         public void It_cant_get_values_from_write_only_methods()
         {
             WriteOnlyInts target = new WriteOnlyInts();
-            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(target, "IntMethod"));
+            Assert.AreSame(ValueGetter.NoValue, ValueGetter.GetValue(target, "IntMethod", null));
         }
 
         [Test]
@@ -83,7 +91,7 @@ namespace Nustache.Core.Tests
         {
             Hashtable target = new Hashtable();
             target["IntKey"] = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey", null));
         }
 
         [Test]
@@ -91,7 +99,7 @@ namespace Nustache.Core.Tests
         {
             Dictionary<string, int> target = new Dictionary<string, int>();
             target["IntKey"] = 123;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntKey", null));
         }
 
         [Test]
@@ -101,7 +109,7 @@ namespace Nustache.Core.Tests
             mock.Setup(x => x.ContainsKey("Key")).Returns(true);
             mock.Setup(x => x["Key"]).Returns(123);
             IDictionary<string, int> target = mock.Object;
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "Key"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "Key", null));
         }
 
         [Test]
@@ -111,7 +119,7 @@ namespace Nustache.Core.Tests
             dt.Columns.Add("IntColumn", typeof(int));
             dt.Rows.Add(new object[] { 123 });
             DataRowView target = dt.DefaultView[0];
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntColumn"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntColumn", null));
         }
 
         [Test]
@@ -121,7 +129,7 @@ namespace Nustache.Core.Tests
             dt.Columns.Add("IntColumn", typeof(int));
             dt.Rows.Add(new object[] { 123 });
             DataRowView target = dt.DefaultView[0];
-            Assert.AreEqual(123, ValueGetter.GetValue(target, "intcolumn"));
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intcolumn", null));
         }
 
         [Test]
@@ -129,7 +137,7 @@ namespace Nustache.Core.Tests
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'></doc>");
-            Assert.AreEqual("val", ValueGetter.GetValue(target.DocumentElement, "@attr"));
+            Assert.AreEqual("val", ValueGetter.GetValue(target.DocumentElement, "@attr", null));
         }
 
         [Test]
@@ -137,7 +145,7 @@ namespace Nustache.Core.Tests
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'><child>text</child></doc>");
-            var value= (string)ValueGetter.GetValue(target.DocumentElement, "child");
+            var value = (string)ValueGetter.GetValue(target.DocumentElement, "child", null);
             Assert.AreEqual("text", value);
         }
 
@@ -146,7 +154,7 @@ namespace Nustache.Core.Tests
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'><child>text1</child><child>text2</child></doc>");
-            XmlNodeList elements = (XmlNodeList)ValueGetter.GetValue(target.DocumentElement, "child");
+            XmlNodeList elements = (XmlNodeList)ValueGetter.GetValue(target.DocumentElement, "child", null);
             Assert.AreEqual(2, elements.Count);
             Assert.AreEqual("text1", elements[0].InnerText);
             Assert.AreEqual("text2", elements[1].InnerText);
@@ -157,6 +165,7 @@ namespace Nustache.Core.Tests
             public int IntField = -1;
             public int IntProperty { get { return IntField; } set { IntField = value; } }
             public int IntMethod() { return IntField; }
+            public int IntMethodWithContext(RenderContext renderContext) { return IntField; }
             public void IntMethod(int value) { IntField = value; }
         }
 

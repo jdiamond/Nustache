@@ -12,16 +12,16 @@ namespace Nustache.Core
 
         #region Static helper methods
 
-        public static object GetValue(object target, string name)
+        public static object GetValue(object target, string name, RenderContext renderContext)
         {
-            return ValueGetterFactories.Factories.GetValueGetter(target, name).GetValue();
+            return ValueGetterFactories.Factories.GetValueGetter(target, name).GetValue(renderContext);
         }
 
         #endregion
 
         #region Abstract methods
 
-        public abstract object GetValue();
+        public abstract object GetValue(RenderContext renderContext);
 
         #endregion
     }
@@ -64,7 +64,7 @@ namespace Nustache.Core
             return false;
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             if (_name[0] == '@' && TryGetStringByAttributeName(_name.Substring(1)))
                 return _textValueLocated;
@@ -111,7 +111,7 @@ namespace Nustache.Core
             _propertyDescriptor = propertyDescriptor;
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             return _propertyDescriptor.GetValue(_target);
         }
@@ -120,17 +120,26 @@ namespace Nustache.Core
     internal class MethodInfoValueGetter : ValueGetter
     {
         private readonly object _target;
+        private readonly bool _hasRenderContextParam;
         private readonly MethodInfo _methodInfo;
 
-        internal MethodInfoValueGetter(object target, MethodInfo methodInfo)
+        internal MethodInfoValueGetter(object target, MethodInfo methodInfo, bool hasRenderContextParam)
         {
             _target = target;
             _methodInfo = methodInfo;
+            _hasRenderContextParam = hasRenderContextParam;
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
-            return _methodInfo.Invoke(_target, null);
+            if (_hasRenderContextParam)
+            {
+                return _methodInfo.Invoke(_target, new object[] { renderContext });
+            }
+            else
+            {
+                return _methodInfo.Invoke(_target, null);
+            }
         }
     }
 
@@ -145,7 +154,7 @@ namespace Nustache.Core
             _propertyInfo = propertyInfo;
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             return _propertyInfo.GetValue(_target, null);
         }
@@ -162,7 +171,7 @@ namespace Nustache.Core
             _fieldInfo = fieldInfo;
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             return _fieldInfo.GetValue(_target);
         }
@@ -179,7 +188,7 @@ namespace Nustache.Core
             _key = key;
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             return _target[_key];
         }
@@ -198,7 +207,7 @@ namespace Nustache.Core
             _getMethod = dictionaryType.GetMethod("get_Item");
         }
 
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             return _getMethod.Invoke(_target, new object[] { _key });
         }
@@ -206,7 +215,7 @@ namespace Nustache.Core
 
     internal class NoValueGetter : ValueGetter
     {
-        public override object GetValue()
+        public override object GetValue(RenderContext renderContext)
         {
             return NoValue;
         }

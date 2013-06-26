@@ -122,7 +122,15 @@ namespace Nustache.Core
             {
                 if (MethodCanGetValue(method))
                 {
-                    return new MethodInfoValueGetter(target, method);
+                    var parameters = method.GetParameters();
+                    if (parameters.Length == 0)
+                    {
+                        return new MethodInfoValueGetter(target, method, false);
+                    }
+                    else if (parameters.Length == 1 && parameters[0].ParameterType == typeof(RenderContext))
+                    {
+                        return new MethodInfoValueGetter(target, method, true);
+                    }
                 }
             }
 
@@ -131,8 +139,7 @@ namespace Nustache.Core
 
         private static bool MethodCanGetValue(MethodInfo method)
         {
-            return method.ReturnType != typeof(void) &&
-                   method.GetParameters().Length == 0;
+            return method.ReturnType != typeof(void);
         }
     }
 

@@ -26,6 +26,15 @@ namespace Nustache.Core
             get { return _name; }
         }
 
+        /// <summary>
+        /// the binding data for the section.
+        /// </summary>
+        public object Data 
+        { 
+            get; 
+            set; 
+        }
+
         public IEnumerable<Part> Parts { get { return _parts; } }
 
         public void Load(IEnumerable<Part> parts)
