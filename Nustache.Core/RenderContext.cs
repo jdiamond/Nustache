@@ -9,7 +9,7 @@ namespace Nustache.Core
     public delegate Template TemplateLocator(string name);
 
     public delegate Object Lambda(string text);
-
+    
     public class RenderContext
     {
         private const int IncludeLimit = 1024;
@@ -26,9 +26,31 @@ namespace Nustache.Core
             _writer = writer;
             _templateLocator = templateLocator;
             _includeLevel = 0;
+
+            if (section != null)
+            {
+                section.Data = data;
+            }
         }
 
-        public object GetValue(string path)
+        /// <summary>
+        /// get the binding object in the render context by section name.
+        /// </summary>
+        /// <param name="sectionName">section name</param>
+        /// <returns></returns>
+        public object GetSectionData(string sectionName)
+        {
+            foreach (var item in this._sectionStack)
+            {
+                if (string.Equals(item.Name, sectionName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return item.Data;
+                }
+            }
+            return null;
+        }
+
+        internal object GetValue(string path)
         {
             if (path == ".")
             {
@@ -56,9 +78,9 @@ namespace Nustache.Core
             return null;
         }
 
-        private static object GetValueFromPath(object data, string path)
+        private object GetValueFromPath(object data, string path)
         {
-            var value = ValueGetter.GetValue(data, path);
+            var value = ValueGetter.GetValue(data, path, this);
 
             if (value != null && !ReferenceEquals(value, ValueGetter.NoValue))
             {
@@ -69,7 +91,7 @@ namespace Nustache.Core
 
             foreach (var name in names)
             {
-                data = ValueGetter.GetValue(data, name);
+                data = ValueGetter.GetValue(data, name, this);
 
                 if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
                 {
@@ -80,7 +102,7 @@ namespace Nustache.Core
             return data;
         }
 
-        public IEnumerable<object> GetValues(string path)
+        internal IEnumerable<object> GetValues(string path)
         {
             object value = GetValue(path);
 
@@ -130,12 +152,12 @@ namespace Nustache.Core
             }
         }
 
-        public void Write(string text)
+        internal void Write(string text)
         {
             _writer.Write(text);
         }
 
-        public void Include(string templateName)
+        internal void Include(string templateName)
         {
             if (_includeLevel >= IncludeLimit)
             {
@@ -179,13 +201,17 @@ namespace Nustache.Core
             return null;
         }
 
-        public void Push(Section section, object data)
+        internal void Push(Section section, object data)
         {
             _sectionStack.Push(section);
             _dataStack.Push(data);
+            if (section != null)
+            {
+                section.Data = data;
+            }
         }
 
-        public void Pop()
+        internal void Pop()
         {
             _sectionStack.Pop();
             _dataStack.Pop();

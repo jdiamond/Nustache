@@ -87,6 +87,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Nustache.Core.nuspec" />
     <None Include="Nustache.snk" />
   </ItemGroup>

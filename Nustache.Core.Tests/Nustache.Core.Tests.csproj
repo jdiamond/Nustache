@@ -54,6 +54,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Describe_Method.cs" />
     <Compile Include="Example_Trees.cs" />
     <Compile Include="Describe_Encoders.cs" />
     <Compile Include="Describe_Lambda.cs" />
