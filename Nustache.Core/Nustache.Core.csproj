@@ -49,11 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compilation\CompilationException.cs" />
+    <Compile Include="Compilation\CompiledValueGetterVisitor.cs" />
+    <Compile Include="Compilation\CompilePartVisitor.cs" />
     <Compile Include="Compilation\CompoundExpression.cs" />
-    <Compile Include="CompileContext.cs" />
+    <Compile Include="Compilation\CompileContext.cs" />
     <Compile Include="Encoders.cs" />
     <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="GenericDictionaryUtil.cs" />
+    <Compile Include="PartVisitor.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="TemplateDefinition.cs" />
     <Compile Include="Render.cs" />
@@ -71,6 +74,7 @@
     <Compile Include="TemplateInclude.cs" />
     <Compile Include="ValueGetter.cs" />
     <Compile Include="ValueGetterFactory.cs" />
+    <Compile Include="ValueGetterVisitor.cs" />
     <Compile Include="VariableReference.cs" />
   </ItemGroup>
   <ItemGroup>

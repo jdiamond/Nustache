@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq.Expressions;
+using Nustache.Core.Compilation;
 
 namespace Nustache.Core
 {
@@ -53,6 +54,13 @@ namespace Nustache.Core
             var expression = Compile(context);
 
             return (Expression.Lambda<Func<T, string>>(expression, param)).Compile();
+        }
+
+        internal Expression Compile(CompileContext context)
+        {
+            var visitor = new CompilePartVisitor(context);
+            visitor.Visit(this);
+            return visitor.Result();
         }
 
         /// <summary>

@@ -1,7 +1,3 @@
-using System.Linq.Expressions;
-using System.Linq;
-using System.Collections.Generic;
-using Nustache.Core.Compilation;
 
 namespace Nustache.Core
 {
@@ -30,32 +26,6 @@ namespace Nustache.Core
 
                 context.Pop();
             }
-        }
-
-        internal override System.Linq.Expressions.Expression Compile(CompileContext context)
-        {
-            return context.GetInnerExpressions(Name, value =>
-            {
-                context.Push(this, value);
-
-                if (typeof(Lambda).BaseType.IsAssignableFrom(value.Type))
-                {
-                    return
-                        Expression.Call(
-                            Expression.Call(value, value.Type.GetMethod("Invoke"),
-                                Expression.Constant(InnerSource())),
-                            typeof(object).GetMethod("ToString"));
-                }
-
-
-                var expression = CompoundExpression.NullCheck(value, 
-                    nullValue: "", 
-                    returnIfNotNull: base.Compile(context));
-
-                context.Pop();
-
-                return expression;
-            });
         }
 
         public override string ToString()

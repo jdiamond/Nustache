@@ -11,8 +11,10 @@ namespace Nustache.Core
 {
     public abstract class ValueGetterFactory
     {
-        public abstract ValueGetter GetValueGetter(object target, string name);
-        public abstract ValueGetter GetValueGetter(Type targetType, string name);
+        // jon_wingfield: this is still problematic for me. target will be null when compiling, which
+        // really is a POLA violation when you're coding for non-compiled templates.  Feedback/suggestions welcome.
+        /// <param name="target">Can be null if we're compiling.</param>
+        public abstract ValueGetter GetValueGetter(object target, Type targetType, string name);
 
         protected const BindingFlags DefaultBindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
         protected const StringComparison DefaultNameComparison = StringComparison.CurrentCultureIgnoreCase;
@@ -49,7 +51,7 @@ namespace Nustache.Core
         {
             foreach (var factory in Items)
             {
-                var getter = factory.GetValueGetter(targetType, name);
+                var getter = factory.GetValueGetter(null, targetType, name);
                 if (getter != null)
                 {
                     return getter;
@@ -63,7 +65,7 @@ namespace Nustache.Core
         {
             foreach (var factory in factories)
             {
-                var getter = factory.GetValueGetter(target, name);
+                var getter = factory.GetValueGetter(target, target.GetType(), name);
                 if (getter != null)
                 {
                     return getter;
@@ -95,7 +97,7 @@ namespace Nustache.Core
 
     internal class XmlNodeValueGetterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
             if (target is XmlNode)
             {
@@ -104,21 +106,11 @@ namespace Nustache.Core
 
             return null;
         }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
-        {
-            if (targetType.IsSubclassOf(typeof(XmlNode)))
-            {
-                return new XmlNodeValueGetter(null, name);
-            }
-
-            return null;
-        }
     }
 
     internal class PropertyDescriptorValueGetterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
             if (target is ICustomTypeDescriptor)
             {
@@ -136,18 +128,13 @@ namespace Nustache.Core
 
             return null;
         }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
-        {
-            return null;
-        }
     }
 
     internal class MethodInfoValueGatterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
-            MemberInfo[] methods = target.GetType().GetMember(name, MemberTypes.Method, DefaultBindingFlags);
+            MemberInfo[] methods = targetType.GetMember(name, MemberTypes.Method, DefaultBindingFlags);
 
             foreach (MethodInfo method in methods)
             {
@@ -165,28 +152,13 @@ namespace Nustache.Core
             return method.ReturnType != typeof(void) &&
                    method.GetParameters().Length == 0;
         }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
-        {
-            MemberInfo[] methods = targetType.GetMember(name, MemberTypes.Method, DefaultBindingFlags);
-
-            foreach (MethodInfo method in methods)
-            {
-                if (MethodCanGetValue(method))
-                {
-                    return new MethodInfoValueGetter(null, method);
-                }
-            }
-
-            return null;
-        }
     }
 
     internal class PropertyInfoValueGetterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
-            PropertyInfo property = target.GetType().GetProperty(name, DefaultBindingFlags);
+            PropertyInfo property = targetType.GetProperty(name, DefaultBindingFlags);
 
             if (property != null && PropertyCanGetValue(property))
             {
@@ -200,25 +172,13 @@ namespace Nustache.Core
         {
             return property.CanRead;
         }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
-        {
-            PropertyInfo property = targetType.GetProperty(name, DefaultBindingFlags);
-
-            if (property != null && PropertyCanGetValue(property))
-            {
-                return new PropertyInfoValueGetter(null, property);
-            }
-
-            return null;
-        }
     }
 
     internal class FieldInfoValueGetterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
-            FieldInfo field = target.GetType().GetField(name, DefaultBindingFlags);
+            FieldInfo field = targetType.GetField(name, DefaultBindingFlags);
 
             if (field != null)
             {
@@ -227,23 +187,11 @@ namespace Nustache.Core
 
             return null;
         }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
-        {
-            FieldInfo field = targetType.GetField(name, DefaultBindingFlags);
-
-            if (field != null)
-            {
-                return new FieldInfoValueGetter(null, field);
-            }
-
-            return null;
-        }
     }
 
     internal class DictionaryValueGetterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
             if (target is IDictionary)
             {
@@ -257,39 +205,28 @@ namespace Nustache.Core
 
             return null;
         }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
-        {
-            return null;
-        }
     }
 
     internal class GenericDictionaryValueGetterFactory : ValueGetterFactory
     {
-        public override ValueGetter GetValueGetter(object target, string name)
-        {
-            Type dictionaryType = GetSupportedInterfaceType(target.GetType());
-
-            if (dictionaryType != null)
-            {
-                var containsKeyMethod = dictionaryType.GetMethod("ContainsKey");
-
-                if ((bool)containsKeyMethod.Invoke(target, new object[] { name }))
-                {
-                    return new GenericDictionaryValueGetter(target, name, dictionaryType);
-                }
-            }
-
-            return null;
-        }
-
-        public override ValueGetter GetValueGetter(Type targetType, string name)
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
             Type dictionaryType = GetSupportedInterfaceType(targetType);
 
             if (dictionaryType != null)
             {
-                return new GenericDictionaryValueGetter(null, name, dictionaryType);
+                if (target == null)
+                {
+                    return new GenericDictionaryValueGetter(null, name, dictionaryType);
+                }
+                else 
+                {
+                    var containsKeyMethod = dictionaryType.GetMethod("ContainsKey");
+                    if ((bool)containsKeyMethod.Invoke(target, new object[] { name }))
+                    {
+                        return new GenericDictionaryValueGetter(target, name, dictionaryType);
+                    }
+                }
             }
 
             return null;
