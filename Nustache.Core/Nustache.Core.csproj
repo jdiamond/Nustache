@@ -10,13 +10,16 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Nustache.Core</RootNamespace>
     <AssemblyName>Nustache.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion >v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <Framework Condition=" '$(Framework)' == '' ">NET40</Framework>
+    <DefineConstants>NET40</DefineConstants>
+    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +40,14 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="  '$(Framework)' == 'NET20' ">
+    <DefineConstants>NET20</DefineConstants>
+    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="  '$(Framework)' == 'NET40' ">
+    <DefineConstants>NET40</DefineConstants>
+    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
+  </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
@@ -48,11 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compilation\CompilationException.cs" />
-    <Compile Include="Compilation\CompiledValueGetterVisitor.cs" />
-    <Compile Include="Compilation\CompilePartVisitor.cs" />
-    <Compile Include="Compilation\CompoundExpression.cs" />
-    <Compile Include="Compilation\CompileContext.cs" />
+    <Compile Include="Compilation\CompilationException.cs" Condition=" '$(Framework)' == 'NET40' " />
+    <Compile Include="Compilation\CompiledValueGetterVisitor.cs" Condition=" '$(Framework)' == 'NET40' " />
+    <Compile Include="Compilation\CompilePartVisitor.cs" Condition=" '$(Framework)' == 'NET40' " />
+    <Compile Include="Compilation\CompoundExpression.cs" Condition=" '$(Framework)' == 'NET40' " />
+    <Compile Include="Compilation\CompileContext.cs" Condition=" '$(Framework)' == 'NET40' " />
     <Compile Include="Encoders.cs" />
     <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="GenericDictionaryUtil.cs" />
@@ -106,4 +117,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <!-- Uncomment the below to run the build for .NET Fx 2.0 -->
+    <!--<MSBuild Condition=" '$(Framework)' != 'NET20'"
+      Projects="$(MSBuildProjectFile)"
+      Properties="Framework=NET20"
+      RunEachTargetSeparately="true"  />-->
+  </Target>
 </Project>

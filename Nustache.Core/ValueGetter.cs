@@ -17,6 +17,8 @@ namespace Nustache.Core
             return ValueGetterFactories.Factories.GetValueGetter(target, name).GetValue();
         }
 
+#if NET40
+
         public static System.Linq.Expressions.Expression CompiledGetter(Type targetType, string path, System.Linq.Expressions.Expression dataParameter)
         {
             var getter = ValueGetterFactories.Factories.GetCompiledGetter(targetType, path);
@@ -29,6 +31,7 @@ namespace Nustache.Core
             else
                 return null;
         }
+#endif
 
         #endregion
 

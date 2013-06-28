@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq.Expressions;
+
+#if NET40
 using Nustache.Core.Compilation;
+#endif
 
 namespace Nustache.Core
 {
@@ -37,6 +40,8 @@ namespace Nustache.Core
 
             parser.Parse(this, scanner.Scan(template));
         }
+
+#if NET40
 
         /// <summary>
         /// Compiles the template into a Lambda function which can be executed later.
@@ -83,6 +88,8 @@ namespace Nustache.Core
 
             return (Expression.Lambda<Func<object, string>>(expression, param)).Compile();
         }
+
+#endif
 
         /// <summary>
         /// Renders the template.
