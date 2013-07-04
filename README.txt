@@ -23,6 +23,13 @@ For non-MVC projects:
 - Data can be object, IDictionary, or DataTable.
 - If you need more control, use Render.Template.
 - See the source and tests for more information.
+- For compiled templates:
+
+   var template = new Template();
+   template.Load(new StringReader(templateText));
+   var compiled = template.Compile<Foo>(null);
+
+   var html = compiled(fooInstance);
 
 For MVC projects:
 
