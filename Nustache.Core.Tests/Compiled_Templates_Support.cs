@@ -109,6 +109,15 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void Strings_as_truthiness_tests()
+        {
+            var template = Template("A template with {{#Sub.SubText}}data here{{/Sub.SubText}}{{#TestString}}not shown{{/TestString}}");
+            var compiled = template.Compile<TestObject>(null);
+            var result = compiled(new TestObject { Sub = new SubObject { SubText = "Text" }, TestString = "" });
+            Assert.AreEqual("A template with data here", result);
+        }
+
+        [Test]
         public void Enumerable_Sections()
         {
             var template = Template("A template with{{#Items}} {{SubText}} {{/Items}}");
