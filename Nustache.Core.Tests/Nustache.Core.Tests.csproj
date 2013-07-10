@@ -57,9 +57,8 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
-    <Reference Include="Xamasoft.JsonClassGenerator, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\JsonCsClassGenerator\JsonCSharpClassGeneratorLib\bin\Release\Xamasoft.JsonClassGenerator.dll</HintPath>
+    <Reference Include="Xamasoft.JsonClassGenerator">
+      <HintPath>..\Lib\JsonClassGenerator\Xamasoft.JsonClassGenerator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
