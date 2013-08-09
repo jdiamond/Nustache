@@ -17,6 +17,7 @@ namespace Nustache.Core
         private readonly Stack<object> _dataStack = new Stack<object>();
         private readonly TextWriter _writer;
         private readonly TemplateLocator _templateLocator;
+        private readonly RenderContextBehaviour _renderContextBehaviour;
         private int _includeLevel;
 
         public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator)
@@ -26,6 +27,12 @@ namespace Nustache.Core
             _writer = writer;
             _templateLocator = templateLocator;
             _includeLevel = 0;
+            _renderContextBehaviour = RenderContextBehaviour.GetDefaultRenderContextBehaviour();
+        }
+
+        public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour) : this(section,data,writer,templateLocator)
+        {
+            _renderContextBehaviour = renderContextBehaviour;
         }
 
         public object GetValue(string path)
@@ -51,6 +58,11 @@ namespace Nustache.Core
                         return value;
                     }
                 }
+            }
+
+            if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
+            {
+                throw new NustacheContextMissException(string.Format("Path : {0} is null or undefined, RaiseExceptionOnDataContextMiss : true.", path));
             }
 
             return null;

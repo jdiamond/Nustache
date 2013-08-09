@@ -102,11 +102,17 @@ namespace Nustache.Core
         /// </remarks>
         public void Render(object data, TextWriter writer, TemplateLocator templateLocator)
         {
-            var context = new RenderContext(this, data, writer, templateLocator);
+            Render(data, writer, templateLocator, RenderContextBehaviour.GetDefaultRenderContextBehaviour());
+        }
+
+        public void Render(object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour)
+        {
+            var context = new RenderContext(this, data, writer, templateLocator, renderContextBehaviour);
 
             Render(context);
 
             writer.Flush();
         }
+
     }
 }

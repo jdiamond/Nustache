@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Nustache.Core</RootNamespace>
     <AssemblyName>Nustache.Core</AssemblyName>
-    <TargetFrameworkVersion >v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -67,7 +67,9 @@
     <Compile Include="Encoders.cs" />
     <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="GenericDictionaryUtil.cs" />
+    <Compile Include="NustacheContextMissException.cs" />
     <Compile Include="PartVisitor.cs" />
+    <Compile Include="RenderContextBehaviour.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="TemplateDefinition.cs" />
     <Compile Include="Render.cs" />
