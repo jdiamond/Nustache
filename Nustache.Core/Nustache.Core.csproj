@@ -68,6 +68,7 @@
     <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="GenericDictionaryUtil.cs" />
     <Compile Include="NustacheContextMissException.cs" />
+    <Compile Include="NustacheEmptyStringException.cs" />
     <Compile Include="PartVisitor.cs" />
     <Compile Include="RenderContextBehaviour.cs" />
     <Compile Include="Section.cs" />

@@ -55,6 +55,15 @@ namespace Nustache.Core
 
                     if (!ReferenceEquals(value, ValueGetter.NoValue))
                     {
+                        if (value is string)
+                        {
+                            var valueAsString = (string)value;
+                            if (string.IsNullOrEmpty(valueAsString) && _renderContextBehaviour.RaiseExceptionOnEmptyStringValue)
+                            {
+                                throw new NustacheEmptyStringException(
+                                    string.Format("Path : {0} is an empty string, RaiseExceptionOnEmptyStringValue : true.", path));
+                            }
+                        }
                         return value;
                     }
                 }
@@ -62,7 +71,7 @@ namespace Nustache.Core
 
             if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
             {
-                throw new NustacheContextMissException(string.Format("Path : {0} is null or undefined, RaiseExceptionOnDataContextMiss : true.", path));
+                throw new NustacheContextMissException(string.Format("Path : {0} is undefined, RaiseExceptionOnDataContextMiss : true.", path));
             }
 
             return null;
@@ -98,6 +107,10 @@ namespace Nustache.Core
 
             if (value == null)
             {
+                if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
+                {
+                    throw new NustacheContextMissException(string.Format("Path : {0} is undefined, RaiseExceptionOnDataContextMiss : true.", path));
+                }
                 yield break;
             }
             else if (value is bool)
