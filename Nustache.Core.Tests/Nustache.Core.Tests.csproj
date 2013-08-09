@@ -96,6 +96,7 @@
     <Compile Include="PartComparer.cs" />
     <Compile Include="EnumerablePartExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderContext_Behaviour_Support.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nustache.Core\Nustache.Core.csproj">

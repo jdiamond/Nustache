@@ -17,15 +17,19 @@ namespace Nustache.Core
         private readonly Stack<object> _dataStack = new Stack<object>();
         private readonly TextWriter _writer;
         private readonly TemplateLocator _templateLocator;
+        private readonly RenderContextBehaviour _renderContextBehaviour;
         private int _includeLevel;
 
-        public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator)
+        public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour = null) 
         {
             _sectionStack.Push(section);
             _dataStack.Push(data);
             _writer = writer;
             _templateLocator = templateLocator;
             _includeLevel = 0;
+
+            _renderContextBehaviour = renderContextBehaviour ??
+                                      RenderContextBehaviour.GetDefaultRenderContextBehaviour();
         }
 
         public object GetValue(string path)
@@ -48,9 +52,23 @@ namespace Nustache.Core
 
                     if (!ReferenceEquals(value, ValueGetter.NoValue))
                     {
+                        if (value is string)
+                        {
+                            var valueAsString = (string)value;
+                            if (string.IsNullOrEmpty(valueAsString) && _renderContextBehaviour.RaiseExceptionOnEmptyStringValue)
+                            {
+                                throw new NustacheEmptyStringException(
+                                    string.Format("Path : {0} is an empty string, RaiseExceptionOnEmptyStringValue : true.", path));
+                            }
+                        }
                         return value;
                     }
                 }
+            }
+
+            if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
+            {
+                throw new NustacheDataContextMissException(string.Format("Path : {0} is undefined, RaiseExceptionOnDataContextMiss : true.", path));
             }
 
             return null;
@@ -86,6 +104,10 @@ namespace Nustache.Core
 
             if (value == null)
             {
+                if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
+                {
+                    throw new NustacheDataContextMissException(string.Format("Path : {0} is undefined, RaiseExceptionOnDataContextMiss : true.", path));
+                }
                 yield break;
             }
             else if (value is bool)
