@@ -46,7 +46,8 @@ namespace Nustache.Core.Tests.Mustache_Spec
 
         private static void RunMustacheSpecs(MustacheSpec.MustacheTest test)
         {
-            TemplateLocator testDataTemplateLocator = name =>            {
+            TemplateLocator testDataTemplateLocator = name =>
+            {
                 if (test.Partials != null && test.Partials[name] != null)
                 {
                     var template = new Template();

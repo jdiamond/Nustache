@@ -7,3 +7,4 @@ obj
 *.sln.cache
 *.nupkg
 *.dotCover
+packages

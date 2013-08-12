@@ -63,3 +63,11 @@ Syntax:
     You can define templates inside sections. They override
     templates defined in outer sections which override
     external templates.
+
+Development:
+
+- Build with VS2012 or MSBuild.
+- To run the tests that use Mustache specs, run this command from your
+  Nustache clone:
+
+    git submodule update --init
