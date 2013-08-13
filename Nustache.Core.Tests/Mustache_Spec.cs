@@ -16,16 +16,16 @@ namespace Nustache.Core.Tests
         [TestCaseSource("Inverted")]
         [TestCaseSource("Partials")]
         [TestCaseSource("Sections")]
-        public void AllTests(Dictionary<object, object> data, string template, Dictionary<object, string> partials, string expected)
+        public void AllTests(string name, Dictionary<object, object> data, string template, Dictionary<object, string> partials, string expected)
         {
             FixData(data);
 
             var actual = Render.StringToString(
                 template,
                 data,
-                name => {
+                partial => {
                     var t = new Template();
-                    t.Load(new StringReader(partials[name]));
+                    t.Load(new StringReader(partials[partial]));
                     return t;
                 });
 
@@ -54,7 +54,7 @@ namespace Nustache.Core.Tests
             var doc = new Deserializer().Deserialize<SpecDoc>(new StringReader(text));
 
             return doc.tests
-                .Select(test => new TestCaseData(test.data, test.template, test.partials, test.expected)
+                .Select(test => new TestCaseData(test.name, test.data, test.template, test.partials, test.expected)
                 .SetName(file + ": " + test.name));
         }
     }

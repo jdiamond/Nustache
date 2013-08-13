@@ -48,7 +48,10 @@ namespace Nustache.Core
             {
                 if (data != null)
                 {
-                    var value = GetValueFromPath(data, path);
+                    bool partialMatch;
+                    var value = GetValueFromPath(data, path, out partialMatch);
+
+                    if (partialMatch) break;
 
                     if (!ReferenceEquals(value, ValueGetter.NoValue))
                     {
@@ -74,8 +77,10 @@ namespace Nustache.Core
             return null;
         }
 
-        private static object GetValueFromPath(object data, string path)
+        private static object GetValueFromPath(object data, string path, out bool partialMatch)
         {
+            partialMatch = false;
+
             var value = ValueGetter.GetValue(data, path);
 
             if (value != null && !ReferenceEquals(value, ValueGetter.NoValue))
@@ -85,17 +90,23 @@ namespace Nustache.Core
 
             var names = path.Split('.');
 
-            foreach (var name in names)
+            if (names.Length > 1)
             {
-                data = ValueGetter.GetValue(data, name);
-
-                if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
+                foreach (var name in names)
                 {
-                    break;
+                    data = ValueGetter.GetValue(data, name);
+
+                    if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
+                    {
+                        partialMatch = true;
+                        break;
+                    }
                 }
+
+                return data;
             }
 
-            return data;
+            return value;
         }
 
         public IEnumerable<object> GetValues(string path)
