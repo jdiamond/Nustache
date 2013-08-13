@@ -163,6 +163,11 @@ namespace Nustache.Core
             }
         }
 
+        public bool IsTruthy(string path)
+        {
+            return GetValues(path).GetEnumerator().MoveNext();
+        }
+
         public void Write(string text)
         {
             _writer.Write(text);

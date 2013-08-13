@@ -34,10 +34,29 @@ namespace Nustache.Core.Tests
 
         private void FixData(Dictionary<object, object> data)
         {
-            // YamlDotNet returns all values as strings. Parse the one value that matters to the tests.
+            // YamlDotNet returns all values as strings. Parse the one number that matters to the tests.
             if (data.ContainsKey("power"))
             {
                 data["power"] = double.Parse((string)data["power"]);
+            }
+
+            FixFalseValues(data);
+        }
+
+        private void FixFalseValues(Dictionary<object, object> data)
+        {
+            foreach (var key in data.Keys.ToArray()) // Copy the array so we can modify it while looping.
+            {
+                var value = data[key];
+
+                if (value is string && (string)value == "false")
+                {
+                    data[key] = false;
+                }
+                else if (value is Dictionary<object, object>)
+                {
+                    FixFalseValues((Dictionary<object, object>)value);
+                }
             }
         }
 
@@ -51,7 +70,8 @@ namespace Nustache.Core.Tests
         public IEnumerable<ITestCaseData> GetTestCases(string file)
         {
             var text = File.ReadAllText(string.Format("../../../spec/specs/{0}.yml", file));
-            var doc = new Deserializer().Deserialize<SpecDoc>(new StringReader(text));
+            var deserializer = new Deserializer();
+            var doc = deserializer.Deserialize<SpecDoc>(new StringReader(text));
 
             return doc.tests
                 .Select(test => new TestCaseData(test.name, test.data, test.template, test.partials, test.expected)

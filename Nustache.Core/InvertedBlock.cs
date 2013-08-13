@@ -11,7 +11,7 @@
         public override void Render(RenderContext context)
         {
             // According to mustache(5), we only need to render an inverted section if the value is truthful 
-            if (context.GetValues(Name).GetEnumerator().MoveNext()) {
+            if (context.IsTruthy(Name)) {
                 return;
             }
 
