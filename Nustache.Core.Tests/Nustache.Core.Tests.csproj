@@ -57,11 +57,18 @@
     <Reference Include="Xamasoft.JsonClassGenerator">
       <HintPath>..\Lib\JsonClassGenerator\Xamasoft.JsonClassGenerator.dll</HintPath>
     </Reference>
+    <Reference Include="YamlDotNet.Core">
+      <HintPath>..\packages\YamlDotNet.Core.2.1.1\lib\net35\YamlDotNet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet.RepresentationModel">
+      <HintPath>..\packages\YamlDotNet.RepresentationModel.2.1.1\lib\net35\YamlDotNet.RepresentationModel.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Example_Trees.cs" />
     <Compile Include="Describe_Encoders.cs" />
     <Compile Include="Describe_Lambda.cs" />
+    <Compile Include="Mustache_Spec.cs" />
     <Compile Include="PartExtensions.cs" />
     <Compile Include="Describe_FileSystemTemplateLocator.cs" />
     <Compile Include="FileSystemTestFixture.cs" />
