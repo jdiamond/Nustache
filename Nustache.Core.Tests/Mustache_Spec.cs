@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using NUnit.Framework;
 using YamlDotNet.RepresentationModel.Serialization;
 
@@ -19,6 +18,8 @@ namespace Nustache.Core.Tests
         [TestCaseSource("Sections")]
         public void AllTests(Dictionary<object, object> data, string template, Dictionary<object, string> partials, string expected)
         {
+            FixData(data);
+
             var actual = Render.StringToString(
                 template,
                 data,
@@ -27,7 +28,17 @@ namespace Nustache.Core.Tests
                     t.Load(new StringReader(partials[name]));
                     return t;
                 });
+
             Assert.AreEqual(expected, actual);
+        }
+
+        private void FixData(Dictionary<object, object> data)
+        {
+            // YamlDotNet returns all values as strings. Parse the one value that matters to the tests.
+            if (data.ContainsKey("power"))
+            {
+                data["power"] = double.Parse((string)data["power"]);
+            }
         }
 
         public IEnumerable<ITestCaseData> Comments() { return GetTestCases("comments"); }
