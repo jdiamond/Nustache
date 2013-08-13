@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Nustache.Core</RootNamespace>
     <AssemblyName>Nustache.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -59,11 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compilation\CompilationException.cs" Condition=" '$(Framework)' == 'NET40' " />
-    <Compile Include="Compilation\CompiledValueGetterVisitor.cs" Condition=" '$(Framework)' == 'NET40' " />
-    <Compile Include="Compilation\CompilePartVisitor.cs" Condition=" '$(Framework)' == 'NET40' " />
-    <Compile Include="Compilation\CompoundExpression.cs" Condition=" '$(Framework)' == 'NET40' " />
-    <Compile Include="Compilation\CompileContext.cs" Condition=" '$(Framework)' == 'NET40' " />
     <Compile Include="Encoders.cs" />
     <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="GenericDictionaryUtil.cs" />

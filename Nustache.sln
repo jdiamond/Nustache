@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Mvc3.Example", "Nu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Mvc3", "Nustache.Mvc3\Nustache.Mvc3.csproj", "{BB62330D-3604-40EB-9B76-39CE36F1AD6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Compilation", "Nustache.Compilation\Nustache.Compilation.csproj", "{BE490269-ABD0-4FCE-802D-6B9ACF147E66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nustache.Compilation.Tests", "Nustache.Compilation.Tests\Nustache.Compilation.Tests.csproj", "{4EC98A3B-4112-4CF0-81BC-D471F6192203}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{BB62330D-3604-40EB-9B76-39CE36F1AD6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB62330D-3604-40EB-9B76-39CE36F1AD6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB62330D-3604-40EB-9B76-39CE36F1AD6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE490269-ABD0-4FCE-802D-6B9ACF147E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE490269-ABD0-4FCE-802D-6B9ACF147E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE490269-ABD0-4FCE-802D-6B9ACF147E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE490269-ABD0-4FCE-802D-6B9ACF147E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC98A3B-4112-4CF0-81BC-D471F6192203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC98A3B-4112-4CF0-81BC-D471F6192203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC98A3B-4112-4CF0-81BC-D471F6192203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC98A3B-4112-4CF0-81BC-D471F6192203}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

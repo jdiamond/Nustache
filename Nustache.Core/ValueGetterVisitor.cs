@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Nustache.Core
+﻿namespace Nustache.Core
 {
-    internal interface ValueGetterVisitor
+    public interface ValueGetterVisitor
     {
         void Visit(MethodInfoValueGetter getter);
         void Visit(PropertyInfoValueGetter getter);

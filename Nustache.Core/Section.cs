@@ -64,7 +64,7 @@ namespace Nustache.Core
             }
         }
 
-        internal string InnerSource()
+        public string InnerSource()
         {
             var sb = new StringBuilder();
             foreach (var part in Parts)

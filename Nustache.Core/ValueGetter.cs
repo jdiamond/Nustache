@@ -17,29 +17,13 @@ namespace Nustache.Core
             return ValueGetterFactories.Factories.GetValueGetter(target, name).GetValue();
         }
 
-#if NET40
-
-        public static System.Linq.Expressions.Expression CompiledGetter(Type targetType, string path, System.Linq.Expressions.Expression dataParameter)
-        {
-            var getter = ValueGetterFactories.Factories.GetCompiledGetter(targetType, path);
-            var visitor = new Nustache.Core.Compilation.CompiledValueGetterVisitor(targetType, dataParameter);
-            if (getter != null)
-            {
-                getter.Accept(visitor);
-                return visitor.CompiledGetter;
-            }
-            else
-                return null;
-        }
-#endif
-
         #endregion
 
         #region Abstract methods
 
         public abstract object GetValue();
 
-        internal void Accept(ValueGetterVisitor visitor)
+        public void Accept(ValueGetterVisitor visitor)
         {
             try
             {
@@ -153,10 +137,10 @@ namespace Nustache.Core
         }
     }
 
-    internal class MethodInfoValueGetter : ValueGetter
+    public class MethodInfoValueGetter : ValueGetter
     {
         private readonly object _target;
-        internal readonly MethodInfo MethodInfo;
+        public readonly MethodInfo MethodInfo;
 
         internal MethodInfoValueGetter(object target, MethodInfo methodInfo)
         {
@@ -170,10 +154,10 @@ namespace Nustache.Core
         }
     }
 
-    internal class PropertyInfoValueGetter : ValueGetter
+    public class PropertyInfoValueGetter : ValueGetter
     {
         private readonly object _target;
-        internal readonly PropertyInfo PropertyInfo;
+        public readonly PropertyInfo PropertyInfo;
 
         internal PropertyInfoValueGetter(object target, PropertyInfo propertyInfo)
         {
@@ -187,10 +171,10 @@ namespace Nustache.Core
         }
     }
 
-    internal class FieldInfoValueGetter : ValueGetter
+    public class FieldInfoValueGetter : ValueGetter
     {
         private readonly object _target;
-        internal readonly FieldInfo FieldInfo;
+        public readonly FieldInfo FieldInfo;
 
         internal FieldInfoValueGetter(object target, FieldInfo fieldInfo)
         {
@@ -221,12 +205,12 @@ namespace Nustache.Core
         }
     }
 
-    internal class GenericDictionaryValueGetter : ValueGetter
+    public class GenericDictionaryValueGetter : ValueGetter
     {
         private readonly object _target;
-        internal readonly string Key;
-        internal readonly MethodInfo GetMethod;
-        internal readonly Type DictionaryType;
+        public readonly string Key;
+        public readonly MethodInfo GetMethod;
+        public readonly Type DictionaryType;
 
         internal GenericDictionaryValueGetter(object target, string key, Type dictionaryType)
         {

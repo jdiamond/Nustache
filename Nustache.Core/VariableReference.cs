@@ -28,7 +28,7 @@ namespace Nustache.Core
         }
 
         public string Path { get { return _path; } }
-        internal bool Escaped { get { return _escaped; } }
+        public bool Escaped { get { return _escaped; } }
 
         public override void Render(RenderContext context)
         {

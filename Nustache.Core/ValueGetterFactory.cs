@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
-using System.Linq;
 
 namespace Nustache.Core
 {
@@ -234,7 +233,7 @@ namespace Nustache.Core
 
         private static Type GetSupportedInterfaceType(Type targetType)
         {
-            Func<Type, bool> supportedInteface = interfaceType => interfaceType.IsGenericType &&
+            Predicate<Type> supportedInteface = interfaceType => interfaceType.IsGenericType &&
                     interfaceType.GetGenericTypeDefinition() == typeof(IDictionary<,>) &&
                     interfaceType.GetGenericArguments()[0] == typeof(string);
 
@@ -244,7 +243,7 @@ namespace Nustache.Core
             }
             else
             {
-                return targetType.GetInterfaces().FirstOrDefault(supportedInteface);
+                return Array.Find(targetType.GetInterfaces(), supportedInteface);
             }
         }
     }

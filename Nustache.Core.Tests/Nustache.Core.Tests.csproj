@@ -42,9 +42,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net35\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -62,21 +59,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Describe_Compound_Expression_Enumerator.cs" />
-    <Compile Include="Compiled_Templates_Support.cs" />
-    <Compile Include="Describe_Compiled_Template_Data_Types.cs" />
     <Compile Include="Example_Trees.cs" />
     <Compile Include="Describe_Encoders.cs" />
     <Compile Include="Describe_Lambda.cs" />
-    <Compile Include="Mustache_Spec\examples\delimiters.cs" />
-    <Compile Include="Mustache_Spec\examples\interpolation.cs" />
-    <Compile Include="Mustache_Spec\examples\inverted.cs" />
-    <Compile Include="Mustache_Spec\examples\JsonClassHelper.cs" />
-    <Compile Include="Mustache_Spec\examples\partials.cs" />
-    <Compile Include="Mustache_Spec\examples\sections.cs" />
-    <Compile Include="Mustache_Spec\Generate_Classes_from_JSON.cs" />
-    <Compile Include="Mustache_Spec\MustacheSpec.cs" />
-    <Compile Include="Mustache_Spec\Official_Specs.cs" />
     <Compile Include="PartExtensions.cs" />
     <Compile Include="Describe_FileSystemTemplateLocator.cs" />
     <Compile Include="FileSystemTestFixture.cs" />
@@ -123,9 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Mustache_Spec\examples\Generated Code!!.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
