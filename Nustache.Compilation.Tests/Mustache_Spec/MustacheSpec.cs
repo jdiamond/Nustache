@@ -21,7 +21,7 @@ namespace Nustache.Core.Tests.Mustache_Spec
 
         public MustacheSpec(string name)
         {
-            rawSpecs = File.ReadAllText(String.Format("../../spec/specs/{0}.json", name));
+            rawSpecs = File.ReadAllText(String.Format("../../../spec/specs/{0}.json", name));
             jsonSpecs = JObject.Parse(rawSpecs);
             this.Tests = jsonSpecs["tests"].ToArray();
             this.StronglyTypedExamples = GetSpecs(this.Tests);
