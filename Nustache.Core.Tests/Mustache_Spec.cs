@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using YamlDotNet.RepresentationModel.Serialization;
 
@@ -34,28 +36,60 @@ namespace Nustache.Core.Tests
 
         private void FixData(Dictionary<object, object> data)
         {
-            // YamlDotNet returns all values as strings. Parse the one number that matters to the tests.
-            if (data.ContainsKey("power"))
-            {
-                data["power"] = double.Parse((string)data["power"]);
-            }
-
+            FixNumbers(data);
             FixFalseValues(data);
+        }
+
+        private void FixNumbers(Dictionary<object, object> data)
+        {
+            Visit(data,
+                value => Regex.IsMatch(value, @"^\d+(\.\d+)?$"),
+                value => double.Parse(value));
         }
 
         private void FixFalseValues(Dictionary<object, object> data)
         {
-            foreach (var key in data.Keys.ToArray()) // Copy the array so we can modify it while looping.
-            {
-                var value = data[key];
+            Visit(data,
+                value => value == "false",
+                value => false);
+        }
 
-                if (value is string && (string)value == "false")
+        private void Visit(object value, Func<string, bool> pred, Func<string, object> func)
+        {
+            if (value is List<object>)
+            {
+                var list = (List<object>)value;
+
+                for (var i = 0; i < list.Count; i++)
                 {
-                    data[key] = false;
+                    var val = list[i];
+
+                    if (val is string && pred((string)val))
+                    {
+                        list[i] = func((string)val);
+                    }
+                    else
+                    {
+                        Visit(val, pred, func);
+                    }
                 }
-                else if (value is Dictionary<object, object>)
+            }
+            else if (value is Dictionary<object, object>)
+            {
+                var dict = (Dictionary<object, object>)value;
+
+                foreach (var key in dict.Keys.ToArray()) // Copy the array so we can modify it while looping.
                 {
-                    FixFalseValues((Dictionary<object, object>)value);
+                    var val = dict[key];
+
+                    if (val is string && pred((string)val))
+                    {
+                        dict[key] = func((string)val);
+                    }
+                    else
+                    {
+                        Visit(val, pred, func);
+                    }
                 }
             }
         }
