@@ -64,9 +64,17 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_can_render_unencoded_text()
         {
-          var result = Render.StringToString("{{{foo}}}", new { foo = "<bar>" });
+            var result = Render.StringToString("{{{foo}}}", new { foo = "<bar>" });
 
-          Assert.AreEqual("<bar>", result);
+            Assert.AreEqual("<bar>", result);
+        }
+
+        [Test]
+        public void It_can_use_an_ampersand_to_render_unencoded_text()
+        {
+            var result = Render.StringToString("{{&foo}}", new { foo = "<bar>" });
+
+            Assert.AreEqual("<bar>", result);
         }
     }
 }

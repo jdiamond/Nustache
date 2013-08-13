@@ -25,6 +25,12 @@ namespace Nustache.Core
             {
                 _path = match.Groups[1].Value;
             }
+
+            if (_path.StartsWith("&"))
+            {
+                _escaped = false;
+                _path = _path.Substring(1).Trim();
+            }
         }
 
         public string Path { get { return _path; } }
