@@ -25,10 +25,18 @@ namespace Nustache.Core.Tests
             var actual = Render.StringToString(
                 template,
                 data,
-                partial => {
-                    var t = new Template();
-                    t.Load(new StringReader(partials[partial]));
-                    return t;
+                partial =>
+                {
+                    if (partials.ContainsKey(partial))
+                    {
+                        var t = new Template();
+                        t.Load(new StringReader(partials[partial]));
+                        return t;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 });
 
             Assert.AreEqual(expected, actual);
