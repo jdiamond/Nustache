@@ -10,11 +10,14 @@ namespace Nustache.Core
         private static readonly Regex _markerRegex = new Regex(@"\{\{([\{]?[^}]+?\}?)\}\}");
         // Remove standalone lines (lines which have only a non-variable expression on them)
         private static readonly Regex _standaloneRegex = new Regex(
-            @"(^|\r?\n)[\r\t\v ]*({\{\s*[#\/!\<\>^]+[^}]+?\}\})[\r\t\v ]*(\r?\n|$)");
+            @"(^|\r?\n)[\r\t\v ]*({\{\s*[#\/!\<\>^=]+[^}]+?\}\})[\r\t\v ]*(\r?\n|$)");
+
         // Special case for standalone lines that have multiple non-variable expressions with only newlines separating them
         // E.g.: {{#begin}}\n{{/end}}\n   (this is straight from the mustache specs)
         private static readonly Regex _standaloneSpecialCaseRegex = new Regex(
             @"(^|\r?\n)[\r\t\v ]*({\{\s*[#\/!\<\>^]+[^}]+?\}\})[\r\t\v\n ]*({\{\s*[#\/!\<\>^]+[^}]+?\}\})[\r\t\v ]*(\r?\n|$)");
+
+        private static readonly Regex _delimitersRegex = new Regex(@"^=\s*(\S+)\s+(\S+)\s*=$");
 
         public IEnumerable<Part> Scan(string template)
         {
@@ -24,11 +27,14 @@ namespace Nustache.Core
             // remove standalone expressions before parsing as this greatly simplifies things.  
             // See https://github.com/defunkt/mustache/blob/master/lib/mustache/parser.rb for how complex parsing is without this
             template = _standaloneRegex.Replace(template, match => match.Groups[1].Value + match.Groups[2].Value);
-            template = _standaloneSpecialCaseRegex.Replace(template, match => match.Groups[1].Value + match.Groups[2].Value + match.Groups[3].Value);
-            
+            template = _standaloneSpecialCaseRegex.Replace(template,
+                match => match.Groups[1].Value + match.Groups[2].Value + match.Groups[3].Value);
+
+            var regex = _markerRegex;
+
             while (true)
             {
-                if ((m = _markerRegex.Match(template, i)).Success)
+                if ((m = regex.Match(template, i)).Success)
                 {
                     string literal = template.Substring(i, m.Index - i);
 
@@ -41,7 +47,18 @@ namespace Nustache.Core
 
                     marker = marker.Trim();
 
-                    if (marker[0] == '#')
+                    if (marker[0] == '=')
+                    {
+                        var delimiters = _delimitersRegex.Match(marker);
+
+                        if (delimiters.Success)
+                        {
+                            var start = delimiters.Groups[1].Value;
+                            var end = delimiters.Groups[2].Value;
+                            regex = new Regex(Regex.Escape(start) + "(.+)" + Regex.Escape(end));
+                        }
+                    }
+                    else if (marker[0] == '#')
                     {
                         yield return new Block(marker.Substring(1).Trim());
                     }
