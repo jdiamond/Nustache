@@ -17,16 +17,13 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
-    <Framework Condition=" '$(Framework)' == '' ">NET40</Framework>
-    <DefineConstants>NET40</DefineConstants>
-    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -35,18 +32,11 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="  '$(Framework)' == 'NET20' ">
-    <DefineConstants>NET20</DefineConstants>
-    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="  '$(Framework)' == 'NET40' ">
-    <DefineConstants>NET40</DefineConstants>
-    <OutputPath>bin\$(Configuration)\$(Framework)</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
