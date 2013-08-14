@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace Nustache.Core
@@ -19,6 +20,9 @@ namespace Nustache.Core
         private readonly TemplateLocator _templateLocator;
         private readonly RenderContextBehaviour _renderContextBehaviour;
         private int _includeLevel;
+        private string _indent;
+        private bool _lineEnded;
+        private readonly Regex _indenter = new Regex("\n(?!$)");
 
         public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour = null) 
         {
@@ -168,12 +172,31 @@ namespace Nustache.Core
             return GetValues(path).GetEnumerator().MoveNext();
         }
 
+        public void WriteLiteral(string text)
+        {
+            if (_indent != null)
+            {
+                text = _indenter.Replace(text, m => "\n" + _indent);
+            }
+
+            Write(text);
+
+            _lineEnded = text.Length > 0 && text[text.Length - 1] == '\n';
+        }
+
         public void Write(string text)
         {
+            // Sometimes a literal gets cut in half by a variable and needs to be indented.
+            if (_indent != null && _lineEnded)
+            {
+                text = _indent + text;
+                _lineEnded = false;
+            }
+
             _writer.Write(text);
         }
 
-        public void Include(string templateName)
+        public void Include(string templateName, string indent)
         {
             if (_includeLevel >= IncludeLimit)
             {
@@ -182,6 +205,9 @@ namespace Nustache.Core
             }
 
             _includeLevel++;
+
+            var oldIndent = _indent;
+            _indent = (_indent ?? "") + (indent ?? "");
 
             TemplateDefinition templateDefinition = GetTemplateDefinition(templateName);
 
@@ -198,6 +224,8 @@ namespace Nustache.Core
                     template.Render(this);
                 }
             }
+
+            _indent = oldIndent;
 
             _includeLevel--;
         }

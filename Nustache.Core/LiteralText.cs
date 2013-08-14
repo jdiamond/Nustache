@@ -20,7 +20,7 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
-            context.Write(_text);
+            context.WriteLiteral(_text);
         }
 
         public override string Source()

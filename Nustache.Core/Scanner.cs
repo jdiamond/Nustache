@@ -19,9 +19,10 @@ namespace Nustache.Core
                 {
                     var leadingWhiteSpace = m.Groups[1];
                     var leadingLineEnd = m.Groups[2];
-                    var marker = m.Groups[3].Value.Trim();
-                    var trailingWhiteSpace = m.Groups[4];
-                    var trailingLineEnd = m.Groups[5];
+                    var leadingWhiteSpaceOnly = m.Groups[3];
+                    var marker = m.Groups[4].Value.Trim();
+                    var trailingWhiteSpace = m.Groups[5];
+                    var trailingLineEnd = m.Groups[6];
 
                     var previousLiteral = template.Substring(i, m.Index - i);
 
@@ -58,7 +59,7 @@ namespace Nustache.Core
                     }
                     else if (marker[0] == '>')
                     {
-                        part = new TemplateInclude(marker.Substring(1).Trim());
+                        part = new TemplateInclude(marker.Substring(1).Trim(), lineEnded || i == 0 ? leadingWhiteSpaceOnly.Value : null);
                     }
                     else if (marker[0] != '!')
                     {
@@ -73,6 +74,11 @@ namespace Nustache.Core
                     else
                     {
                         previousLiteral += leadingLineEnd;
+
+                        if (part is TemplateInclude)
+                        {
+                            previousLiteral += leadingWhiteSpaceOnly;
+                        }
                     }
 
                     if (previousLiteral != "")
@@ -113,7 +119,7 @@ namespace Nustache.Core
         private static Regex MakeRegex(string start, string end)
         {
             return new Regex(
-                @"((^|\r?\n)?[\r\t\v ]*)" +
+                @"((^|\r?\n)?([\r\t\v ]*))" +
                 Regex.Escape(start) +
                 @"([\{]?[^" + Regex.Escape(end.Substring(0, 1)) + @"]+?\}?)" +
                 Regex.Escape(end) +
