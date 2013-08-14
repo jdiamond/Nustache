@@ -1,51 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Text;
 
 namespace Nustache.Core
 {
     public class Scanner
     {
-        private static readonly Regex _markerRegex = new Regex(@"\{\{([\{]?[^}]+?\}?)\}\}");
-        // Remove standalone lines (lines which have only a non-variable expression on them)
-        private static readonly Regex _standaloneRegex = new Regex(
-            @"(^|\r?\n)[\r\t\v ]*({\{\s*[#\/!\<\>^=]+[^}]+?\}\})[\r\t\v ]*(\r?\n|$)");
-
-        // Special case for standalone lines that have multiple non-variable expressions with only newlines separating them
-        // E.g.: {{#begin}}\n{{/end}}\n   (this is straight from the mustache specs)
-        private static readonly Regex _standaloneSpecialCaseRegex = new Regex(
-            @"(^|\r?\n)[\r\t\v ]*({\{\s*[#\/!\<\>^]+[^}]+?\}\})[\r\t\v\n ]*({\{\s*[#\/!\<\>^]+[^}]+?\}\})[\r\t\v ]*(\r?\n|$)");
-
-        private static readonly Regex _delimitersRegex = new Regex(@"^=\s*(\S+)\s+(\S+)\s*=$");
-
         public IEnumerable<Part> Scan(string template)
         {
-            int i = 0;
-            Match m;
-
-            // remove standalone expressions before parsing as this greatly simplifies things.  
-            // See https://github.com/defunkt/mustache/blob/master/lib/mustache/parser.rb for how complex parsing is without this
-            template = _standaloneRegex.Replace(template, match => match.Groups[1].Value + match.Groups[2].Value);
-            template = _standaloneSpecialCaseRegex.Replace(template,
-                match => match.Groups[1].Value + match.Groups[2].Value + match.Groups[3].Value);
-
-            var regex = _markerRegex;
+            var regex = MakeRegex("{{", "}}");
+            var i = 0;
+            var lineEnded = false;
 
             while (true)
             {
+                Match m;
+
                 if ((m = regex.Match(template, i)).Success)
                 {
-                    string literal = template.Substring(i, m.Index - i);
+                    var leadingWhiteSpace = m.Groups[1];
+                    var leadingLineEnd = m.Groups[2];
+                    var marker = m.Groups[3].Value.Trim();
+                    var trailingWhiteSpace = m.Groups[4];
+                    var trailingLineEnd = m.Groups[5];
 
-                    if (literal != "")
-                    {
-                        yield return new LiteralText(literal);
-                    }
+                    var previousLiteral = template.Substring(i, m.Index - i);
 
-                    string marker = m.Groups[1].Value;
+                    var isStandalone = (leadingLineEnd.Success || (lineEnded && m.Index == i)) && trailingLineEnd.Success;
 
-                    marker = marker.Trim();
+                    Part part = null;
 
                     if (marker[0] == '=')
                     {
@@ -55,35 +37,62 @@ namespace Nustache.Core
                         {
                             var start = delimiters.Groups[1].Value;
                             var end = delimiters.Groups[2].Value;
-                            regex = new Regex(Regex.Escape(start) + "(.+)" + Regex.Escape(end));
+                            regex = MakeRegex(start, end);
                         }
                     }
                     else if (marker[0] == '#')
                     {
-                        yield return new Block(marker.Substring(1).Trim());
+                        part = new Block(marker.Substring(1).Trim());
                     }
                     else if (marker[0] == '^')
                     {
-                        yield return new InvertedBlock(marker.Substring(1).Trim());
+                        part = new InvertedBlock(marker.Substring(1).Trim());
                     }
                     else if (marker[0] == '<')
                     {
-                        yield return new TemplateDefinition(marker.Substring(1).Trim());
+                        part = new TemplateDefinition(marker.Substring(1).Trim());
                     }
                     else if (marker[0] == '/')
                     {
-                        yield return new EndSection(marker.Substring(1).Trim());
+                        part = new EndSection(marker.Substring(1).Trim());
                     }
                     else if (marker[0] == '>')
                     {
-                        yield return new TemplateInclude(marker.Substring(1).Trim());
+                        part = new TemplateInclude(marker.Substring(1).Trim());
                     }
                     else if (marker[0] != '!')
                     {
-                        yield return new VariableReference(marker.Trim());
+                        part = new VariableReference(marker.Trim());
+                        isStandalone = false;
+                    }
+
+                    if (!isStandalone)
+                    {
+                        previousLiteral += leadingWhiteSpace;
+                    }
+                    else
+                    {
+                        previousLiteral += leadingLineEnd;
+                    }
+
+                    if (previousLiteral != "")
+                    {
+                        yield return new LiteralText(previousLiteral);
+                    }
+
+                    if (part != null)
+                    {
+                        yield return part;
                     }
 
                     i = m.Index + m.Length;
+
+                    if (!isStandalone)
+                    {
+                        i -= trailingWhiteSpace.Length;
+                    }
+
+                    lineEnded = trailingLineEnd.Success;
                 }
                 else
                 {
@@ -93,8 +102,23 @@ namespace Nustache.Core
 
             if (i < template.Length)
             {
-                yield return new LiteralText(template.Substring(i));
+                var remainingLiteral = template.Substring(i);
+
+                yield return new LiteralText(remainingLiteral);
             }
+        }
+
+        private static readonly Regex _delimitersRegex = new Regex(@"^=\s*(\S+)\s+(\S+)\s*=$");
+
+        private static Regex MakeRegex(string start, string end)
+        {
+            return new Regex(
+                @"((^|\r?\n)?[\r\t\v ]*)" +
+                Regex.Escape(start) +
+                @"([\{]?[^" + Regex.Escape(end.Substring(0, 1)) + @"]+?\}?)" +
+                Regex.Escape(end) +
+                @"([\r\t\v ]*(\r?\n|$)?)"
+            );
         }
     }
 }
