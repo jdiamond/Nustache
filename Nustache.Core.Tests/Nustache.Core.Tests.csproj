@@ -54,9 +54,6 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
-    <Reference Include="Xamasoft.JsonClassGenerator">
-      <HintPath>..\Lib\JsonClassGenerator\Xamasoft.JsonClassGenerator.dll</HintPath>
-    </Reference>
     <Reference Include="YamlDotNet.Core">
       <HintPath>..\packages\YamlDotNet.Core.2.1.1\lib\net35\YamlDotNet.Core.dll</HintPath>
     </Reference>
