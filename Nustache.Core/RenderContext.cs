@@ -73,6 +73,11 @@ namespace Nustache.Core
                 }
             }
 
+            if (Helpers.Contains(path))
+            {
+                return Helpers.Get(path);
+            }
+
             if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
             {
                 throw new NustacheDataContextMissException(string.Format("Path : {0} is undefined, RaiseExceptionOnDataContextMiss : true.", path));

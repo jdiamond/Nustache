@@ -11,16 +11,28 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
-            var lambda = context.GetValue(Name) as Lambda;
+            var value = context.GetValue(Name);
+
+            var lambda = value as Lambda;
+
             if (lambda != null)
             {
                 context.Write(lambda(InnerSource()).ToString());
                 return;
             }
 
-            foreach (var value in context.GetValues(Name))
+            var helper = value as Helper;
+
+            if (helper != null)
             {
-                context.Push(this, value);
+                // TODO: Pass in arguments and options. Where are they parsed?
+                helper(context, null, null, ctx => base.Render(context));
+                return;
+            }
+
+            foreach (var item in context.GetValues(Name))
+            {
+                context.Push(this, item);
 
                 base.Render(context);
 

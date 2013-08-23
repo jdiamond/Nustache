@@ -52,6 +52,7 @@
     <Compile Include="Encoders.cs" />
     <Compile Include="FileSystemTemplateLocator.cs" />
     <Compile Include="GenericDictionaryUtil.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="NustacheDataContextMissException.cs" />
     <Compile Include="NustacheEmptyStringException.cs" />
     <Compile Include="PartVisitor.cs" />
