@@ -1,3 +1,13 @@
+2013-08-22:
+
+- Tests now include official Mustache specs and code was updated
+  so that they all pass.
+- Getting specs to pass included adding ampersand escapes and custom
+  delimiters and many small whitespace fixes.
+- Added option for throwing when keys reference undefined values
+  thanks to Mark deVilliers (mdevilliers).
+- Nustache.Compilation project thanks to Jon Wingfield (jonwingfield).
+
 2013-06-20:
 
 - Support dictionaries that implement IDictionary<K, V>, but not
