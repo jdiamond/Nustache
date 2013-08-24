@@ -28,6 +28,8 @@ namespace Nustache.Core
 
         public IEnumerable<Part> Parts { get { return _parts; } }
 
+        public Section Inverse { get; set; }
+
         public void Load(IEnumerable<Part> parts)
         {
             foreach (var part in parts)
@@ -57,6 +59,11 @@ namespace Nustache.Core
         }
 
         public override void Render(RenderContext context)
+        {
+            RenderParts(context);
+        }
+
+        public void RenderParts(RenderContext context)
         {
             foreach (var part in _parts)
             {

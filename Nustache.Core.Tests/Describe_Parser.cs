@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Nustache.Core.Tests
@@ -131,6 +132,33 @@ namespace Nustache.Core.Tests
                                            new EndSection("foo"),
                                            new LiteralText("after")
                                        }));
+        }
+
+        [Test]
+        public void It_treats_sections_named_else_as_inverse_sections()
+        {
+            var parser = new Parser();
+            var template = new Template();
+
+            parser.Parse(template,
+                         new Part[]
+                             {
+                                 new LiteralText("before"),
+                                 new Block("foo"),
+                                 new LiteralText("inside1"),
+                                 new Block("else"),
+                                 new LiteralText("inside2"), 
+                                 new EndSection("foo"),
+                                 new LiteralText("after")
+                             });
+
+            template.Parts.IsEqualTo(new LiteralText("before"),
+                                     new Block("foo",
+                                               new LiteralText("inside1"),
+                                               new EndSection("foo")),
+                                     new LiteralText("after"));
+
+            ((Block)template.Parts.ToArray()[1]).Inverse.IsEqualTo(new Block("else", new LiteralText("inside2")));
         }
     }
 }

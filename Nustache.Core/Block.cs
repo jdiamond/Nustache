@@ -22,19 +22,31 @@ namespace Nustache.Core
                 return;
             }
 
-            var helper = value as Helper;
+            var helper = value as HelperProxy;
 
             if (helper != null)
             {
-                helper(context, null, null, data =>
+                helper(data =>
                 {
                     context.Enter(this);
                     context.Push(data);
 
-                    base.Render(context);
+                    RenderParts(context);
 
                     context.Pop();
                     context.Exit();
+                }, data =>
+                {
+                    if (Inverse != null)
+                    {
+                        context.Enter(Inverse);
+                        context.Push(data);
+
+                        Inverse.RenderParts(context);
+
+                        context.Pop();
+                        context.Exit();
+                    }
                 });
 
                 return;

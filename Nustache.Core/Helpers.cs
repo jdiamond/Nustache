@@ -1,17 +1,76 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Nustache.Core
 {
-    public delegate void Helper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, InnerHelper fn);
-    public delegate void InnerHelper(object data);
+    public delegate void Helper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse);
+    public delegate void HelperProxy(RenderBlock fn, RenderBlock inverse);
+    public delegate void RenderBlock(object data);
 
     public static class Helpers
     {
-        private static Dictionary<string, Helper> _helpers = new Dictionary<string, Helper>();
+        private static readonly Dictionary<string, Helper> DefaultHelpers = new Dictionary<string, Helper>();
+        private static readonly Dictionary<string, Helper> CustomHelpers = new Dictionary<string, Helper>();
 
         public static void Register(string name, Helper helper)
         {
-            _helpers.Add(name, helper);
+            CustomHelpers.Add(name, helper);
+        }
+
+        public static bool Contains(string name)
+        {
+            return CustomHelpers.ContainsKey(name) || DefaultHelpers.ContainsKey(name);
+        }
+
+        public static Helper Get(string name)
+        {
+            return CustomHelpers.ContainsKey(name) ? CustomHelpers[name] : DefaultHelpers[name];
+        }
+
+        public static void Clear()
+        {
+            CustomHelpers.Clear();
+        }
+
+        static Helpers()
+        {
+            DefaultHelpers["each"] = EachHelper;
+            DefaultHelpers["if"] = IfHelper;
+            DefaultHelpers["unless"] = UnlessHelper;
+            DefaultHelpers["with"] = WithHelper;
+        }
+
+        public static void EachHelper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse)
+        {
+            foreach (var item in (IEnumerable) arguments[0])
+            {
+                fn(item);
+            }
+        }
+
+        public static void IfHelper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse)
+        {
+            var value = arguments[0];
+
+            if (context.IsTruthy(value))
+            {
+                fn(null);
+            }
+            else
+            {
+                inverse(null);
+            }
+        }
+
+        public static void UnlessHelper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse)
+        {
+            IfHelper(context, arguments, options, inverse, fn);
+        }
+
+        public static void WithHelper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse)
+        {
+            fn(arguments[0]);
         }
 
         public static void Parse(RenderContext ctx, string path, out string name, out IList<object> arguments, out IDictionary<string, object> options)
@@ -68,7 +127,7 @@ namespace Nustache.Core
                         options = new Dictionary<string, object>();
                     }
 
-                    var splits2 = arg.Split(new[] {'='}, 2);
+                    var splits2 = arg.Split(new[] { '=' }, 2);
                     var key = splits2[0];
                     var val = splits2[1];
 
@@ -82,21 +141,6 @@ namespace Nustache.Core
                     }
                 }
             }
-        }
-
-        public static bool Contains(string name)
-        {
-            return _helpers.ContainsKey(name);
-        }
-
-        public static Helper Get(string name)
-        {
-            return _helpers[name];
-        }
-
-        public static void Clear()
-        {
-            _helpers.Clear();
         }
     }
 }

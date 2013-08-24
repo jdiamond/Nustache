@@ -19,12 +19,28 @@ namespace Nustache.Core
 
                 if (part is Section)
                 {
-                    sectionStack.Push(section);
-                    section = (Section)part;
+                    var newSection = (Section)part;
+
+                    if (newSection.Name == "else")
+                    {
+                        section.Inverse = newSection;
+                        newSection.Inverse = section;
+                        section = newSection;
+                    }
+                    else
+                    {
+                        sectionStack.Push(section);
+                        section = newSection;
+                    }
                 }
                 else if (part is EndSection)
                 {
                     var endSection = (EndSection)part;
+
+                    if (section.Name == "else")
+                    {
+                        section = section.Inverse;
+                    }
 
                     if (sectionStack.Count == 1)
                     {

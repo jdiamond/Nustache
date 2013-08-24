@@ -5,6 +5,8 @@ namespace Nustache.Core
 {
     public class Scanner
     {
+        private static readonly Regex DelimitersRegex = new Regex(@"^=\s*(\S+)\s+(\S+)\s*=$");
+
         public IEnumerable<Part> Scan(string template)
         {
             var regex = MakeRegex("{{", "}}");
@@ -17,6 +19,8 @@ namespace Nustache.Core
 
                 if ((m = regex.Match(template, i)).Success)
                 {
+                    var previousLiteral = template.Substring(i, m.Index - i);
+
                     var leadingWhiteSpace = m.Groups[1];
                     var leadingLineEnd = m.Groups[2];
                     var leadingWhiteSpaceOnly = m.Groups[3];
@@ -24,15 +28,13 @@ namespace Nustache.Core
                     var trailingWhiteSpace = m.Groups[5];
                     var trailingLineEnd = m.Groups[6];
 
-                    var previousLiteral = template.Substring(i, m.Index - i);
-
                     var isStandalone = (leadingLineEnd.Success || (lineEnded && m.Index == i)) && trailingLineEnd.Success;
 
                     Part part = null;
 
                     if (marker[0] == '=')
                     {
-                        var delimiters = _delimitersRegex.Match(marker);
+                        var delimiters = DelimitersRegex.Match(marker);
 
                         if (delimiters.Success)
                         {
@@ -63,8 +65,15 @@ namespace Nustache.Core
                     }
                     else if (marker[0] != '!')
                     {
-                        part = new VariableReference(marker.Trim());
-                        isStandalone = false;
+                        if (marker == "else")
+                        {
+                            part = new Block(marker);
+                        }
+                        else
+                        {
+                            part = new VariableReference(marker);
+                            isStandalone = false;
+                        }
                     }
 
                     if (!isStandalone)
@@ -113,8 +122,6 @@ namespace Nustache.Core
                 yield return new LiteralText(remainingLiteral);
             }
         }
-
-        private static readonly Regex _delimitersRegex = new Regex(@"^=\s*(\S+)\s+(\S+)\s*=$");
 
         private static Regex MakeRegex(string start, string end)
         {

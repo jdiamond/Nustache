@@ -83,7 +83,7 @@ namespace Nustache.Core
             {
                 var helper = Helpers.Get(name);
 
-                return (Helper)((ctx, args, opts, fn) => helper(ctx, arguments, options, fn));
+                return (HelperProxy)((fn, inverse) => helper(this, arguments, options, fn, inverse));
             }
 
             if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)
@@ -182,7 +182,32 @@ namespace Nustache.Core
 
         public bool IsTruthy(string path)
         {
-            return GetValues(path).GetEnumerator().MoveNext();
+            return IsTruthy(GetValue(path));
+        }
+
+        public bool IsTruthy(object value)
+        {
+            if (value == null)
+            {
+                return false;
+            }
+            
+            if (value is bool)
+            {
+                return (bool)value;
+            }
+            
+            if (value is string)
+            {
+                return !string.IsNullOrEmpty((string)value);
+            }
+            
+            if (value is IEnumerable)
+            {
+                return ((IEnumerable)value).GetEnumerator().MoveNext();
+            }
+
+            return true;
         }
 
         public void WriteLiteral(string text)

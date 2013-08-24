@@ -40,11 +40,11 @@ namespace Nustache.Core
         {
             var value = context.GetValue(_path);
 
-            var helper = value as Helper;
+            var helper = value as HelperProxy;
 
             if (helper != null)
             {
-                helper(context, null, null, ctx => {});
+                helper(data => { }, data => { });
             }
             else if (value != null)
             {

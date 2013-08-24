@@ -15,7 +15,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_can_register_global_helpers()
         {
-            Helpers.Register("noop", (ctx, args, opts, fn) => fn(null));
+            Helpers.Register("noop", (ctx, args, opts, fn, inverse) => fn(null));
 
             var result = Render.StringToString("{{#noop}}{{value}}{{/noop}}", new {value = 42});
 
@@ -25,7 +25,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_passes_arguments_into_helpers()
         {
-            Helpers.Register("link", (ctx, args, opts, fn) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", args[1], args[0])));
+            Helpers.Register("link", (ctx, args, opts, fn, inverse) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", args[1], args[0])));
 
             var result = Render.StringToString("{{link text url}}", new {text = "TEXT", url = "URL"});
 
@@ -35,7 +35,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_passes_options_into_helpers()
         {
-            Helpers.Register("link", (ctx, args, opts, fn) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", opts["url"], opts["text"])));
+            Helpers.Register("link", (ctx, args, opts, fn, inverse) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", opts["url"], opts["text"])));
 
             var result = Render.StringToString("{{link text=\"TEXT\" url=\"URL\"}}", new {});
 
@@ -45,7 +45,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_passes_arguments_into_block_helpers()
         {
-            Helpers.Register("list", (ctx, args, opts, fn) =>
+            Helpers.Register("list", (ctx, args, opts, fn, inverse) =>
             {
                 ctx.Write("<ul>");
 
@@ -74,7 +74,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_parses_quoted_arguments_as_literal_strings()
         {
-            Helpers.Register("link", (ctx, args, opts, fn) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", args[1], args[0])));
+            Helpers.Register("link", (ctx, args, opts, fn, inverse) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", args[1], args[0])));
 
             var result = Render.StringToString("{{link \"TEXT\" \"URL\"}}", new {});
 
@@ -84,11 +84,67 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_parses_quoted_options_as_literal_strings()
         {
-            Helpers.Register("link", (ctx, args, opts, fn) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", opts["url"], opts["text"])));
+            Helpers.Register("link", (ctx, args, opts, fn, inverse) => ctx.Write(string.Format("<a href=\"{0}\">{1}</a>", opts["url"], opts["text"])));
 
             var result = Render.StringToString("{{link text=\"TEXT\" url=\"URL\"}}", new { });
 
             Assert.AreEqual("<a href=\"URL\">TEXT</a>", result);
+        }
+
+        [Test]
+        public void It_registers_each_by_default()
+        {
+            var result = Render.StringToString(
+                "<ul>{{#each things}}<li>{{.}}</li>{{/each}}</ul>",
+                new { things = new[] { "thing1", "thing2", "thing3" } });
+
+            Assert.AreEqual("<ul><li>thing1</li><li>thing2</li><li>thing3</li></ul>", result);
+        }
+
+        [Test]
+        public void It_registers_if_by_default()
+        {
+            var template = "{{#if error}}<div class=\"alert alert-danger\">{{error.message}}</div>{{else}}<p>No errors</p>{{/if}}";
+
+            var result = Render.StringToString(
+                template,
+                new {error = new {message = "Connection closed"}});
+
+            Assert.AreEqual("<div class=\"alert alert-danger\">Connection closed</div>", result);
+
+            result = Render.StringToString(
+                template,
+                new {error = false});
+
+            Assert.AreEqual("<p>No errors</p>", result);
+        }
+
+        [Test]
+        public void It_registers_unless_by_default()
+        {
+            var template = "{{#unless error}}<p>No errors</p>{{else}}<div class=\"alert alert-danger\">{{error.message}}</div>{{/unless}}";
+
+            var result = Render.StringToString(
+                template,
+                new {error = new {message = "Connection closed"}});
+
+            Assert.AreEqual("<div class=\"alert alert-danger\">Connection closed</div>", result);
+
+            result = Render.StringToString(
+                template,
+                new {error = false});
+
+            Assert.AreEqual("<p>No errors</p>", result);
+        }
+
+        [Test]
+        public void It_registers_with_by_default()
+        {
+            var result = Render.StringToString(
+                "<div class=\"alert alert-danger\">{{#with error}}<p>{{message}}</p>{{/with}}</div>",
+                new { error = new { message = "Connection closed" } });
+
+            Assert.AreEqual("<div class=\"alert alert-danger\"><p>Connection closed</p></div>", result);
         }
     }
 }
