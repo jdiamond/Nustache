@@ -34,7 +34,7 @@ namespace Nustache.Core
                                 endSection.Name));
                     }
 
-                    if (endSection.Name != section.Name)
+                    if (endSection.Name.Split()[0].Trim() != section.Name.Split()[0].Trim())
                     {
                         throw new NustacheException(
                             string.Format(
