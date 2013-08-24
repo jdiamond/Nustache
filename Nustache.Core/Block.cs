@@ -25,7 +25,6 @@ namespace Nustache.Core
 
             if (helper != null)
             {
-                // TODO: Pass in arguments and options. Where are they parsed?
                 helper(context, null, null, ctx => base.Render(context));
                 return;
             }

@@ -73,9 +73,17 @@ namespace Nustache.Core
                 }
             }
 
-            if (Helpers.Contains(path))
+            string name;
+            IList<object> arguments;
+            IDictionary<string, object> options;
+
+            Helpers.Parse(this, path, out name, out arguments, out options);
+
+            if (Helpers.Contains(name))
             {
-                return Helpers.Get(path);
+                var helper = Helpers.Get(name);
+
+                return (Helper)((ctx, args, opts, fn) => helper(ctx, arguments, options, fn));
             }
 
             if (_renderContextBehaviour.RaiseExceptionOnDataContextMiss)

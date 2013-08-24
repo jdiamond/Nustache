@@ -38,9 +38,15 @@ namespace Nustache.Core
 
         public override void Render(RenderContext context)
         {
-            object value = context.GetValue(_path);
+            var value = context.GetValue(_path);
 
-            if (value != null)
+            var helper = value as Helper;
+
+            if (helper != null)
+            {
+                helper(context, null, null, ctx => {});
+            }
+            else if (value != null)
             {
                 context.Write(_escaped
                     ? Encoders.HtmlEncode(value.ToString())
