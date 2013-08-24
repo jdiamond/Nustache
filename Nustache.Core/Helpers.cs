@@ -3,7 +3,7 @@
 namespace Nustache.Core
 {
     public delegate void Helper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, InnerHelper fn);
-    public delegate void InnerHelper(RenderContext context);
+    public delegate void InnerHelper(object data);
 
     public static class Helpers
     {

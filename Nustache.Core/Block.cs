@@ -18,6 +18,7 @@ namespace Nustache.Core
             if (lambda != null)
             {
                 context.Write(lambda(InnerSource()).ToString());
+
                 return;
             }
 
@@ -25,17 +26,29 @@ namespace Nustache.Core
 
             if (helper != null)
             {
-                helper(context, null, null, ctx => base.Render(context));
+                helper(context, null, null, data =>
+                {
+                    context.Enter(this);
+                    context.Push(data);
+
+                    base.Render(context);
+
+                    context.Pop();
+                    context.Exit();
+                });
+
                 return;
             }
 
             foreach (var item in context.GetValues(Name))
             {
-                context.Push(this, item);
+                context.Enter(this);
+                context.Push(item);
 
                 base.Render(context);
 
                 context.Pop();
+                context.Exit();
             }
         }
 

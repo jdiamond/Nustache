@@ -15,7 +15,7 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_can_register_global_helpers()
         {
-            Helpers.Register("noop", (ctx, args, opts, fn) => fn(ctx));
+            Helpers.Register("noop", (ctx, args, opts, fn) => fn(null));
 
             var result = Render.StringToString("{{#noop}}{{value}}{{/noop}}", new {value = 42});
 
@@ -52,9 +52,7 @@ namespace Nustache.Core.Tests
                 foreach (var item in (IEnumerable)args[0])
                 {
                     ctx.Write("<li>");
-                    ctx.Push(null, item);
-                    fn(ctx);
-                    ctx.Pop();
+                    fn(item);
                     ctx.Write("</li>");
                 }
 

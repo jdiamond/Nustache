@@ -258,15 +258,23 @@ namespace Nustache.Core
             return null;
         }
 
-        public void Push(Section section, object data)
+        public void Enter(Section section)
         {
             _sectionStack.Push(section);
+        }
+
+        public void Exit()
+        {
+            _sectionStack.Pop();
+        }
+
+        public void Push(object data)
+        {
             _dataStack.Push(data);
         }
 
         public void Pop()
         {
-            _sectionStack.Pop();
             _dataStack.Pop();
         }
     }

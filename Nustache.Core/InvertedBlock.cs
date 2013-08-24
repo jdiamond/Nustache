@@ -15,11 +15,11 @@
                 return;
             }
 
-            context.Push(this, true);
+            context.Enter(this);
 
             base.Render(context);
 
-            context.Pop();
+            context.Exit();
         }
 
         public override string ToString()
