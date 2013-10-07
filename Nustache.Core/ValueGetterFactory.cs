@@ -160,7 +160,7 @@ namespace Nustache.Core
             PropertyInfo property = null;
             foreach (var p in targetType.GetProperties(DefaultBindingFlags))
             {
-                if (p.Name.Equals(name))
+                if (p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     property = p;
                     break;
