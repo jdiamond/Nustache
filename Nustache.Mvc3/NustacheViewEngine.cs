@@ -64,7 +64,7 @@ namespace Nustache.Mvc
             return GetView(controllerContext, partialPath, null);
         }
 
-        private IView GetView(ControllerContext controllerContext, string viewPath, string masterPath)
+        protected virtual IView GetView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
             return new NustacheView(this, controllerContext, viewPath, masterPath);
         }
