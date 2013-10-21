@@ -26,7 +26,7 @@ namespace Nustache.Mvc
             _masterPath = masterPath;
         }
 
-        public void Render(ViewContext viewContext, TextWriter writer)
+        public virtual void Render(ViewContext viewContext, TextWriter writer)
         {
             var viewTemplate = GetTemplate();
 
@@ -64,12 +64,12 @@ namespace Nustache.Mvc
             }
         }
 
-        private Template GetTemplate()
+        protected virtual Template GetTemplate()
         {
             return LoadTemplate(_viewPath);
         }
 
-        private Template LoadTemplate(string path)
+        protected virtual Template LoadTemplate(string path)
         {
             var key = "Nustache:" + path;
 
@@ -80,6 +80,7 @@ namespace Nustache.Mvc
 
             var templatePath = _controllerContext.HttpContext.Server.MapPath(path);
             var templateSource = File.ReadAllText(templatePath);
+            templateSource = PreprocessHook(templateSource);
             var template = new Template();
             template.Load(new StringReader(templateSource));
 
@@ -88,7 +89,7 @@ namespace Nustache.Mvc
             return template;
         }
 
-        private Template FindPartial(string name)
+        protected virtual Template FindPartial(string name)
         {
             var viewResult = _engine.FindPartialView(_controllerContext, name, false);
 
@@ -121,6 +122,12 @@ namespace Nustache.Mvc
             }
 
             return null;
+        }
+
+        protected virtual string PreprocessHook(string templateSource)
+        {
+            // hook to run a preprocessor over the template source
+            return templateSource;
         }
     }
 }
