@@ -1,0 +1,1 @@
+﻿<span class="success">Partials work</span>

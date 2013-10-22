@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace Nustache.Mvc3.Example.Controllers
 {
@@ -6,41 +7,53 @@ namespace Nustache.Mvc3.Example.Controllers
     {
         public ActionResult Index()
         {
-            ViewData["DoesViewDataWork"] = "ViewData works!";
-            ViewBag.DoesViewBagWork = "ViewBag works!";
-
             var model = new
-                        {
-                            DoModelPropertiesWork = "Model properties work!",
-                            DoesHtmlEncodingWork = "<em>Should this be encoded?</em>",
-                            DoesInternationalCharacterEncodingWork = "Iñtërnâtiônàlizætiøn",
-                            DoesRussianCharacterEncodingWork = "Привет, как дела"
-                        };
+            {
+                DoModelPropertiesWork = "Model properties work!",
+                DoesHtmlEncodingWork = "<em>Should this be encoded?</em>",
+                DoesInternationalCharacterEncodingWork = "Iñtërnâtiônàlizætiøn",
+                DoesRussianCharacterEncodingWork = "Привет, как дела"
+            };
 
-            // TODO: Find a better way to specify the default master.
-            return View("Index", "_Layout", model);
+            var path = Request.Path.EndsWith("/") ? Request.Path + "index" : Request.Path;
+
+            if (path.StartsWith("/"))
+            {
+                path = path.Substring(1, path.Length - 1);
+            }
+
+            return View(path, "_Layout", model);
         }
 
-        public ActionResult RazorWithPartialNustache()
+        public ActionResult Custom()
         {
-            ViewBag.InternationalCharacters = "Iñtërnâtiônàlizætiøn";
-
             var model = new
-                        {
-                            DoModelPropertiesWork = "Model properties work!"
-                        };
-
-            return View(model);
+            {
+                DoModelPropertiesWork = "Model properties work!",
+                DoesHtmlEncodingWork = "<em>Should this be encoded?</em>",
+                DoesInternationalCharacterEncodingWork = "Iñtërnâtiônàlizætiøn",
+                DoesRussianCharacterEncodingWork = "Привет, как дела"
+            }; 
+            
+            return View("custom-view", "_Layout", model);
         }
 
-        public ActionResult MissingView()
+        protected override void OnException(ExceptionContext filterContext)
         {
-            return View();
+            filterContext.ExceptionHandled = true;
+            // You could use a custom layout for the 404 page.
+            View("NotFound", "_Layout", filterContext).ExecuteResult(ControllerContext);
+            base.OnException(filterContext);
         }
 
-        public ActionResult MissingPartial()
+        public new dynamic ViewBag
         {
-            return View();
+            get { throw new NotSupportedException("You cannot use view bag"); }
+        }
+
+        public new ViewDataDictionary ViewData
+        {
+            get { throw new NotSupportedException("You cannot use view data"); }
         }
     }
 }

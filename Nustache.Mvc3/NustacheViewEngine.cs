@@ -21,35 +21,40 @@ namespace Nustache.Mvc
             var fileExtension = FileExtensions[0];
 
             MasterLocationFormats = new[]
-                                    {
-                                        "~/Views/{1}/{0}." + fileExtension,
-                                        "~/Views/Shared/{0}." + fileExtension
-                                    };
+            {
+                "~/Views/{1}/{0}." + fileExtension,
+                "~/Views/Shared/{0}." + fileExtension
+            };
+
             ViewLocationFormats = new[]
-                                  {
-                                      "~/Views/{1}/{0}." + fileExtension,
-                                      "~/Views/Shared/{0}." + fileExtension
-                                  };
+            {
+                "~/Views/{1}/{0}." + fileExtension,
+                "~/Views/Shared/{0}." + fileExtension
+            };
+
             PartialViewLocationFormats = new[]
-                                         {
-                                             "~/Views/{1}/{0}." + fileExtension,
-                                             "~/Views/Shared/{0}." + fileExtension
-                                         };
+            {
+                "~/Views/{1}/{0}." + fileExtension,
+                "~/Views/Shared/{0}." + fileExtension
+            };
+
             AreaMasterLocationFormats = new[]
-                                        {
-                                            "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
-                                            "~/Areas/{2}/Views/Shared/{0}." + fileExtension
-                                        };
+            {
+                "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
+                "~/Areas/{2}/Views/Shared/{0}." + fileExtension
+            };
+            
             AreaViewLocationFormats = new[]
-                                      {
-                                          "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
-                                          "~/Areas/{2}/Views/Shared/{0}." + fileExtension
-                                      };
+            {
+                "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
+                "~/Areas/{2}/Views/Shared/{0}." + fileExtension
+            };
+            
             AreaPartialViewLocationFormats = new[]
-                                             {
-                                                 "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
-                                                 "~/Areas/{2}/Views/Shared/{0}." + fileExtension
-                                             };
+            {
+                "~/Areas/{2}/Views/{1}/{0}." + fileExtension,
+                "~/Areas/{2}/Views/Shared/{0}." + fileExtension
+            };
         }
 
         public NustacheViewEngineRootContext RootContext { get; set; }
@@ -67,6 +72,16 @@ namespace Nustache.Mvc
         protected virtual IView GetView(ControllerContext controllerContext, string viewPath, string masterPath)
         {
             return new NustacheView(this, controllerContext, viewPath, masterPath);
+        }
+
+        public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
+        {
+            return base.FindView(controllerContext, viewName, masterName, useCache);
+        }
+
+        public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
+        {
+            return base.FindPartialView(controllerContext, partialViewName, useCache);
         }
     }
 
