@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Nustache.Core
 {
@@ -43,7 +43,7 @@ namespace Nustache.Core
 
         public static void EachHelper(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse)
         {
-            foreach (var item in (IEnumerable) arguments[0])
+            foreach (var item in (IEnumerable)arguments[0])
             {
                 fn(item);
             }
@@ -73,6 +73,18 @@ namespace Nustache.Core
             fn(arguments[0]);
         }
 
+        private static IEnumerable<string> ExtractCaptureValues(MatchCollection matches, string groupName)
+        {
+            foreach (var match in matches)
+            {
+                var m = match as Match;
+                if (m.Groups[groupName].Captures.Count != 0)
+                {
+                    yield return m.Value;
+                }
+            }
+        }
+
         public static void Parse(RenderContext ctx, string path, out string name, out IList<object> arguments, out IDictionary<string, object> options)
         {
             name = path;
@@ -81,57 +93,59 @@ namespace Nustache.Core
 
             if (path.Contains(" "))
             {
-                var splits = path.Split();
-                name = splits[0];
-                ParseArguments(ctx, splits, out arguments);
-                ParseOptions(ctx, splits, out options);
+                // unescaped: (?<option>\S+=(?:["'][^"']+["']|\S+))|(?<argument>["'][^"']+["']|\S+)
+                const string pattern = "(?<option>\\S+=(?:[\"'][^\"']+[\"']|\\S+))|(?<argument>[\"'][^\"']+[\"']|\\S+)";
+                var tokens = Regex.Matches(path, pattern);
+                var argTokens = ExtractCaptureValues(tokens, "argument");
+                var optTokens = ExtractCaptureValues(tokens, "option");
+                name = ParseName(argTokens);
+                arguments = ParseArguments(ctx, argTokens);
+                options = ParseOptions(ctx, optTokens);
             }
         }
 
-        private static void ParseArguments(RenderContext ctx, string[] splits, out IList<object> arguments)
+        private static string ParseName(IEnumerable<string> tokens) { 
+            var e = tokens.GetEnumerator();
+            e.MoveNext();
+            return e.Current;
+        }
+
+        private static IList<object> ParseArguments(RenderContext ctx, IEnumerable<string> tokens)
         {
-            arguments = null;
+            var e = tokens.GetEnumerator();
+            e.MoveNext(); //Skip first argument as it's the helper name.
 
-            if (splits.Length > 1)
+            var arguments = new List<object>();
+
+            while (e.MoveNext())
             {
-                arguments = new List<object>(splits).GetRange(1, splits.Length - 1);
-
-                for (var i = 0; i < arguments.Count; i++)
+                var value = e.Current;
+                if (value[0] == '"' || value[0] == '\'')
                 {
-                    var arg = (string)arguments[i];
-
-                    if (arg[0] == '"')
-                    {
-                        arguments[i] = arg.Substring(1, arg.Length - 2);
-                    }
-                    else
-                    {
-                        arguments[i] = ctx.GetValue(arg);
-                    }
+                    arguments.Add(value.Substring(1, value.Length - 2));
+                }
+                else
+                {
+                    arguments.Add(ctx.GetValue(value));
                 }
             }
+
+            return arguments;
         }
 
-        private static void ParseOptions(RenderContext ctx, string[] splits, out IDictionary<string, object> options)
+        private static IDictionary<string, object> ParseOptions(RenderContext ctx, IEnumerable<string> tokens)
         {
-            options = null;
+            var options = new Dictionary<string, object>();
 
-            for (var i = 0; i < splits.Length; i++)
+            foreach (var token in tokens)
             {
-                var arg = splits[i];
-
-                if (arg.Contains("="))
+                if (token.Contains("="))
                 {
-                    if (options == null)
-                    {
-                        options = new Dictionary<string, object>();
-                    }
+                    var split = token.Split(new[] { '=' }, 2);
+                    var key = split[0];
+                    var val = split[1];
 
-                    var splits2 = arg.Split(new[] { '=' }, 2);
-                    var key = splits2[0];
-                    var val = splits2[1];
-
-                    if (val[0] == '"')
+                    if (val[0] == '"' || val[0] == '\'')
                     {
                         options[key] = val.Substring(1, val.Length - 2);
                     }
@@ -141,6 +155,8 @@ namespace Nustache.Core
                     }
                 }
             }
+
+            return options;
         }
     }
 }
