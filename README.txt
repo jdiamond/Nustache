@@ -1,5 +1,10 @@
 Nustache - Logic-less templates for .NET
 
+*NOTICE*:
+
+I haven't used Nustache in a while and don't have enough bandwidth to responsibly maintain it.
+If you depend on Nustache and want committ access, please contat me!
+
 For a list of implementations (other than .NET) and editor plugins, see
 http://mustache.github.com/.
 
