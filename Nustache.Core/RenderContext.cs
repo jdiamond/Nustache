@@ -109,13 +109,17 @@ namespace Nustache.Core
 
             if (names.Length > 1)
             {
-                foreach (var name in names)
+                for (int i = 0; i < names.Length; i++ )
                 {
-                    data = ValueGetter.GetValue(data, name);
+                    data = ValueGetter.GetValue(data, names[i]);
 
                     if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
                     {
-                        partialMatch = true;
+                        if (i>0)
+                        {
+                            partialMatch = true;
+                        }
+
                         break;
                     }
                 }
