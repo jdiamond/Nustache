@@ -115,7 +115,7 @@ namespace Nustache.Core
 
                     if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
                     {
-                        if (i>0)
+                        if (i > 0)
                         {
                             partialMatch = true;
                         }
