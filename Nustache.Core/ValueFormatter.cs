@@ -60,6 +60,10 @@ namespace Nustache.Core
         /// <returns></returns>
         public static object Format(object obj)
         {
+            if (!HasRegisteredFormatters)
+            {
+                return obj;
+            }
             var type = obj.GetType();
             var func = _typeFormatters[type];
             if (func == null)
