@@ -4,6 +4,7 @@ using System.Data;
 using System.Xml;
 using Moq;
 using NUnit.Framework;
+using System.Collections.Specialized;
 
 namespace Nustache.Core.Tests
 {
@@ -150,6 +151,14 @@ namespace Nustache.Core.Tests
             Assert.AreEqual(2, elements.Count);
             Assert.AreEqual("text1", elements[0].InnerText);
             Assert.AreEqual("text2", elements[1].InnerText);
+        }
+
+        [Test]
+        public void It_gets_NameValueCollection_values()
+        {
+            NameValueCollection target = new NameValueCollection();
+            target["IntKey"] = "123";
+            Assert.AreEqual("123", ValueGetter.GetValue(target, "IntKey"));
         }
 
         public class ReadWriteInts
