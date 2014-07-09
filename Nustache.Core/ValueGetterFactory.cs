@@ -259,7 +259,16 @@ namespace Nustache.Core
                 int arrayIndex;
                 bool parseSuccess = Int32.TryParse(name, out arrayIndex);
 
+                /* 
+                 * There is an index as per the success of the parse, it is not greater than the count 
+                 * (minus one since index is zero referenced) or less than zero.
+                 */ 
+                if(parseSuccess &&
+                   !(arrayIndex > (listTarget.Count - 1)) &&
+                   !(arrayIndex < 0))
+                {
 
+                }
 
 
             }
