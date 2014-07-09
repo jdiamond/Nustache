@@ -255,6 +255,12 @@ namespace Nustache.Core
             //Both Lists and Arrays internally can be assigned to IList.
             if (typeof(IList).IsAssignableFrom(targetType))
             {
+                var listTarget = target as IList;
+                int arrayIndex;
+                bool parseSuccess = Int32.TryParse(name, out arrayIndex);
+
+
+
 
             }
 
