@@ -267,10 +267,8 @@ namespace Nustache.Core
                    !(arrayIndex > (listTarget.Count - 1)) &&
                    !(arrayIndex < 0))
                 {
-
+                    return new ListValueByIndexGetter(listTarget, arrayIndex);
                 }
-
-
             }
 
             return null;
