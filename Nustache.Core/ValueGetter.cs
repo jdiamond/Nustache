@@ -226,6 +226,22 @@ namespace Nustache.Core
         }
     }
 
+    internal class ListValueByIndexGetter : ValueGetter
+    {
+        private readonly IList _target;
+        private readonly int _index;
+
+        public ListValueByIndexGetter(IList target, int index)
+        {
+            _target = target;
+            _index = index;
+        }
+        public override object GetValue()
+        {
+            return _target[_index];
+        }
+    }
+
     internal class NoValueGetter : ValueGetter
     {
         public override object GetValue()
