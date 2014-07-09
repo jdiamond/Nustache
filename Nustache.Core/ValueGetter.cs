@@ -226,6 +226,14 @@ namespace Nustache.Core
         }
     }
 
+    internal class ListValueByIndexGetter : ValueGetter
+    {
+        public override object GetValue()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     internal class NoValueGetter : ValueGetter
     {
         public override object GetValue()
