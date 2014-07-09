@@ -1,0 +1,1 @@
+﻿<span class="success">Shared partials work</span>
