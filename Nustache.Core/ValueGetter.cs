@@ -228,9 +228,17 @@ namespace Nustache.Core
 
     internal class ListValueByIndexGetter : ValueGetter
     {
+        private readonly IList _target;
+        private readonly int _index;
+
+        public ListValueByIndexGetter(IList target, int index)
+        {
+            _target = target;
+            _index = index;
+        }
         public override object GetValue()
         {
-            throw new NotImplementedException();
+            return _target[_index];
         }
     }
 
