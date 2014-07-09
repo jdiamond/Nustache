@@ -48,6 +48,10 @@ namespace Nustache.Core
             }
             else if (value != null)
             {
+                if (ValueFormatter.HasRegisteredFormatters)
+                {
+                    value = ValueFormatter.Format(value);
+                }
                 context.Write(_escaped
                     ? Encoders.HtmlEncode(value.ToString())
                     : value.ToString());
