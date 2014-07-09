@@ -155,10 +155,16 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_gets_ListValueByIndex_values_from_array()
         {
-            System.String[] target = new[] { "hello", "world" };
+            string[] target = new[] { "hello", "world" };
             Assert.AreEqual("hello", ValueGetter.GetValue(target, "0"));
         }
 
+        [Test]
+        public void It_gets_ListValueByIndex_values_from_List()
+        {
+            List<string> target = new List<string>() { "hello", "world" };
+            Assert.AreEqual("hello", ValueGetter.GetValue(target, "0"));
+        }
 
         public class ReadWriteInts
         {
