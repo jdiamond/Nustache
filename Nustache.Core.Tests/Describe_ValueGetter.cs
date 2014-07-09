@@ -166,6 +166,13 @@ namespace Nustache.Core.Tests
             Assert.AreEqual("hello", ValueGetter.GetValue(target, "0"));
         }
 
+        [Test]
+        public void It_fails_ListValueByIndex_values_from_List()
+        {
+            string[] target = new[] { "hello", "world" };
+            Assert.AreEqual(ValueGetter.NoValue, ValueGetter.GetValue(target, "2"));
+        }
+
         public class ReadWriteInts
         {
             public int IntField = -1;
