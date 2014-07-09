@@ -247,4 +247,12 @@ namespace Nustache.Core
             }
         }
     }
+
+    internal class ListValueByIndexGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
