@@ -85,7 +85,8 @@ namespace Nustache.Core
             new DictionaryValueGetterFactory(),
             new MethodInfoValueGatterFactory(),
             new PropertyInfoValueGetterFactory(),
-            new FieldInfoValueGetterFactory()
+            new FieldInfoValueGetterFactory(),
+            new ListValueByIndexGetterFactory()
         };
 
         public static ValueGetterFactoryCollection Factories
