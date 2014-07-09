@@ -252,7 +252,13 @@ namespace Nustache.Core
     {
         public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
-            throw new NotImplementedException();
+            //Both Lists and Arrays internally can be assigned to IList.
+            if (typeof(IList).IsAssignableFrom(targetType))
+            {
+
+            }
+
+            return null;
         }
     }
 }
