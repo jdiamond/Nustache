@@ -87,6 +87,7 @@ namespace Nustache.Core
             new MethodInfoValueGatterFactory(),
             new PropertyInfoValueGetterFactory(),
             new FieldInfoValueGetterFactory(),
+            new ListValueByIndexGetterFactory(),
             new NameValueCollectionGetterFactory()
         };
 
@@ -247,6 +248,33 @@ namespace Nustache.Core
             {
                 return Array.Find(targetType.GetInterfaces(), supportedInteface);
             }
+        }
+    }
+
+    internal class ListValueByIndexGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            //Both Lists and Arrays internally can be assigned to IList.
+            if (typeof(IList).IsAssignableFrom(targetType))
+            {
+                var listTarget = target as IList;
+                int arrayIndex;
+                bool parseSuccess = Int32.TryParse(name, out arrayIndex);
+
+                /* 
+                 * There is an index as per the success of the parse, it is not greater than the count 
+                 * (minus one since index is zero referenced) or less than zero.
+                 */ 
+                if(parseSuccess &&
+                   !(arrayIndex > (listTarget.Count - 1)) &&
+                   !(arrayIndex < 0))
+                {
+                    return new ListValueByIndexGetter(listTarget, arrayIndex);
+                }
+            }
+
+            return null;
         }
     }
 
