@@ -9,7 +9,9 @@ namespace Nustache.Core
 {
     public delegate Template TemplateLocator(string name);
 
-    public delegate Object Lambda(string text);
+    public delegate Object Lambda(string text, RenderContext context, RenderFunc render);
+
+    public delegate string RenderFunc(RenderContext context);
 
     public class RenderContext
     {
@@ -34,6 +36,18 @@ namespace Nustache.Core
 
             _renderContextBehaviour = renderContextBehaviour ??
                                       RenderContextBehaviour.GetDefaultRenderContextBehaviour();
+        }
+
+        public RenderContext(RenderContext baseContext, TextWriter writer)
+        {
+            _sectionStack = baseContext._sectionStack;
+            _dataStack = baseContext._dataStack;
+            _writer = writer;
+            _templateLocator = baseContext._templateLocator;
+            _renderContextBehaviour = baseContext._renderContextBehaviour;
+            _includeLevel = baseContext._includeLevel;
+            _indent = baseContext._indent;
+            _lineEnded = baseContext._lineEnded;
         }
 
         public object GetValue(string path)
