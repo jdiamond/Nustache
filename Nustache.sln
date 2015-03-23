@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D6A76C1-E840-4BB4-AAA6-CA39BECEAF21}"
 	ProjectSection(SolutionItems) = preProject
 		HISTORY.txt = HISTORY.txt
@@ -42,7 +44,6 @@ Global
 		{872BE5F3-E52A-45C8-BEEB-1A9540F24153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{872BE5F3-E52A-45C8-BEEB-1A9540F24153}.Release|Any CPU.Build.0 = Release|Any CPU
 		{326AEAC1-FBCD-4FB2-8141-20F873CFF68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{326AEAC1-FBCD-4FB2-8141-20F873CFF68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{326AEAC1-FBCD-4FB2-8141-20F873CFF68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{326AEAC1-FBCD-4FB2-8141-20F873CFF68F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB62330D-3604-40EB-9B76-39CE36F1AD6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
