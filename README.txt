@@ -1,5 +1,13 @@
 Nustache - Logic-less templates for .NET
 
+**NEW NOTICE**:
+Hello, as you may have noticed this repository has been silent for awhile. I worked on it awhile ago 
+when I had a problem but didn't contribute any more. 
+
+I'm planning to commit some time to looking at outstanding pull-requests and issues and try get the 
+project moving again. With that in mind feel free to open issues and contribute pull requests.
+- Romanx
+
 *NOTICE*:
 
 I haven't used Nustache in a while and don't have enough bandwidth to responsibly maintain it.
