@@ -105,7 +105,7 @@ namespace Nustache.Compilation
 
         public void Visit(TemplateInclude include)
         {
-            parts.Add(context.Include(include.Name));
+            parts.Add(context.Include(include.Name, include.Indent));
         }
 
         public void Visit(VariableReference variable)

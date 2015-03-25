@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq.Expressions;
 using System.Collections;
 using Nustache.Core;
+using System.Text.RegularExpressions;
 
 namespace Nustache.Compilation
 {
@@ -12,6 +13,8 @@ namespace Nustache.Compilation
     {
         private int IncludeLimit = 255;
         private int _includeLevel = 0;
+        public string _indent;
+        public readonly Regex _indenter = new Regex("\n(?!$)");
 
         private readonly Type targetType;
         private readonly RenderContext renderContext;
@@ -174,7 +177,7 @@ namespace Nustache.Compilation
             _targetObjectStack.Pop();
         }
 
-        internal Expression Include(string templateName)
+        internal Expression Include(string templateName, string indent)
         {
             if (_includeLevel >= IncludeLimit)
             {
@@ -183,6 +186,9 @@ namespace Nustache.Compilation
             }
 
             _includeLevel++;
+
+            var oldIndent = _indent;
+            _indent = (_indent ?? "") + (indent ?? "");
 
             Expression compiled = null;
 
@@ -205,6 +211,7 @@ namespace Nustache.Compilation
                     compiled = template.Compile(this);
                 }
             }
+            _indent = oldIndent;
 
             _includeLevel--;
 
