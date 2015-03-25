@@ -80,7 +80,13 @@ namespace Nustache.Compilation
 
         public void Visit(LiteralText literal)
         {
-            parts.Add(Expression.Constant(literal.Text, typeof(string)));
+            var text = literal.Text;
+            if (context._indent != null)
+            {
+                text = context._indenter.Replace(text, m => "\n" + context._indent);
+            }
+
+            parts.Add(Expression.Constant(text, typeof(string)));
         }
 
         public void Visit(EndSection endSections)
