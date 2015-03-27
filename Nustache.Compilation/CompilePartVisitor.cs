@@ -119,11 +119,11 @@ namespace Nustache.Compilation
 
             if (variable.Escaped)
             {
-                parts.Add(Expression.Call(null, typeof(Encoders).GetMethod("DefaultHtmlEncode"), getter));
+                parts.Add(CompoundExpression.IndentOnLineEnd(Expression.Call(null, typeof(Encoders).GetMethod("DefaultHtmlEncode"), getter), context));
             }
             else
             {
-                parts.Add(getter);
+                parts.Add(CompoundExpression.IndentOnLineEnd(getter, context));
             }
         }
     }
