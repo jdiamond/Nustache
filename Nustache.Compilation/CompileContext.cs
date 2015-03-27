@@ -15,6 +15,7 @@ namespace Nustache.Compilation
         private int _includeLevel = 0;
         public string _indent;
         public readonly Regex _indenter = new Regex("\n(?!$)");
+        public bool _lineEnded;
 
         private readonly Type targetType;
         private readonly RenderContext renderContext;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Nustache.Compilation
 {
@@ -54,6 +55,38 @@ namespace Nustache.Compilation
                 concatenatedString
             );
             return block;
+        }
+
+        public static Expression IndentCheck(Expression expression, CompileContext context) 
+        {
+            if (context._indent == null) return expression;
+
+            var regex = Expression.Variable(typeof(Regex));
+
+            return Expression.Block(
+                new[] { regex },
+                Expression.Assign(regex, Expression.New(typeof(Regex).GetConstructor(new[] { typeof(String) }), new List<Expression>() { Expression.Constant("\n(?!$)", typeof(String)) })),
+                Expression.Call(regex, typeof(Regex).GetMethod("Replace", new[] { typeof(String), typeof(String) }), new List<Expression>()
+                {
+                    IndentOnLineEnd(expression, context),
+                    Expression.Constant("\n" + context._indent)
+                })
+            );
+        }
+
+        public static Expression IndentOnLineEnd(Expression expression, CompileContext context)
+        {
+            if (context._indent != null && context._lineEnded)
+            {
+                var expr =  Expression.Call(typeof(String).GetMethod("Concat", new [] { typeof(String), typeof(String) }), new List<Expression> { 
+                    Expression.Constant(context._indent, typeof(String)), 
+                    expression 
+                });
+                context._lineEnded = false;
+                return expr;
+            }
+
+            return expression;
         }
 
         internal static Expression NullCheck(Expression expression, string nullValue = "", Expression returnIfNotNull = null)

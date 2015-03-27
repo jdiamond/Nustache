@@ -75,18 +75,15 @@ namespace Nustache.Compilation
 
                 return expression;
             }));
-
         }
 
         public void Visit(LiteralText literal)
         {
             var text = literal.Text;
-            if (context._indent != null)
-            {
-                text = context._indenter.Replace(text, m => "\n" + context._indent);
-            }
 
-            parts.Add(Expression.Constant(text, typeof(string)));
+            parts.Add(CompoundExpression.IndentCheck(Expression.Constant(text, typeof(string)), context));
+
+            context._lineEnded = text.Length > 0 && text[text.Length - 1] == '\n';
         }
 
         public void Visit(EndSection endSections)
