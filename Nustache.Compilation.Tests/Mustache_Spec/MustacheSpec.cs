@@ -48,8 +48,8 @@ namespace Nustache.Core.Tests.Mustache_Spec
 
         private static string StripReservedWords(string s)
         {
-            s = new Regex(@"\{\s*[#\/\^]?string\s*\}\}").Replace(s, eval => eval.Value.Replace("string", "string1"));
-            s = new Regex(@"\{\s*[#\/\^]?bool\s*\}\}").Replace(s, eval => eval.Value.Replace("bool", "bool1"));
+            s = new Regex(@"\{\{\s*[#\/\^&]?\s*string\s*\}\}").Replace(s, eval => eval.Value.Replace("string", "string1"));
+            s = new Regex(@"\{\{\s*[#\/\^&]?\s*bool\s*\}\}").Replace(s, eval => eval.Value.Replace("bool", "bool1"));
 
             return s.Replace("\"string\"", "\"string1\"")
                     .Replace("\"bool\"", "\"bool1\"");
