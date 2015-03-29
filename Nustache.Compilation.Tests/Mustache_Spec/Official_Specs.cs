@@ -72,11 +72,21 @@ namespace Nustache.Core.Tests.Mustache_Spec
                 !test.Name.ToLower().Contains("broken chain") &&
                 !(test.SpecName == "inverted" && (test.Name == "List" || test.Name == "Context")))
             {
-                var compiledTemplate = templ.Compile(
+                try
+                {
+                    var compiledTemplate = templ.Compile(
                     test.StronglyTypedExample != null ? test.StronglyTypedExample.GetType() : typeof(object),
                     testDataTemplateLocator);
-                rendered = compiledTemplate(test.StronglyTypedExample);
-                Assert.AreEqual(test.Expected, rendered, "Compiled Template rendering failed for " + test.Description);
+                    rendered = compiledTemplate(test.StronglyTypedExample);
+                    Assert.AreEqual(test.Expected, rendered, "Compiled Template rendering failed for " + test.Description);
+                }
+                catch (Nustache.Core.NustacheException ex)
+                {
+                    if (ex.Message.StartsWith("Unsupported:"))
+                    {
+                        Assert.Inconclusive(ex.Message);
+                    }
+                }
             }
             else
             {
