@@ -169,7 +169,7 @@ namespace Nustache.Compilation.Tests
                     new SubObject { SubText = "c" },
                 }
             });
-            Assert.AreEqual("A template witha  TrueBlahThirdc ", result.Replace("\r\n", ""));
+            Assert.AreEqual("A template witha  TrueBlahThirdc ", result.Replace(Environment.NewLine, ""));
         }
 
         [Test]
@@ -231,7 +231,7 @@ namespace Nustache.Compilation.Tests
             var compiled = template.Compile<TestObject>(null);
 
             var result = compiled(new TestObject { Sub = new SubObject { SubText = "Byaaah" } });
-            Assert.AreEqual("in partial Byaaah  after partial", result.Replace("\r\n", ""));
+            Assert.AreEqual("in partial Byaaah  after partial", result.Replace(Environment.NewLine, ""));
         }
 
         [Test]
