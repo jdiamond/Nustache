@@ -196,7 +196,7 @@ namespace Nustache.Compilation
             TemplateDefinition templateDefinition = GetTemplateDefinition(templateName);
 
             if (_includedTemplates.Contains(templateName))
-                throw new NustacheException("Compiled recursive templates will be supported in a later release");
+                throw new NustacheException("Unsupported: Compiled recursive templates will be supported in a later release");
             _includedTemplates.Add(templateName);
 
             if (templateDefinition != null)
