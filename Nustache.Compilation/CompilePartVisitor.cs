@@ -75,12 +75,15 @@ namespace Nustache.Compilation
 
                 return expression;
             }));
-
         }
 
         public void Visit(LiteralText literal)
         {
-            parts.Add(Expression.Constant(literal.Text, typeof(string)));
+            var text = literal.Text;
+
+            parts.Add(CompoundExpression.IndentCheck(Expression.Constant(text, typeof(string)), context));
+
+            context._lineEnded = text.Length > 0 && text[text.Length - 1] == '\n';
         }
 
         public void Visit(EndSection endSections)
@@ -105,7 +108,7 @@ namespace Nustache.Compilation
 
         public void Visit(TemplateInclude include)
         {
-            parts.Add(context.Include(include.Name));
+            parts.Add(context.Include(include.Name, include.Indent));
         }
 
         public void Visit(VariableReference variable)
@@ -116,11 +119,11 @@ namespace Nustache.Compilation
 
             if (variable.Escaped)
             {
-                parts.Add(Expression.Call(null, typeof(Encoders).GetMethod("DefaultHtmlEncode"), getter));
+                parts.Add(CompoundExpression.IndentOnLineEnd(Expression.Call(null, typeof(Encoders).GetMethod("DefaultHtmlEncode"), getter), context));
             }
             else
             {
-                parts.Add(getter);
+                parts.Add(CompoundExpression.IndentOnLineEnd(getter, context));
             }
         }
     }
