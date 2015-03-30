@@ -1,5 +1,12 @@
 #Nustache - Logic-less templates for .NET
 
+![Nustache.Core](https://img.shields.io/appveyor/ci/romanx/nustache/master.svg)
+![Nustache.Core](https://img.shields.io/github/stars/jdiamond/Nustache.svg)
+
+Nustache.Core: ![Nustache.Core](https://img.shields.io/nuget/dt/Nustache.svg)
+Nustache.Mvc3: ![Nustache.Mvc3](https://img.shields.io/nuget/dt/Nustache.Mvc3.svg)
+Nustache.Compliation: ![Nustache.Compliation](https://img.shields.io/nuget/dt/Nustache.Compilation.svg)
+
 ### NEW NOTICE - 2015-03-29:
 
 Hello, as you may have noticed this repository has been silent for awhile. I worked on it awhile ago 
