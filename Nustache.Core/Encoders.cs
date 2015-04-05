@@ -47,10 +47,17 @@ namespace Nustache.Core
                         sb.Append("&amp;");
                         break;
                     default:
-                        if (text[i] > 159)
+                        var ch = text[i];
+                        if (ch > 159)
                         {
                             sb.Append("&#");
-                            sb.Append(((int)text[i]).ToString(CultureInfo.InvariantCulture));
+                            if (char.IsHighSurrogate(ch) && (i + 1) < len) {
+                                // convert surrogates to their decimal value
+                                sb.Append(char.ConvertToUtf32(ch, text[i+1]));
+                                i++;
+                            } else {
+                                sb.Append(((int)ch).ToString(CultureInfo.InvariantCulture));
+                            }
                             sb.Append(";");
                         }
                         else
