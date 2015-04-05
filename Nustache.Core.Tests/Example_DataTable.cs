@@ -22,5 +22,19 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("123", result);
         }
+
+        [Test]
+        public void It_can_Render_Datatables_Case_Insensitive()
+        {
+            var dt = new System.Data.DataTable();
+            dt.Columns.Add("IntColumn", typeof(int));
+            dt.Rows.Add(new object[] { 1 });
+            dt.Rows.Add(new object[] { 2 });
+            dt.Rows.Add(new object[] { 3 });
+
+            var result = Render.StringToString("{{#Item}}{{intcolumn}}{{/Item}}", new { Item = dt });
+
+            Assert.AreEqual("123", result);
+        }
     }
 }
