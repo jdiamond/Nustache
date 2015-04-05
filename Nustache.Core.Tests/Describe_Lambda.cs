@@ -10,7 +10,7 @@ namespace Nustache.Core.Tests
         {
             var result = Render.StringToString("{{#wrapped}}{{name}} is awesome.{{/wrapped}}", new
             {
-                wrapped = (Lambda<string>)((s) => string.Format("<b>{0}</b>", s))
+                wrapped = (Lambda<object>)((s) => string.Format("<b>{0}</b>", s))
             });
             Assert.AreEqual("<b>{{name}} is awesome.</b>", result);
         }
