@@ -79,6 +79,24 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_Nested_Fully_Qualified_Statements_Are_Evaluated()
+        {
+            var a = new Block("a.b",
+                        new Block("a.c", new LiteralText("I should render."), new EndSection("a.c")), 
+                        new EndSection("a.b"));
+            var writer = new StringWriter();
+            var context = new RenderContext(
+                null,
+                new Dictionary<string, object> { { "a", new Dictionary<string, object> { { "b", 3 }, { "c", true } } } },
+                writer,
+                null);
+
+            a.Render(context);
+
+            Assert.AreEqual("I should render.", writer.GetStringBuilder().ToString());
+        }
+
+        [Test]
         public void It_has_a_useful_ToString_method()
         {
             var a = new Block("a");

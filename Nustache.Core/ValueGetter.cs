@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
 using System.Xml;
@@ -239,6 +240,24 @@ namespace Nustache.Core
         public override object GetValue()
         {
             return _target[_index];
+        }
+    }
+
+
+    internal class NameValueCollectionValueGetter : ValueGetter
+    {
+        private readonly NameValueCollection _target;
+        private readonly string _key;
+
+        internal NameValueCollectionValueGetter(NameValueCollection target, string key)
+        {
+            _target = target;
+            _key = key;
+        }
+
+        public override object GetValue()
+        {
+            return _target[_key];
         }
     }
 
