@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 using System.Xml;
 
@@ -88,7 +89,8 @@ namespace Nustache.Core
             new PropertyInfoValueGetterFactory(),
             new FieldInfoValueGetterFactory(),
             new ListValueByIndexGetterFactory(),
-            new NameValueCollectionGetterFactory()
+            new NameValueCollectionGetterFactory(),
+            new DataRowGetterFactory()
         };
 
         public static ValueGetterFactoryCollection Factories
@@ -280,6 +282,19 @@ namespace Nustache.Core
                 {
                     return new ListValueByIndexGetter(listTarget, arrayIndex);
                 }
+            }
+
+            return null;
+        }
+    }
+
+    internal class DataRowGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            if (target is DataRow)
+            {
+                return new DataRowValueGetter((DataRow)target, name);
             }
 
             return null;
