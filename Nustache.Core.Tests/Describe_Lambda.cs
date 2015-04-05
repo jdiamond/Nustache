@@ -10,9 +10,20 @@ namespace Nustache.Core.Tests
         {
             var result = Render.StringToString("{{#wrapped}}{{name}} is awesome.{{/wrapped}}", new
             {
-                wrapped = (Lambda)((s) => string.Format("<b>{0}</b>", s))
+                wrapped = (Lambda)((body, context, render) => string.Format("<b>{0}</b>", body))
             });
             Assert.AreEqual("<b>{{name}} is awesome.</b>", result);
+        }
+
+        [Test]
+        public void It_can_use_context_and_render_delegate_inside_lambda()
+        {
+            var result = Render.StringToString("{{#wrapped}}{{name}} is awesome.{{/wrapped}}", new
+            {
+                wrapped = (Lambda)((body, context, render) => string.Format("<b>{0}</b>", render(context))),
+                name = "Lukasz"
+            });
+            Assert.AreEqual("<b>Lukasz is awesome.</b>", result);
         }
     }
 }
