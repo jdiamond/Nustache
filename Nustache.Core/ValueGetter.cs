@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 using System.Xml;
 
@@ -239,6 +240,28 @@ namespace Nustache.Core
         public override object GetValue()
         {
             return _target[_index];
+        }
+    }
+
+    internal class DataRowValueGetter : ValueGetter
+    {
+        private readonly DataRow _target;
+        private readonly string _name;
+
+        public DataRowValueGetter(DataRow target, string name)
+        {
+            _target = target;
+            _name = name;
+        }
+
+        public override object GetValue()
+        {
+            if(_target.Table.Columns.Contains(_name)) 
+            {
+                return _target[_name];
+            }
+
+            return null;
         }
     }
 
