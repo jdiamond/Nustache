@@ -13,7 +13,7 @@ namespace Nustache.Core
         {
             var value = context.GetValue(Name);
 
-            var lambda = value as Lambda;
+            var lambda = value as Lambda<object>;
 
             if (lambda != null)
             {

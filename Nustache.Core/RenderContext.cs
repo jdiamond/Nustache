@@ -9,7 +9,8 @@ namespace Nustache.Core
 {
     public delegate Template TemplateLocator(string name);
 
-    public delegate Object Lambda(string text);
+    public delegate Object Lambda<T>(T text);
+    public delegate Object Lambda();
 
     public class RenderContext
     {
