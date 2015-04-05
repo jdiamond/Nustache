@@ -11,7 +11,7 @@
     <description>$description$</description>
     <tags>Template Mustache MVC</tags>
     <dependencies>
-      <dependency id="Nustache" version="1.12.2.12" />
+      <dependency id="Nustache" version="$version$" />
     </dependencies>
   </metadata>
 </package>
