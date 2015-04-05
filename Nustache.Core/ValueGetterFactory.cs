@@ -160,7 +160,15 @@ namespace Nustache.Core
     {
         public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
-            PropertyInfo property = targetType.GetProperty(name, DefaultBindingFlags);
+            PropertyInfo property = null;
+            foreach (var p in targetType.GetProperties(DefaultBindingFlags))
+            {
+                if (p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    property = p;
+                    break;
+                }
+            }
 
             if (property != null && PropertyCanGetValue(property))
             {
