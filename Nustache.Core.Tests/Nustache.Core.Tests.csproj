@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Describe_Helpers.cs" />
+    <Compile Include="Example_DataTable.cs" />
     <Compile Include="Example_Trees.cs" />
     <Compile Include="Describe_Encoders.cs" />
     <Compile Include="Describe_Lambda.cs" />
