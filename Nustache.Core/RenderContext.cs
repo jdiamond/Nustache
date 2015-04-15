@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -9,7 +10,9 @@ namespace Nustache.Core
 {
     public delegate Template TemplateLocator(string name);
 
-    public delegate Object Lambda(string text);
+    public delegate Object Lambda(string text, RenderContext context, RenderFunc render);
+
+    public delegate string RenderFunc(RenderContext context);
 
     public class RenderContext
     {
@@ -34,6 +37,18 @@ namespace Nustache.Core
 
             _renderContextBehaviour = renderContextBehaviour ??
                                       RenderContextBehaviour.GetDefaultRenderContextBehaviour();
+        }
+
+        public RenderContext(RenderContext baseContext, TextWriter writer)
+        {
+            _sectionStack = baseContext._sectionStack;
+            _dataStack = baseContext._dataStack;
+            _writer = writer;
+            _templateLocator = baseContext._templateLocator;
+            _renderContextBehaviour = baseContext._renderContextBehaviour;
+            _includeLevel = baseContext._includeLevel;
+            _indent = baseContext._indent;
+            _lineEnded = baseContext._lineEnded;
         }
 
         public object GetValue(string path)
@@ -109,13 +124,17 @@ namespace Nustache.Core
 
             if (names.Length > 1)
             {
-                foreach (var name in names)
+                for (int i = 0; i < names.Length; i++ )
                 {
-                    data = ValueGetter.GetValue(data, name);
+                    data = ValueGetter.GetValue(data, names[i]);
 
                     if (data == null || ReferenceEquals(data, ValueGetter.NoValue))
                     {
-                        partialMatch = true;
+                        if (i > 0)
+                        {
+                            partialMatch = true;
+                        }
+
                         break;
                     }
                 }
@@ -170,6 +189,13 @@ namespace Nustache.Core
             else if (value is IEnumerable)
             {
                 foreach (var item in ((IEnumerable)value))
+                {
+                    yield return item;
+                }
+            }
+            else if (value is DataTable)
+            {
+                foreach (var item in ((DataTable)value).Rows)
                 {
                     yield return item;
                 }
@@ -259,7 +285,11 @@ namespace Nustache.Core
 
                 if (template != null)
                 {
+					// push the included template on the stack so that internally defined templates can be resolved properly later.
+					// designed to pass test Describe_Template_Render.It_can_include_templates_over_three_levels_with_external_includes()
+                    this.Enter(template);
                     template.Render(this);
+                    this.Exit();
                 }
             }
 

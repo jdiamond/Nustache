@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 using System.Xml;
 
@@ -86,7 +88,9 @@ namespace Nustache.Core
             new MethodInfoValueGatterFactory(),
             new PropertyInfoValueGetterFactory(),
             new FieldInfoValueGetterFactory(),
-            new ListValueByIndexGetterFactory()
+            new ListValueByIndexGetterFactory(),
+            new NameValueCollectionGetterFactory(),
+            new DataRowGetterFactory()
         };
 
         public static ValueGetterFactoryCollection Factories
@@ -158,7 +162,15 @@ namespace Nustache.Core
     {
         public override ValueGetter GetValueGetter(object target, Type targetType, string name)
         {
-            PropertyInfo property = targetType.GetProperty(name, DefaultBindingFlags);
+            PropertyInfo property = null;
+            foreach (var p in targetType.GetProperties(DefaultBindingFlags))
+            {
+                if (p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    property = p;
+                    break;
+                }
+            }
 
             if (property != null && PropertyCanGetValue(property))
             {
@@ -269,6 +281,37 @@ namespace Nustache.Core
                    !(arrayIndex < 0))
                 {
                     return new ListValueByIndexGetter(listTarget, arrayIndex);
+                }
+            }
+
+            return null;
+        }
+    }
+
+    internal class DataRowGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            if (target is DataRow)
+            {
+                return new DataRowValueGetter((DataRow)target, name);
+            }
+
+            return null;
+        }
+    }
+
+    internal class NameValueCollectionGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            if (target is NameValueCollection)
+            {
+                var nameValueCollection = (NameValueCollection)target;
+
+                if (nameValueCollection[name] != null)
+                {
+                    return new NameValueCollectionValueGetter(nameValueCollection, name);
                 }
             }
 
