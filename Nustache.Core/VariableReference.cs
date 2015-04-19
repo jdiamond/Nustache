@@ -40,10 +40,10 @@ namespace Nustache.Core
         {
             var value = context.GetValue(_path);
 
-            var lambda = value as Lambda<string>;
+            var lambda = value as Lambda<object>;
             if(lambda != null) 
             {
-                var lambdaResult = lambda();
+                var lambdaResult = lambda().ToString();
 
                 lambdaResult = _escaped
                     ? Encoders.HtmlEncode(lambdaResult.ToString())
@@ -51,7 +51,10 @@ namespace Nustache.Core
 
                 using (System.IO.TextReader sr = new System.IO.StringReader(lambdaResult))
                 {
-                    var template = new Template();
+                    Template template = new Template();
+                    template.StartDelimiter = "{{";
+                    template.EndDelimiter = "}}";
+
                     template.Load(sr);
                     context.Enter(template);
                     template.Render(context);

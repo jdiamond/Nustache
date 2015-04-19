@@ -16,14 +16,17 @@ namespace Nustache.Core
         {
             var value = context.GetValue(Name);
 
-            var lambda = value as Lambda<string, string>;
+            var lambda = value as Lambda<string, object>;
 
             if (lambda != null)
             {
-                var lambdaResult = lambda(InnerSource());
+                var lambdaResult = lambda(InnerSource()).ToString();
                 using(TextReader sr = new StringReader(lambdaResult))
                 {
                     var template = new Template();
+                    template.StartDelimiter = context.ActiveStartDelimiter;
+                    template.EndDelimiter = context.ActiveEndDelimiter;
+
                     template.Load(sr);
                     context.Enter(template);
                     template.Render(context);

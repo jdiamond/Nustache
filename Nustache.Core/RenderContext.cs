@@ -27,6 +27,8 @@ namespace Nustache.Core
         private string _indent;
         private bool _lineEnded;
         private readonly Regex _indenter = new Regex("\n(?!$)");
+        public string ActiveStartDelimiter { get; set; }
+        public string ActiveEndDelimiter { get; set; }
 
         public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour = null) 
         {
