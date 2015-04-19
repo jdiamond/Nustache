@@ -15,16 +15,5 @@ namespace Nustache.Core.Tests
             });
             Assert.AreEqual("<b>Nustache is awesome.</b>", result);
         }
-
-        [Test]
-        public void Lambdas_Return_Should_Be_Interpolated()
-        {
-            var result = Render.StringToString("Hello, {{lambda}}!", new
-            {
-                lambda = (Lambda<string>)(() => "World")
-            });
-
-            Assert.AreEqual("Hello, World!", result);
-        }
     }
 }

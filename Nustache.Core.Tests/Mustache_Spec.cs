@@ -19,6 +19,8 @@ namespace Nustache.Core.Tests
     [TestFixture]
     public class Mustache_Spec
     {
+        public static Int32 GlobalCalls;
+
         [Test]
         [TestCaseSource("Comments")]
         [TestCaseSource("Delimiters")]
@@ -77,7 +79,20 @@ namespace Nustache.Core.Tests
             if (data.ContainsKey("lambda"))
             {
                 var res = (Dictionary<object, object>)data["lambda"];
-                data["lambda"] = res["js"];
+                
+                //Hack for Interpolation Multiple calls as it uses globals which the library doesn't support entirely.
+                if (((String)res["js"]).Contains(".calls"))
+                {
+                    data["lambda"] = (Lambda<object>)(() =>
+                    {
+                        return ++Mustache_Spec.GlobalCalls;
+                    });
+                }
+                else
+                {
+                    data["lambda"] = res["js"];
+                }
+
             }
 
             Visit(data,
@@ -86,26 +101,24 @@ namespace Nustache.Core.Tests
                 {
                     if (value.Contains("function()"))
                     {
-                        var match = Regex.Match(value, @"function\(\)\s* {\s*return\s*([A-Za-z \"">={(}?:)]*)\s* }");
+                        var match = Regex.Match(value, @"function\(\)\s*{\s*return\s*([A-Za-z0-9 \"">=|{(}?+#._:;)]*)\s* }");
                         if(match.Success)
                         {
                             var body = match.Groups[1].Value;
 
-                            var interpreter = new Interpreter();
-
-                            return interpreter.ParseAsDelegate<Lambda<string>>(body);
+                            return new Interpreter().ParseAsDelegate<Lambda<object>>(body);
                         }
 
                     }
                     else if (value.Contains("function(txt)"))
                     {
-                        var match = Regex.Match(value, @"function\((\w*)\)\s*{\s*([A-Za-z \"">={(}?:)]*)\s* }");
+                        var match = Regex.Match(value, @"function\((\w*)\)\s*{\s*return\s*([A-Za-z0-9 \"">=|{(}?+#._:;)]*)\s* }");
                         if(match.Success) 
                         {                            
                             var argumentName = match.Groups[1].Value;
                             var body = match.Groups[2].Value;
-                            var lambda = Expression.Lambda<Lambda<string, string>>(Expression.Constant(body), ParameterExpression.Parameter(typeof(string), argumentName));
-                            return lambda.Compile();
+
+                            return new Interpreter().ParseAsDelegate<Lambda<object>>(body, argumentName);
                         }
                     }                    
                     return null;
