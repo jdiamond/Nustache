@@ -175,6 +175,26 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_gets_DataRow_Values()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("IntColumn", typeof(int));
+            dt.Rows.Add(new object[] { 123 });
+            var target = dt.Rows[0];
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "IntColumn"));
+        }
+
+        [Test]
+        public void It_gets_case_insensitive_DataRow_Values()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("IntColumn", typeof(int));
+            dt.Rows.Add(new object[] { 123 });
+            var target = dt.Rows[0];
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "intcolumn"));
+        }
+
+        [Test]
         public void It_gets_NameValueCollection_values()
         {
             NameValueCollection target = new NameValueCollection();

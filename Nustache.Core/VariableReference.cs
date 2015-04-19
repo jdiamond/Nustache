@@ -61,7 +61,7 @@ namespace Nustache.Core
 
         public override string Source()
         {
-            return "{{" + _path + "}}";
+            return "{{" + (!Escaped ? "&" : "") + _path + "}}";
         }
 
         public override string ToString()

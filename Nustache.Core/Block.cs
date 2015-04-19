@@ -1,4 +1,7 @@
 
+using System;
+using System.IO;
+
 namespace Nustache.Core
 {
     public class Block : Section
@@ -17,7 +20,15 @@ namespace Nustache.Core
 
             if (lambda != null)
             {
-                context.Write(lambda(InnerSource()).ToString());
+                RenderFunc render = c =>
+                {
+                    var textWriter = new StringWriter();
+                    var lambdaContext = new RenderContext(context, textWriter);
+                    RenderParts(lambdaContext);
+                    return textWriter.GetStringBuilder().ToString();
+                };
+
+                context.Write(lambda(InnerSource(), context, render).ToString());
 
                 return;
             }
