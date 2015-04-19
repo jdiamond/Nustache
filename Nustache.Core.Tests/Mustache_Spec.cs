@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
+using DynamicExpresso;
 using Microsoft.CSharp;
 using NUnit.Framework;
 using YamlDotNet.RepresentationModel.Serialization;
@@ -89,8 +90,10 @@ namespace Nustache.Core.Tests
                         if(match.Success)
                         {
                             var body = match.Groups[1].Value;
-                            var lambda = Expression.Lambda<Lambda<string>>(Expression.Constant(body));
-                            return lambda.Compile();
+
+                            var interpreter = new Interpreter();
+
+                            return interpreter.ParseAsDelegate<Lambda<string>>(body);
                         }
 
                     }
