@@ -118,7 +118,7 @@ namespace Nustache.Core.Tests
                             var argumentName = match.Groups[1].Value;
                             var body = match.Groups[2].Value;
 
-                            return new Interpreter().ParseAsDelegate<Lambda<object>>(body, argumentName);
+                            return new Interpreter().ParseAsDelegate<Lambda<string, object>>(body, argumentName);
                         }
                     }                    
                     return null;
