@@ -176,12 +176,19 @@ namespace Nustache.Core.Tests
         public IEnumerable<ITestCaseData> GetTestCases(string file)
         {
             var text = File.ReadAllText(string.Format("../../../spec/specs/{0}.yml", file));
+            if (file.Equals("~lambdas")) text = CleanLambdaFile(text);
+
             var deserializer = new Deserializer();
             var doc = deserializer.Deserialize<SpecDoc>(new StringReader(text));
 
             return doc.tests
                 .Select(test => new TestCaseData(test.name, test.data, test.template, test.partials, test.expected)
                 .SetName(file + ": " + test.name));
+        }
+
+        private string CleanLambdaFile(String fileContents)
+        {
+            return fileContents.Replace("!code", "");
         }
     }
 
