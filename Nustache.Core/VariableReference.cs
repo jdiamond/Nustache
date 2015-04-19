@@ -44,6 +44,11 @@ namespace Nustache.Core
             if(lambda != null) 
             {
                 var lambdaResult = lambda();
+
+                lambdaResult = _escaped
+                    ? Encoders.HtmlEncode(lambdaResult.ToString())
+                    : lambdaResult.ToString(); 
+
                 using (System.IO.TextReader sr = new System.IO.StringReader(lambdaResult))
                 {
                     var template = new Template();
