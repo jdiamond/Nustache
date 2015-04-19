@@ -1,8 +1,15 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.CSharp;
 using NUnit.Framework;
 using YamlDotNet.RepresentationModel.Serialization;
 
@@ -18,6 +25,7 @@ namespace Nustache.Core.Tests
         [TestCaseSource("Inverted")]
         [TestCaseSource("Partials")]
         [TestCaseSource("Sections")]
+        [TestCaseSource("Lambdas")]
         public void AllTests(string name, Dictionary<object, object> data, string template, Dictionary<object, string> partials, string expected)
         {
             FixData(data);
@@ -46,6 +54,7 @@ namespace Nustache.Core.Tests
         {
             FixNumbers(data);
             FixFalseValues(data);
+            FixLambdas(data);
         }
 
         private void FixNumbers(Dictionary<object, object> data)
@@ -62,6 +71,44 @@ namespace Nustache.Core.Tests
                 value => false);
         }
 
+        private void FixLambdas(Dictionary<object, object> data)
+        {
+            if (data.ContainsKey("lambda"))
+            {
+                var res = (Dictionary<object, object>)data["lambda"];
+                data["lambda"] = res["js"];
+            }
+
+            Visit(data,
+                value => (value.Contains("function()") || value.Contains("function(txt)")),
+                value =>
+                {
+                    if (value.Contains("function()"))
+                    {
+                        var match = Regex.Match(value, @"function\(\)\s* {\s*return\s*([A-Za-z \"">={(}?:)]*)\s* }");
+                        if(match.Success)
+                        {
+                            var body = match.Groups[1].Value;
+                            var lambda = Expression.Lambda<Lambda<string>>(Expression.Constant(body));
+                            return lambda.Compile();
+                        }
+
+                    }
+                    else if (value.Contains("function(txt)"))
+                    {
+                        var match = Regex.Match(value, @"function\((\w*)\)\s*{\s*([A-Za-z \"">={(}?:)]*)\s* }");
+                        if(match.Success) 
+                        {                            
+                            var argumentName = match.Groups[1].Value;
+                            var body = match.Groups[2].Value;
+                            var lambda = Expression.Lambda<Lambda<string, string>>(Expression.Constant(body), ParameterExpression.Parameter(typeof(string), argumentName));
+                            return lambda.Compile();
+                        }
+                    }                    
+                    return null;
+                });
+        }
+        
         private void Visit(object value, Func<string, bool> pred, Func<string, object> func)
         {
             if (value is List<object>)
@@ -108,6 +155,7 @@ namespace Nustache.Core.Tests
         public IEnumerable<ITestCaseData> Inverted() { return GetTestCases("inverted"); }
         public IEnumerable<ITestCaseData> Partials() { return GetTestCases("partials"); }
         public IEnumerable<ITestCaseData> Sections() { return GetTestCases("sections"); }
+        public IEnumerable<ITestCaseData> Lambdas() { return GetTestCases("~lambdas"); }
 
         public IEnumerable<ITestCaseData> GetTestCases(string file)
         {
