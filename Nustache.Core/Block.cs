@@ -16,19 +16,19 @@ namespace Nustache.Core
         {
             var value = context.GetValue(Name);
 
-            var lambda = value as Lambda<object>;
+            var lambda = value as Lambda<string, string>;
 
             if (lambda != null)
             {
-                RenderFunc render = c =>
+                var lambdaResult = lambda(InnerSource());
+                using(TextReader sr = new StringReader(lambdaResult))
                 {
-                    var textWriter = new StringWriter();
-                    var lambdaContext = new RenderContext(context, textWriter);
-                    RenderParts(lambdaContext);
-                    return textWriter.GetStringBuilder().ToString();
-                };
-
-                context.Write(lambda(InnerSource(), context, render).ToString());
+                    var template = new Template();
+                    template.Load(sr);
+                    context.Enter(template);
+                    template.Render(context);
+                    context.Exit();
+                }
 
                 return;
             }

@@ -40,9 +40,20 @@ namespace Nustache.Core
         {
             var value = context.GetValue(_path);
 
-            if (value is Lambda)
+            var lambda = value as Lambda<string>;
+            if(lambda != null) 
             {
-                value = (value as Lambda)();
+                var lambdaResult = lambda();
+                using (System.IO.TextReader sr = new System.IO.StringReader(lambdaResult))
+                {
+                    var template = new Template();
+                    template.Load(sr);
+                    context.Enter(template);
+                    template.Render(context);
+                    context.Exit();
+
+                    return;
+                }
             }
 
             var helper = value as HelperProxy;
