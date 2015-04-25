@@ -76,5 +76,17 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("<bar>", result);
         }
+
+        [Test]
+        public void It_can_render_nontyped_delegate_functions()
+        {
+            var result = Render.StringToString("{{foo}}, {{bar}}", new
+            {
+                foo = "bar",
+                bar = new System.Func<string>(() => { return "foo"; })
+            });
+
+            Assert.AreEqual("bar, foo", result);
+        }
     }
 }
