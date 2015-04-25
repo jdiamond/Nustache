@@ -83,7 +83,7 @@ namespace Nustache.Core
             var lambda = value as Lambda<string, object>;
             if (lambda != null) return lambda;
 
-            if (value is Delegate)
+            if (value is Delegate && !(value is HelperProxy))
             {
                 var delegateValue = (Delegate)value;
                 return (Lambda<string, object>)((body) => (object)delegateValue.DynamicInvoke(body));
