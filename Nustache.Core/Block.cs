@@ -16,7 +16,7 @@ namespace Nustache.Core
         {
             var value = context.GetValue(Name);
 
-            var lambda = value as Lambda<string, object>;
+            var lambda = CheckValueIsDelegateOrLambda(value);
 
             if (lambda != null)
             {
@@ -76,6 +76,20 @@ namespace Nustache.Core
                 context.Pop();
                 context.Exit();
             }
+        }
+
+        public Lambda<string, object> CheckValueIsDelegateOrLambda(object value)
+        {
+            var lambda = value as Lambda<string, object>;
+            if (lambda != null) return lambda;
+
+            if (value is Delegate)
+            {
+                var delegateValue = (Delegate)value;
+                return (Lambda<string, object>)((body) => (object)delegateValue.DynamicInvoke(body));
+            }
+
+            return null;
         }
 
         public override string ToString()
