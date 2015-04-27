@@ -10,20 +10,33 @@ namespace Nustache.Core.Tests
         {
             var result = Render.StringToString("{{#wrapped}}{{name}} is awesome.{{/wrapped}}", new
             {
-                wrapped = (Lambda)((body, context, render) => string.Format("<b>{0}</b>", body))
+                wrapped = (Lambda<string, object>)((body) => string.Format("<b>{0}</b>", body)),
+                name = "Nustache"
             });
-            Assert.AreEqual("<b>{{name}} is awesome.</b>", result);
+            Assert.AreEqual("<b>Nustache is awesome.</b>", result);
         }
 
         [Test]
-        public void It_can_use_context_and_render_delegate_inside_lambda()
+        public void It_can_render_nontyped_delegate_functions()
+        {
+            var result = Render.StringToString("{{foo}}, {{bar}}", new
+            {
+                foo = "bar",
+                bar = new System.Func<string>(() => { return "foo"; })
+            });
+
+            Assert.AreEqual("bar, foo", result);
+        }
+
+        [Test]
+        public void It_can_render_nontyped_delegate_functions_with_body()
         {
             var result = Render.StringToString("{{#wrapped}}{{name}} is awesome.{{/wrapped}}", new
             {
-                wrapped = (Lambda)((body, context, render) => string.Format("<b>{0}</b>", render(context))),
-                name = "Lukasz"
+                wrapped = new System.Func<string, string>((body) => string.Format("<b>{0}</b>", body)),
+                name = "Nustache"
             });
-            Assert.AreEqual("<b>Lukasz is awesome.</b>", result);
+            Assert.AreEqual("<b>Nustache is awesome.</b>", result);
         }
     }
 }

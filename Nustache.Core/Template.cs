@@ -4,14 +4,24 @@ namespace Nustache.Core
 {
     public class Template : Section
     {
+        public string StartDelimiter { get; set; }
+        public string EndDelimiter { get; set; }
+
         public Template()
             : this("#template") // I'm not happy about this fake name.
         {
         }
 
         public Template(string name)
+            : this(name, "{{", "}}")
+        {
+        }
+
+        public Template(string name, string startDelimiter, string endDelimiter)
             : base(name)
         {
+            StartDelimiter = startDelimiter;
+            EndDelimiter = endDelimiter;
         }
 
         /// <summary>
@@ -29,10 +39,12 @@ namespace Nustache.Core
         {
             string template = reader.ReadToEnd();
 
-            var scanner = new Scanner();
+            var scanner = new Scanner(StartDelimiter, EndDelimiter);
             var parser = new Parser();
-
             parser.Parse(this, scanner.Scan(template));
+            // After load get the last state of the delimiters to save in the context.
+            StartDelimiter = scanner.StartDelimiter;
+            EndDelimiter = scanner.EndDelimiter;
         }
 
         /// <summary>
@@ -52,11 +64,12 @@ namespace Nustache.Core
         public void Render(object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour)
         {
             var context = new RenderContext(this, data, writer, templateLocator, renderContextBehaviour);
+            context.ActiveStartDelimiter = StartDelimiter;
+            context.ActiveEndDelimiter = EndDelimiter;
 
             Render(context);
 
             writer.Flush();
         }
-
     }
 }
