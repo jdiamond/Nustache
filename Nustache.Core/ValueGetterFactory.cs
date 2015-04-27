@@ -84,13 +84,13 @@ namespace Nustache.Core
             new XmlNodeValueGetterFactory(),
             new PropertyDescriptorValueGetterFactory(),
             new GenericDictionaryValueGetterFactory(),
+            new DataRowGetterFactory(),
             new DictionaryValueGetterFactory(),
             new MethodInfoValueGatterFactory(),
             new PropertyInfoValueGetterFactory(),
             new FieldInfoValueGetterFactory(),
             new ListValueByIndexGetterFactory(),
-            new NameValueCollectionGetterFactory(),
-            new DataRowGetterFactory()
+            new NameValueCollectionGetterFactory()
         };
 
         public static ValueGetterFactoryCollection Factories

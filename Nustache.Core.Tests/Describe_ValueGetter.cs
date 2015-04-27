@@ -195,6 +195,16 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_gets_DataRow_values_using_property_names()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("item", typeof(int));
+            dt.Rows.Add(new object[] { 123 });
+            var target = dt.Rows[0];
+            Assert.AreEqual(123, ValueGetter.GetValue(target, "item"));
+        }
+
+        [Test]
         public void It_gets_NameValueCollection_values()
         {
             NameValueCollection target = new NameValueCollection();
