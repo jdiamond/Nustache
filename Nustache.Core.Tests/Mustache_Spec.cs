@@ -1,8 +1,16 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Text;
 using System.Text.RegularExpressions;
+using DynamicExpresso;
+using Microsoft.CSharp;
 using NUnit.Framework;
 using YamlDotNet.RepresentationModel.Serialization;
 
@@ -11,6 +19,8 @@ namespace Nustache.Core.Tests
     [TestFixture]
     public class Mustache_Spec
     {
+        public static Int32 GlobalCalls;
+
         [Test]
         [TestCaseSource("Comments")]
         [TestCaseSource("Delimiters")]
@@ -18,6 +28,7 @@ namespace Nustache.Core.Tests
         [TestCaseSource("Inverted")]
         [TestCaseSource("Partials")]
         [TestCaseSource("Sections")]
+        [TestCaseSource("Lambdas")]
         public void AllTests(string name, Dictionary<object, object> data, string template, Dictionary<object, string> partials, string expected)
         {
             FixData(data);
@@ -46,6 +57,7 @@ namespace Nustache.Core.Tests
         {
             FixNumbers(data);
             FixFalseValues(data);
+            FixLambdas(data);
         }
 
         private void FixNumbers(Dictionary<object, object> data)
@@ -62,6 +74,57 @@ namespace Nustache.Core.Tests
                 value => false);
         }
 
+        private void FixLambdas(Dictionary<object, object> data)
+        {
+            if (data.ContainsKey("lambda"))
+            {
+                var res = (Dictionary<object, object>)data["lambda"];
+                
+                //Hack for Interpolation Multiple calls as it uses globals which the library doesn't support entirely.
+                if (((String)res["js"]).Contains(".calls"))
+                {
+                    data["lambda"] = (Lambda<object>)(() =>
+                    {
+                        return ++Mustache_Spec.GlobalCalls;
+                    });
+                }
+                else
+                {
+                    data["lambda"] = res["js"];
+                }
+
+            }
+
+            Visit(data,
+                value => (value.Contains("function()") || value.Contains("function(txt)")),
+                value =>
+                {
+                    if (value.Contains("function()"))
+                    {
+                        var match = Regex.Match(value, @"function\(\)\s*{\s*return\s*([A-Za-z0-9 \"">=|{(}?+#._:;)]*)\s* }");
+                        if(match.Success)
+                        {
+                            var body = match.Groups[1].Value;
+
+                            return new Interpreter().ParseAsDelegate<Lambda<object>>(body);
+                        }
+
+                    }
+                    else if (value.Contains("function(txt)"))
+                    {
+                        var match = Regex.Match(value, @"function\((\w*)\)\s*{\s*return\s*([A-Za-z0-9 \"">=|{(}?+#._:;)]*)\s* }");
+                        if(match.Success) 
+                        {                            
+                            var argumentName = match.Groups[1].Value;
+                            var body = match.Groups[2].Value;
+
+                            return new Interpreter().ParseAsDelegate<Lambda<string, object>>(body, argumentName);
+                        }
+                    }                    
+                    return null;
+                });
+        }
+        
         private void Visit(object value, Func<string, bool> pred, Func<string, object> func)
         {
             if (value is List<object>)
@@ -108,16 +171,24 @@ namespace Nustache.Core.Tests
         public IEnumerable<ITestCaseData> Inverted() { return GetTestCases("inverted"); }
         public IEnumerable<ITestCaseData> Partials() { return GetTestCases("partials"); }
         public IEnumerable<ITestCaseData> Sections() { return GetTestCases("sections"); }
+        public IEnumerable<ITestCaseData> Lambdas() { return GetTestCases("~lambdas"); }
 
         public IEnumerable<ITestCaseData> GetTestCases(string file)
         {
             var text = File.ReadAllText(string.Format("../../../spec/specs/{0}.yml", file));
+            if (file.Equals("~lambdas")) text = CleanLambdaFile(text);
+
             var deserializer = new Deserializer();
             var doc = deserializer.Deserialize<SpecDoc>(new StringReader(text));
 
             return doc.tests
                 .Select(test => new TestCaseData(test.name, test.data, test.template, test.partials, test.expected)
                 .SetName(file + ": " + test.name));
+        }
+
+        private string CleanLambdaFile(String fileContents)
+        {
+            return fileContents.Replace("!code", "");
         }
     }
 

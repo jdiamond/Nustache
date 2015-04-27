@@ -6,10 +6,23 @@ namespace Nustache.Core
     public class Scanner
     {
         private static readonly Regex DelimitersRegex = new Regex(@"^=\s*(\S+)\s+(\S+)\s*=$");
+        public string StartDelimiter { get; set; }
+        public string EndDelimiter { get; set; }
+
+        public Scanner()
+            : this("{{", "}}")
+        {
+        }
+
+        public Scanner(string startDelimiter, string endDelimiter)
+        {
+            StartDelimiter = startDelimiter;
+            EndDelimiter = endDelimiter;
+        }
 
         public IEnumerable<Part> Scan(string template)
         {
-            var regex = MakeRegex("{{", "}}");
+            var regex = MakeRegex(StartDelimiter, EndDelimiter);
             var i = 0;
             var lineEnded = false;
 
@@ -40,6 +53,9 @@ namespace Nustache.Core
                         {
                             var start = delimiters.Groups[1].Value;
                             var end = delimiters.Groups[2].Value;
+                            this.StartDelimiter = start;
+                            this.EndDelimiter = end;
+
                             regex = MakeRegex(start, end);
                         }
                     }
