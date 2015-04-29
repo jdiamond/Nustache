@@ -56,7 +56,7 @@ namespace Nustache.Compilation
             {
                 context.Push(block, value);
 
-                if (typeof(Lambda).BaseType.IsAssignableFrom(value.Type))
+                if (typeof(Lambda<string>).BaseType.IsAssignableFrom(value.Type))
                 {
                     return
                         Expression.Call(

@@ -40,6 +40,30 @@ namespace Nustache.Core
         {
             var value = context.GetValue(_path);
 
+            var lambda = CheckValueIsDelegateOrLambda(value);
+            if(lambda != null) 
+            {
+                var lambdaResult = lambda().ToString();
+
+                lambdaResult = _escaped
+                    ? Encoders.HtmlEncode(lambdaResult.ToString())
+                    : lambdaResult.ToString(); 
+
+                using (System.IO.TextReader sr = new System.IO.StringReader(lambdaResult))
+                {
+                    Template template = new Template();
+                    template.StartDelimiter = "{{";
+                    template.EndDelimiter = "}}";
+
+                    template.Load(sr);
+                    context.Enter(template);
+                    template.Render(context);
+                    context.Exit();
+
+                    return;
+                }
+            }
+
             var helper = value as HelperProxy;
 
             if (helper != null)
@@ -52,6 +76,20 @@ namespace Nustache.Core
                     ? Encoders.HtmlEncode(value.ToString())
                     : value.ToString());
             }
+        }
+
+        public Lambda<object> CheckValueIsDelegateOrLambda(object value)
+        {
+            var lambda = value as Lambda<object>;
+            if(lambda != null) return lambda;
+
+            if (value is Delegate && !(value is HelperProxy))
+            {
+                var delegateValue = (Delegate)value;
+                return (Lambda<object>)(() => (object)delegateValue.DynamicInvoke());
+            }
+
+            return null;
         }
 
         public override string Source()
