@@ -186,7 +186,7 @@ namespace Nustache.Core
                     yield return value;
                 }
             }
-            else if (value is IEnumerable)
+            else if (value is IEnumerable && IsTruthy(value)) //Use IsTruthy to determine if it has IEnumberable values.
             {
                 foreach (var item in ((IEnumerable)value))
                 {
