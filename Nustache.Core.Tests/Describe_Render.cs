@@ -76,5 +76,21 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("<bar>", result);
         }
+
+        [Test]
+        public void It_ignores_Newtonsoft_IEnumerable_results_with_no_values()
+        {
+            const string template = @"{{#link}}<a href=""{{{url}}}"" {{#classname}}class=""{{{.}}}""{{/classname}}>{{{title}}}</a>{{/link}}";
+            const string json = @"{
+                ""link"": {
+                    ""url"": ""https://github.com/jdiamond/Nustache/"",
+                    ""title"": ""Nustache Main"",
+                    ""classname"": ""nustache--logo""
+                }
+            }";
+            var result = Render.StringToString(template, Newtonsoft.Json.Linq.JObject.Parse(json));
+
+            Assert.AreEqual(@"<a href=""https://github.com/jdiamond/Nustache/"" class=""nustache--logo"">Nustache Main</a>", result);
+        }
     }
 }

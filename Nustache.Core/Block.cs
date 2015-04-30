@@ -16,19 +16,22 @@ namespace Nustache.Core
         {
             var value = context.GetValue(Name);
 
-            var lambda = value as Lambda;
+            var lambda = CheckValueIsDelegateOrLambda(value);
 
             if (lambda != null)
             {
-                RenderFunc render = c =>
+                var lambdaResult = lambda(InnerSource()).ToString();
+                using(TextReader sr = new StringReader(lambdaResult))
                 {
-                    var textWriter = new StringWriter();
-                    var lambdaContext = new RenderContext(context, textWriter);
-                    RenderParts(lambdaContext);
-                    return textWriter.GetStringBuilder().ToString();
-                };
+                    var template = new Template();
+                    template.StartDelimiter = context.ActiveStartDelimiter;
+                    template.EndDelimiter = context.ActiveEndDelimiter;
 
-                context.Write(lambda(InnerSource(), context, render).ToString());
+                    template.Load(sr);
+                    context.Enter(template);
+                    template.Render(context);
+                    context.Exit();
+                }
 
                 return;
             }
@@ -73,6 +76,20 @@ namespace Nustache.Core
                 context.Pop();
                 context.Exit();
             }
+        }
+
+        public Lambda<string, object> CheckValueIsDelegateOrLambda(object value)
+        {
+            var lambda = value as Lambda<string, object>;
+            if (lambda != null) return lambda;
+
+            if (value is Delegate && !(value is HelperProxy))
+            {
+                var delegateValue = (Delegate)value;
+                return (Lambda<string, object>)((body) => (object)delegateValue.DynamicInvoke(body));
+            }
+
+            return null;
         }
 
         public override string ToString()

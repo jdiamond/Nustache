@@ -10,7 +10,8 @@ namespace Nustache.Core
 {
     public delegate Template TemplateLocator(string name);
 
-    public delegate Object Lambda(string text, RenderContext context, RenderFunc render);
+    public delegate TResult Lambda<TResult>();
+    public delegate TResult Lambda<T, TResult>(T arg);
 
     public delegate string RenderFunc(RenderContext context);
 
@@ -26,6 +27,8 @@ namespace Nustache.Core
         private string _indent;
         private bool _lineEnded;
         private readonly Regex _indenter = new Regex("\n(?!$)");
+        public string ActiveStartDelimiter { get; set; }
+        public string ActiveEndDelimiter { get; set; }
 
         public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour = null) 
         {
@@ -170,6 +173,10 @@ namespace Nustache.Core
                 {
                     yield return value;
                 }
+            }
+            else if (value.GetType().ToString().Equals("Newtonsoft.Json.Linq.JValue"))
+            {
+                yield return value;
             }
             else if (GenericIDictionaryUtil.IsInstanceOfGenericIDictionary(value))
             {
