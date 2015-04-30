@@ -80,8 +80,8 @@ namespace Nustache.Core.Tests
         [Test]
         public void It_ignores_Newtonsoft_IEnumerable_results_with_no_values()
         {
-            var template = @"{{#link}}<a href=""{{{url}}}"" {{#classname}}class=""{{{.}}}""{{/classname}}>{{{title}}}</a>{{/link}}";
-            var json = @"{
+            const string template = @"{{#link}}<a href=""{{{url}}}"" {{#classname}}class=""{{{.}}}""{{/classname}}>{{{title}}}</a>{{/link}}";
+            const string json = @"{
                 ""link"": {
                     ""url"": ""https://github.com/jdiamond/Nustache/"",
                     ""title"": ""Nustache Main"",

@@ -174,6 +174,10 @@ namespace Nustache.Core
                     yield return value;
                 }
             }
+            else if (value.GetType().ToString().Equals("Newtonsoft.Json.Linq.JValue"))
+            {
+                yield return value;
+            }
             else if (GenericIDictionaryUtil.IsInstanceOfGenericIDictionary(value))
             {
                 if ((value as IEnumerable).GetEnumerator().MoveNext())
@@ -189,7 +193,7 @@ namespace Nustache.Core
                     yield return value;
                 }
             }
-            else if (value is IEnumerable && IsTruthy(value)) //Use IsTruthy to determine if it has IEnumberable values.
+            else if (value is IEnumerable)
             {
                 foreach (var item in ((IEnumerable)value))
                 {
