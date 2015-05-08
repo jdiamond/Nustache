@@ -33,6 +33,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.core">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.core.interfaces">
+      <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiled_Templates_Support.cs" />
+    <Compile Include="UseEncoderDelegate.cs" />
     <Compile Include="Describe_Compiled_Template_Data_Types.cs" />
     <Compile Include="Describe_Compound_Expression_Enumerator.cs" />
     <Compile Include="Mustache_Spec\examples\delimiters.cs" />
