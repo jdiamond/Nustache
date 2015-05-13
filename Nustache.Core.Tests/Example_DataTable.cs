@@ -36,5 +36,51 @@ namespace Nustache.Core.Tests
 
             Assert.AreEqual("123", result);
         }
+
+        [Test]
+        public void It_Should_Render_Inverted_When_Having_No_Rows()
+        {
+            var dt = new System.Data.DataTable();
+            dt.Columns.Add("Foo");
+
+            var result = Render.StringToString(
+                @"<table>
+                    <thead>
+                        <tr>
+                            <th>Foo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#Data}}
+                        <tr>
+                            <td>{{Foo}}</td>
+                        </tr>
+                        {{/Data}}
+                        {{^Data}}
+                        <tr>
+                            <td>
+                                No data exists.
+                            </td>
+                        </tr>
+                        {{/Data}}
+                    </tbody>
+                </table>", new { Data = dt });
+
+            Assert.AreEqual(
+                @"<table>
+                    <thead>
+                        <tr>
+                            <th>Foo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                No data exists.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>", result);
+        }
     }
 }
