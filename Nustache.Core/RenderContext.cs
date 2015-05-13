@@ -240,6 +240,11 @@ namespace Nustache.Core
                 return ((IEnumerable)value).GetEnumerator().MoveNext();
             }
 
+            if (value is DataTable)
+            {
+                return ((DataTable)value).Rows.Count > 0;
+            }
+
             return true;
         }
 
