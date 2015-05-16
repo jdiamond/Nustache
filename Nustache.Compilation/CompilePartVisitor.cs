@@ -119,7 +119,9 @@ namespace Nustache.Compilation
 
             if (variable.Escaped)
             {
-                parts.Add(CompoundExpression.IndentOnLineEnd(Expression.Call(null, typeof(Encoders).GetMethod("DefaultHtmlEncode"), getter), context));
+                var escaperProperty = typeof(Encoders).GetProperty("HtmlEncode", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
+                var escaperMethod = (Delegate)escaperProperty.GetValue(null, null);
+                parts.Add(CompoundExpression.IndentOnLineEnd(Expression.Call(null, escaperMethod.Method, getter), context));
             }
             else
             {
