@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Data;
+using System.IO;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace Nustache.Core.Tests
@@ -91,6 +93,16 @@ namespace Nustache.Core.Tests
             var result = Render.StringToString(template, Newtonsoft.Json.Linq.JObject.Parse(json));
 
             Assert.AreEqual(@"<a href=""https://github.com/jdiamond/Nustache/"" class=""nustache--logo"">Nustache Main</a>", result);
+        }
+
+        [TestCase("true", Result = "Hello World!")]
+        [TestCase("false", Result = "")]
+        public string It_identify_correctly_bool_from_Newtonsoft_JValue_object(string isExpectedMessage)
+        {
+            const string template = @"{{#if ABoolean}}{{AMessage}}{{/if}}";
+            var json = string.Format(@"{{""ABoolean"": {0},""AMessage"": ""Hello World!""}}", isExpectedMessage);
+
+            return Render.StringToString(template, JObject.Parse(json));
         }
     }
 }
