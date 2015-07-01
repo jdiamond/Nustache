@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -233,7 +234,7 @@ namespace Nustache.Core
             {
                 return !string.IsNullOrEmpty((string)value);
             }
-
+            
             if (value is IEnumerable)
             {
                 return ((IEnumerable)value).GetEnumerator().MoveNext();
