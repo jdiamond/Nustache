@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -23,7 +22,6 @@ namespace Nustache.Core
         private readonly TextWriter _writer;
         private readonly TemplateLocator _templateLocator;
         private readonly RenderContextBehaviour _renderContextBehaviour;
-        private readonly JValueIdentifier _jValueIdentifier = new JValueIdentifier();
         private int _includeLevel;
         private string _indent;
         private bool _lineEnded;
@@ -234,18 +232,6 @@ namespace Nustache.Core
             if (value is string)
             {
                 return !string.IsNullOrEmpty((string)value);
-            }
-            
-            // Determines whether the value is an Newtonsoft.Json.Linq.JValue before the enumerable test because all are inherited
-            // from JToken and the JToken is an IEnumerable otherwise continue to the basic way.
-            if (_jValueIdentifier.IsJValue(value))
-            {
-                var jValueIsTruthy = _jValueIdentifier.IsTruthy(value);
-
-                if (jValueIsTruthy != null) // Only whether we are identified the value successfully.
-                {
-                    return (bool) jValueIsTruthy;
-                }
             }
 
             if (value is IEnumerable)
