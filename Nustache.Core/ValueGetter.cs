@@ -135,7 +135,8 @@ namespace Nustache.Core
 
         public override object GetValue()
         {
-            return _propertyDescriptor.GetValue(_target);
+            var value = _propertyDescriptor.GetValue(_target);
+            return JValueIdentifier.IsJValue(value) ? JValueIdentifier.GetValue(value) : value;
         }
     }
 
