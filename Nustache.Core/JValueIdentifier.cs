@@ -28,13 +28,13 @@ namespace Nustache.Core
         }
 
         /// <summary>
-        ///   Determines whether the value can be used as a <see cref="bool" /> and returns its representation.
+        ///   Returns the value of the <see cref="Newtonsoft.Json.Linq.JValue" /> object.
         /// </summary>
         /// <param name="jValue">
         ///   The <see cref="object" /> retrieved from the model.
         /// </param>
         /// <returns>
-        ///   The representation of the <paramref name="jValue" /> as a <see cref="bool" /> otherwise <see langword="null" />.
+        ///   A native value determined by the <see cref="Type"/> returned by the property Type of <see cref="Newtonsoft.Json.Linq.JValue" />.
         /// </returns>
         public static object GetValue(object jValue)
         {
@@ -53,7 +53,7 @@ namespace Nustache.Core
 
             if (typeOfValue == "Integer") // JTokenType.Integer
             {
-                return GetValue<Int64>(jValueType, jValueType);
+                return GetValue<long>(jValueType, jValueType);
             }
 
             if (typeOfValue == "Float") // JTokenType.Float
