@@ -53,12 +53,12 @@ namespace Nustache.Core
 
             if (typeOfValue == "Integer") // JTokenType.Integer
             {
-                return GetValue<long>(jValueType, jValueType);
+                return GetValue<long>(jValueType, jValue);
             }
 
             if (typeOfValue == "Float") // JTokenType.Float
             {
-                return GetValue<double>(jValueType, jValueType);
+                return GetValue<double>(jValueType, jValue);
             }
 
             return null;
