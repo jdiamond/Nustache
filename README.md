@@ -19,7 +19,7 @@ project moving again. With that in mind feel free to open issues and contribute 
 ### NOTICE (JDiamond):
 
 I haven't used Nustache in a while and don't have enough bandwidth to responsibly maintain it.
-If you depend on Nustache and want committ access, please contat me!
+If you depend on Nustache and want committ access, please contact me!
 
 For a list of implementations (other than .NET) and editor plugins, see
 http://mustache.github.com/.
