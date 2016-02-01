@@ -46,7 +46,7 @@ namespace Nustache.Core
                 var lambdaResult = lambda().ToString();
 
                 lambdaResult = _escaped
-                    ? Encoders.HtmlEncode(lambdaResult.ToString())
+                    ? context.HtmlEncoder(lambdaResult.ToString())
                     : lambdaResult.ToString(); 
 
                 using (System.IO.TextReader sr = new System.IO.StringReader(lambdaResult))
@@ -73,7 +73,7 @@ namespace Nustache.Core
             else if (value != null)
             {
                 context.Write(_escaped
-                    ? Encoders.HtmlEncode(value.ToString())
+                    ? context.HtmlEncoder(value.ToString())
                     : value.ToString());
             }
         }
