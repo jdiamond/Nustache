@@ -45,31 +45,47 @@ namespace Nustache.Core
 
         public ValueGetter GetValueGetter(object target, string name)
         {
-            return GetValueGetterOrDefault(Items, target, name) ?? new NoValueGetter();
+            return GetValueGetterOrDefault(Items, target, name, target.GetType()) ?? new NoValueGetter();
         }
 
         public ValueGetter GetCompiledGetter(Type targetType, string name)
         {
-            foreach (var factory in Items)
+            return GetValueGetterOrDefault(Items, null, name, targetType);
+        }
+
+        private static ValueGetter GetValueGetterOrDefault(IList<ValueGetterFactory> factories, object target, string name, Type targetType)
+        {
+            List<ValueGetterFactory> factoriesToRemove = null;
+            foreach (var factory in factories)
             {
-                var getter = factory.GetValueGetter(null, targetType, name);
-                if (getter != null)
+                try
                 {
-                    return getter;
+                    var getter = factory.GetValueGetter(target, targetType, name);
+                    if (getter != null)
+                    {
+                        return getter;
+                    }
+                }
+                catch (System.Security.HostProtectionException)
+                {
+                    //in the event of a partial trust failure, skip the getter factory and mark it for removal
+                    if (factoriesToRemove == null)
+                    {
+                        factoriesToRemove = new List<ValueGetterFactory> { factory };
+                    }
+                    else
+                    {
+                        factoriesToRemove.Add(factory);
+                    }
                 }
             }
 
-            return null;
-        }
-        
-        private static ValueGetter GetValueGetterOrDefault(IEnumerable<ValueGetterFactory> factories, object target, string name)
-        {
-            foreach (var factory in factories)
+            //remove any getter factories that errored out because of partial trust failure
+            if (factoriesToRemove != null)
             {
-                var getter = factory.GetValueGetter(target, target.GetType(), name);
-                if (getter != null)
+                foreach (var factory in factoriesToRemove)
                 {
-                    return getter;
+                    factories.Remove(factory);
                 }
             }
 
