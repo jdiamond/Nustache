@@ -52,8 +52,8 @@ namespace Nustache.Core
     {
         private readonly XmlNode _target;
         private readonly string _name;
-        private string _textValueLocated;
-        private XmlNodeList _childNodeList;
+        private object _foundSingleValue;
+        private XmlNodeList _foundNodeList;
 
         internal XmlNodeValueGetter(XmlNode target, string name)
         {
@@ -61,26 +61,31 @@ namespace Nustache.Core
             _name = name;
         }
 
-        private bool HasChildNodeList()
+        private bool HasFoundNodeList()
         {
-            _childNodeList = _target.SelectNodes(_name);
-            return _childNodeList != null && _childNodeList.Count > 0;
+            _foundNodeList = _target.SelectNodes(_name);
+            return _foundNodeList != null && _foundNodeList.Count > 0;
         }
 
-        private bool TryGetSingleTextNodeValue()
+        private bool TryGetSingleNodeValue()
         {
-            if (_childNodeList.Count != 1)
+            if (_foundNodeList.Count != 1)
                 return false;
 
-            return TryGetNodeValueAsText(_childNodeList[0]);
+            if (TryGetNodeValueAsText(_foundNodeList[0]))
+                return true;
+
+            _foundSingleValue = _foundNodeList[0];
+            return true;
         }
 
         private bool TryGetNodeValueAsText(XmlNode node)
         {
             if (node.ChildNodes.Count == 1
-                && node.ChildNodes[0].NodeType == XmlNodeType.Text)
+                && (node.ChildNodes[0].NodeType == XmlNodeType.Text || node.ChildNodes[0].NodeType == XmlNodeType.CDATA )
+            )
             {
-                _textValueLocated = node.ChildNodes[0].Value;
+                _foundSingleValue = node.ChildNodes[0].Value;
                 return true;
             }
             return false;
@@ -89,19 +94,19 @@ namespace Nustache.Core
         public override object GetValue()
         {
             if (_name[0] == '@' && TryGetStringByAttributeName(_name.Substring(1)))
-                return _textValueLocated;
+                return _foundSingleValue;
 
-            if (HasChildNodeList())
+            if (HasFoundNodeList())
             {
-                if (TryGetSingleTextNodeValue())
-                    return _textValueLocated;
+                if (TryGetSingleNodeValue())
+                    return _foundSingleValue;
 
-                return _childNodeList;
+                return _foundNodeList;
             }
 
             if (TryGetStringByAttributeName(_name))
             {
-                return _textValueLocated;
+                return _foundSingleValue;
             }
 
             return NoValue;
@@ -114,7 +119,7 @@ namespace Nustache.Core
                 XmlNode attribute = _target.Attributes.GetNamedItem(attributeName);
                 if (attribute != null)
                 {
-                    _textValueLocated = attribute.Value;
+                    _foundSingleValue = attribute.Value;
                     return true;
                 }
             }
