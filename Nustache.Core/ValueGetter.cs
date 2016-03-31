@@ -122,6 +122,38 @@ namespace Nustache.Core
         }
     }
 
+    internal class XmlNodeListIndexGetter : ValueGetter
+    {
+        private readonly XmlNodeList _target;
+        private readonly int _index;
+        private object _foundSingleValue;
+
+        public XmlNodeListIndexGetter(XmlNodeList target, int index)
+        {
+            _target = target;
+            _index = index;
+        }
+
+        private object GetNodeValue(XmlNode node)
+        {
+            if (node.ChildNodes.Count == 1
+                && (node.ChildNodes[0].NodeType == XmlNodeType.Text || node.ChildNodes[0].NodeType == XmlNodeType.CDATA)
+            )
+            {
+                return node.ChildNodes[0].Value;
+            }
+            else
+            {
+                return node;
+            }
+        }
+
+        public override object GetValue()
+        {
+            return GetNodeValue(_target[_index]);
+        }
+    }
+
     internal class PropertyDescriptorValueGetter : ValueGetter
     {
         private readonly object _target;

@@ -154,6 +154,45 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
+        public void It_gets_single_string_values_as_string_by_Index_from_XmlNodeList()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml(@"<doc attr='val'>
+    <child>text1</child>
+    <child>text2</child>
+    <child>text3</child>
+</doc>");
+            var value = (string)ValueGetter.GetValue(target.DocumentElement.ChildNodes, "1");
+            Assert.AreEqual("text2", value);
+        }
+
+        [Test]
+        public void It_gets_single_node_values_as_node_by_Index_from_XmlNodeList()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml(@"<doc attr='val'>
+    <child>text1</child>
+    <child><grandchild>text2</grandchild></child>
+    <child>text3</child>
+</doc>");
+            var value = (XmlNode)ValueGetter.GetValue(target.DocumentElement.ChildNodes, "1");
+            Assert.AreEqual("<grandchild>text2</grandchild>", value.InnerXml);
+        }
+
+         [Test]
+        public void It_gets_single_CDATA_values_as_string_by_Index_from_XmlNodeList()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml(@"<doc attr='val'>
+    <child><![CDATA[text1]]></child>
+    <child><![CDATA[text2]]></child>
+    <child><![CDATA[text3]]></child>
+</doc>");
+            var value = (string)ValueGetter.GetValue(target.DocumentElement.ChildNodes, "1");
+            Assert.AreEqual("text2", value);
+        }
+
+        [Test]
         public void It_gets_ListValueByIndex_values_from_array()
         {
             string[] target = new[] { "hello", "world" };
