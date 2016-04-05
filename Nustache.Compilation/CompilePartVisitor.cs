@@ -114,7 +114,7 @@ namespace Nustache.Compilation
         public void Visit(VariableReference variable)
         {
             var getter = context.CompiledGetter(variable.Path);
-            var returnIfNotNull = Expression.Call(getter, context.TargetType.GetMethod("ToString"));
+            var returnIfNotNull = Expression.Call(getter, getter.Type.GetMethod("ToString", new Type[0]));
             getter = CompoundExpression.NullCheck(getter, "", returnIfNotNull);
 
             if (variable.Escaped)
