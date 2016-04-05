@@ -29,7 +29,7 @@ namespace Nustache.Compilation.Tests
         public override string ToString()
         {
             return "SubObject";
-    }
+        }
     }
 
     public class TestObjectWithToString
