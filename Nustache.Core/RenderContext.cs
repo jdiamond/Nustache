@@ -30,6 +30,11 @@ namespace Nustache.Core
         public string ActiveStartDelimiter { get; set; }
         public string ActiveEndDelimiter { get; set; }
 
+        public Encoders.HtmlEncoder HtmlEncoder
+        {
+            get { return _renderContextBehaviour.HtmlEncoder ?? Encoders.HtmlEncode; }   
+        }
+
         public RenderContext(Section section, object data, TextWriter writer, TemplateLocator templateLocator, RenderContextBehaviour renderContextBehaviour = null) 
         {
             _sectionStack.Push(section);

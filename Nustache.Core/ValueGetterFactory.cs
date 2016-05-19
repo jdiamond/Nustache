@@ -82,6 +82,7 @@ namespace Nustache.Core
         private static readonly ValueGetterFactoryCollection _factories = new ValueGetterFactoryCollection
         {
             new XmlNodeValueGetterFactory(),
+            new XmlNodeListIndexGetterFactory(),
             new PropertyDescriptorValueGetterFactory(),
             new GenericDictionaryValueGetterFactory(),
             new DataRowGetterFactory(),
@@ -106,6 +107,32 @@ namespace Nustache.Core
             if (target is XmlNode)
             {
                 return new XmlNodeValueGetter((XmlNode)target, name);
+            }
+
+            return null;
+        }
+    }
+
+    internal class XmlNodeListIndexGetterFactory : ValueGetterFactory
+    {
+        public override ValueGetter GetValueGetter(object target, Type targetType, string name)
+        {
+            if (target is XmlNodeList)
+            {
+                var listTarget = target as XmlNodeList;
+                int arrayIndex;
+                bool parseSuccess = Int32.TryParse(name, out arrayIndex);
+
+                /* 
+                 * There is an index as per the success of the parse, it is not greater than the count 
+                 * (minus one since index is zero referenced) or less than zero.
+                 */
+                if (parseSuccess &&
+                   !(arrayIndex > (listTarget.Count - 1)) &&
+                   !(arrayIndex < 0))
+                {
+                    return new XmlNodeListIndexGetter(listTarget, arrayIndex);
+                }
             }
 
             return null;

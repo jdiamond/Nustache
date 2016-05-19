@@ -25,6 +25,20 @@ namespace Nustache.Compilation.Tests
         public bool TestBool { get; set; }
 
         public SubObject Sub { get; set; }
+
+        public override string ToString()
+        {
+            return "SubObject";
+        }
+    }
+
+    public class TestObjectWithToString
+    {
+        public string TestString { get; set; }
+        public override string ToString()
+        {
+            return "";
+        }
     }
 
     [TestFixture]
@@ -271,6 +285,24 @@ namespace Nustache.Compilation.Tests
             var template = Template("A template with {{TestString1}} and {{TestBool}}");
             var compiled = template.Compile<TestObject>(null);
             compiled(new TestObject { TestString = "Hello", TestBool = true });
+        }
+
+        [Test]
+        public void Member_ToString()
+        {
+            var template = Template("A template with {{Sub}}");
+            var compiled = template.Compile<TestObject>(null);
+            var result = compiled(new TestObject { Sub = new SubObject() });
+            Assert.AreEqual("A template with SubObject", result);
+        }
+
+        [Test]
+        public void Model_With_ToString()
+        {
+            var template = Template("A template with {{TestString}}");
+            var compiled = template.Compile<TestObjectWithToString>(null);
+            var result = compiled(new TestObjectWithToString { TestString = "Hello"});
+            Assert.AreEqual("A template with Hello", result);
         }
 
         private Func<T, string> Compiled<T>(string text) where T : class

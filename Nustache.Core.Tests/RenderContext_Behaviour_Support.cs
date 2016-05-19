@@ -54,6 +54,12 @@ namespace Nustache.Core.Tests
             Assert.AreEqual("beforeafter", result);
         }
 
-
+        [Test]
+        public void Use_custom_encoder()
+        {
+            var result = Render.StringToString("before{{foo}}after", new {foo = string.Empty},
+                new RenderContextBehaviour {HtmlEncoder = text => "middle"});
+            Assert.AreEqual("beforemiddleafter", result);
+        }
     }
 }
