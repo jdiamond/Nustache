@@ -61,6 +61,10 @@ namespace Nustache.Core
                 return GetValue<double>(jValueType, jValue);
             }
 
+            if (typeOfValue == "Date") // JTokenType.Date
+            {
+                return GetValue<DateTime>(jValueType, jValue);
+            }
             return null;
         }
 
