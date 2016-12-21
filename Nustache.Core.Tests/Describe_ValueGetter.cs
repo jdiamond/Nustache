@@ -134,12 +134,30 @@ namespace Nustache.Core.Tests
         }
 
         [Test]
-        public void It_gets_XmlNode_single_child_element_value_as_a_string()
+        public void It_gets_XmlNode_single_child_string_element_value_as_a_string()
         {
             XmlDocument target = new XmlDocument();
             target.LoadXml("<doc attr='val'><child>text</child></doc>");
             var value= (string)ValueGetter.GetValue(target.DocumentElement, "child");
             Assert.AreEqual("text", value);
+        }
+
+        [Test]
+        public void It_gets_XmlNode_single_child_cdata_element_value_as_a_string()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml("<doc attr='val'><child><![CDATA[text]]></child></doc>");
+            var value = (string)ValueGetter.GetValue(target.DocumentElement, "child");
+            Assert.AreEqual("text", value);
+        }
+
+        [Test]
+        public void It_gets_XmlNode_single_child_node_element_value_as_a_node()
+        {
+            XmlDocument target = new XmlDocument();
+            target.LoadXml("<doc attr='val'><child><grandchild>text</grandchild></child></doc>");
+            var nodeValue = (XmlNode)ValueGetter.GetValue(target.DocumentElement, "child");
+            Assert.AreEqual(nodeValue.InnerXml, "<grandchild>text</grandchild>");
         }
 
         [Test]
