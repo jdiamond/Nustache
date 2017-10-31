@@ -1,0 +1,9 @@
+<Project>
+  <!-- Common properties for NuGet package metadata -->
+  <PropertyGroup>
+    <Authors>Jason Diamond</Authors>
+    <PackageLicenseUrl>https://raw.github.com/jdiamond/Nustache/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/jdiamond/Nustache</PackageProjectUrl>
+    <PackageTags>Template;Mustache</PackageTags>
+  </PropertyGroup>
+</Project>
