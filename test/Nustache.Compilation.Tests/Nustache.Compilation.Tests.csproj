@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.7.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Xamasoft.JsonClassGenerator, Version=1.5.0.0" HintPath="..\..\lib\JsonClassGenerator\Xamasoft.JsonClassGenerator.dll" />
+    <ProjectReference Include="..\..\src\Nustache.Core\Nustache.Core.csproj" />
+    <ProjectReference Include="..\..\src\Nustache.Compilation\Nustache.Compilation.csproj" />
+  </ItemGroup>
+
+</Project>
