@@ -21,7 +21,7 @@ namespace Nustache.Core.Tests.Mustache_Spec
                 {
                     var generator = new Xamasoft.JsonClassGenerator.JsonClassGenerator();
                     generator.SingleFile = true;
-                    generator.TargetFolder = "../../Mustache_Spec/examples/";
+                    generator.TargetFolder = "../../../Mustache_Spec/examples/";
                     generator.Namespace = FullTestClassNamespace(spec);
                     generator.MainClass = spec;
                     generator.Example = specDefinition.StronglyTypedExamples.ToString();
