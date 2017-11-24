@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Nustache.Compilation.Tests.Mustache_Spec;
 
 namespace Nustache.Core.Tests.Mustache_Spec
 {
@@ -87,9 +88,8 @@ namespace Nustache.Core.Tests.Mustache_Spec
                 {
                     if (stronglyTypedExamples[SanitizedName] != null)
                     {
-                        this.Example = JsonConvert.DeserializeObject(
-                            stronglyTypedExamples[SanitizedName].ToString()
-                        );
+                        this.Example = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+                            stronglyTypedExamples[SanitizedName].ToString(), new NestedDictionaryConverter());
                     }
                     else
                         this.Example = new object();
