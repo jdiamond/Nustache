@@ -94,6 +94,38 @@ You can define templates inside sections. They override
 templates defined in outer sections which override
 external templates.
 
+### Helpers usage:
+
+Helpers may be useful to:
+- Apply custom format on the values to be rendered
+- To call extension methods
+- ...
+
+**Example:**
+Following line should print time like *13:21:10* instead of default format of `DateTime`. 
+```
+{{FormatDateTime FooDateTime format="HH:mm:ss"}}
+```
+To get this working use following code before rendering.
+```csharp
+Nustache.Core.Helpers.Register("FormatDateTime", FormatDateTime);
+```
+And implement the function `FormatDateTime`, which could look like this:
+```csharp
+static void FormatDateTime(RenderContext context, IList<object> arguments, IDictionary<string, object> options, RenderBlock fn, RenderBlock inverse)
+{
+	if (arguments != null && arguments.Count > 0 && arguments[0] != null && arguments[0] is DateTime)
+	{
+		DateTime datetime = (DateTime)arguments[0];
+		if (options != null && options.ContainsKey("format"))
+			context.Write(datetime.ToString(options["format"] as string));
+		else
+			context.Write(datetime.ToString());
+	}
+}
+```
+Helpers syntax in nustache is `HelperName [arguments] [options]`. Difference between `arguments` and `options` is that the `options` specifie the tuples `key=value` while arguments are simple values. If value (from arguments or options) is not closed within double quotes it gets evaluated (e.g. `FooDateTime` is evaluated to value of the member called `FooDateTime`, and therefore the `argument[0]` is of `DateTime` type. On the other hand the string `"HH:mm:ss"` is not evaluated.
+>All `arguments` and `options` are separated by spaces and even closed in double-quotes they cannot contain spaces. `arguments` and `options` may be mixed (equation sign marks it is `option` instead of `argument`). 
 ## Development:
 
 - Build with VS2012 or MSBuild.
