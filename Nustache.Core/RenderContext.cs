@@ -234,6 +234,11 @@ namespace Nustache.Core
             {
                 return (bool)value;
             }
+		
+            if (value is int)
+            {
+                return (int)value != 0;
+            }
             
             if (value is string)
             {
