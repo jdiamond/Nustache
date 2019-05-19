@@ -41,6 +41,34 @@ namespace Nustache.Compilation.Tests
         }
     }
 
+    public class TreeNode : List<TreeNode>
+    {
+        public string Name { get; set; }
+
+        public IEnumerable<TreeNode> Children
+        {
+            get
+            {
+                yield return this;
+
+                foreach (var child in this)
+                {
+                    foreach (var descendant in child.Children)
+                    {
+                        yield return descendant;
+                    }
+
+                }
+            }
+        }
+
+        public TreeNode(string name)
+        {
+            Name = name;
+        }
+    }
+
+
     [TestFixture]
     public class Compiled_Templates_Support
     {
@@ -231,6 +259,27 @@ namespace Nustache.Compilation.Tests
                 name == "text" ? Template("{{TestString}} {{#Sub.TestBool}}I am in you{{/Sub.TestBool}}") : null);
             var result = compiled(new TestObject { TestString = "a", Sub = new SubObject { TestBool = true } });
             Assert.AreEqual("a I am in you after partial", result);   
+        }
+
+        [Test]
+        public void Partials_Multiple_Usage()
+        {
+            var template = Template("{{>text}} after partial {{>text}}");
+            var compiled = template.Compile<TestObject>(name =>
+                name == "text" ? Template("{{TestString}} {{#Sub.TestBool}}I am in you{{/Sub.TestBool}}") : null);
+            var result = compiled(new TestObject { TestString = "a", Sub = new SubObject { TestBool = true } });
+            Assert.AreEqual("a I am in you after partial a I am in you", result);
+        }
+
+        [Test]
+        public void Partials_Recursion_Not_Supported()
+        {
+            Assert.That(() =>
+            {
+                var template = Template(@"{{<recursive_partial}}{{#Children}}<li>{{Name}}<ul>{{>recursive_partial}}</ul></li>{{/Children}}{{/recursive_partial}}{{>recursive_partial}}");
+                var compiled = template.Compile<TreeNode>(null);
+            },
+            Throws.Exception.InstanceOf<NustacheException>().With.Message.StartsWith("You have reached the include limit of"));
         }
 
         [Test]
